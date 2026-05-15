@@ -27,7 +27,7 @@ export default function Home() {
             <Link href="/containers" className="inline-flex h-12 items-center justify-center bg-primary px-8 text-base font-bold text-primary-foreground hover:bg-primary/90 transition-all uppercase tracking-wider">
               View Inventory
             </Link>
-            <Link href="/contact" className="inline-flex h-12 items-center justify-center border-2 border-border bg-background/50 backdrop-blur-sm px-8 text-base font-bold text-foreground hover:bg-secondary transition-all uppercase tracking-wider">
+            <Link href="/quote" className="inline-flex h-12 items-center justify-center border-2 border-border bg-background/50 backdrop-blur-sm px-8 text-base font-bold text-foreground hover:bg-secondary transition-all uppercase tracking-wider">
               Get a Quote
             </Link>
           </div>

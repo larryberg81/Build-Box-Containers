@@ -13,10 +13,11 @@ export function Navbar() {
         <nav className="hidden md:flex gap-6">
           <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Home</Link>
           <Link href="/containers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Containers</Link>
+          <Link href="/quote" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Quote</Link>
           <Link href="/contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
         </nav>
         <div className="flex items-center gap-4">
-          <Link href="/contact" className="hidden md:inline-flex h-9 items-center justify-center bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors uppercase tracking-wider">
+          <Link href="/quote" className="hidden md:inline-flex h-9 items-center justify-center bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors uppercase tracking-wider">
             Get a Quote
           </Link>
         </div>

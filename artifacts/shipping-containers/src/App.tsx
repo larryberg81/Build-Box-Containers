@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Containers from "@/pages/containers";
 import Contact from "@/pages/contact";
+import Quote from "@/pages/quote";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
@@ -20,6 +21,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/containers" component={Containers} />
           <Route path="/contact" component={Contact} />
+          <Route path="/quote" component={Quote} />
           <Route component={NotFound} />
         </Switch>
       </main>
