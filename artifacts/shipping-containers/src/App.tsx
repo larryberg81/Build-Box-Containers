@@ -9,6 +9,7 @@ import Contact from "@/pages/contact";
 import Quote from "@/pages/quote";
 import Projects from "@/pages/projects";
 import Availability from "@/pages/availability";
+import Resources from "@/pages/resources";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
@@ -26,6 +27,7 @@ function Router() {
           <Route path="/quote" component={Quote} />
           <Route path="/projects" component={Projects} />
           <Route path="/availability" component={Availability} />
+          <Route path="/resources" component={Resources} />
           <Route component={NotFound} />
         </Switch>
       </main>

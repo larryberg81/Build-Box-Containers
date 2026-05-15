@@ -66,3 +66,63 @@ id = "rEFL4_JUx9BJyy3fEG2Cg"
 uri = "file://artifacts/shipping-containers/public/images/project-workshop.png"
 type = "image"
 title = "generated_image"
+
+[[generated]]
+id = "N-Hd3B1ov321v0XJ6Mz3V"
+uri = "file://artifacts/shipping-containers/public/images/container-reefer.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "iFWqwapnHlJkRXjne7oLG"
+uri = "file://artifacts/shipping-containers/public/images/container-open-top.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "BRaV_9zG2mZmnJ8t1ba1g"
+uri = "file://artifacts/shipping-containers/public/images/container-flat-rack.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "hvSudv4OiHoHQZlZ0fP6b"
+uri = "file://artifacts/shipping-containers/public/images/container-high-cube.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "9wwxq9XqaNK7U0O3icqVa"
+uri = "file://artifacts/shipping-containers/public/images/container-double-door.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "zysx6xFA-LDk5-v_PKhRl"
+uri = "file://artifacts/shipping-containers/public/images/blog-buying-guide.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "0EWFaUbMiBz0QlBdoYzmX"
+uri = "file://artifacts/shipping-containers/public/images/blog-modifications.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "SYDcxb8SC8i_GpX9Szy6g"
+uri = "file://artifacts/shipping-containers/public/images/blog-reefer-guide.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "sI3k8NTqwps_8HfZ2hAZJ"
+uri = "file://artifacts/shipping-containers/public/images/blog-maintenance.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "v_KwGbNuA1TMUvX1_VQSE"
+uri = "file://artifacts/shipping-containers/public/images/blog-modular-building.png"
+type = "image"
+title = "generated_image"

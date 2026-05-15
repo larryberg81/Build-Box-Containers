@@ -15,6 +15,7 @@ export function Navbar() {
           <Link href="/containers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Containers</Link>
           <Link href="/projects" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
           <Link href="/availability" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Availability</Link>
+          <Link href="/resources" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Resources</Link>
           <Link href="/quote" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Quote</Link>
           <Link href="/contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
         </nav>
