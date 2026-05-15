@@ -18,7 +18,7 @@ export default function Contact() {
       setLoading(false);
       toast({
         title: "Quote Request Sent",
-        description: "An IronBox representative will contact you shortly.",
+        description: "A Built Box Containers representative will contact you shortly.",
       });
       (e.target as HTMLFormElement).reset();
     }, 1000);
@@ -42,7 +42,7 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="font-display font-bold uppercase tracking-widest text-sm mb-2 text-primary">Contact</h3>
-                <p className="text-muted-foreground">1-800-IRONBOX<br />sales@ironbox.com</p>
+                <p className="text-muted-foreground">1-800-BUILT-BOX<br />sales@builtboxcontainers.com</p>
               </div>
             </div>
           </div>

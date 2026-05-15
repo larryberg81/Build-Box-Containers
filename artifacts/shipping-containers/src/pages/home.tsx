@@ -9,7 +9,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <img 
             src="/images/hero.png" 
-            alt="IronBox Shipping Containers" 
+            alt="Built Box Containers" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-background/80" />
@@ -52,7 +52,7 @@ export default function Home() {
       <section className="py-24 bg-background">
         <div className="container mx-auto px-4 md:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-display font-bold uppercase tracking-tight mb-4">The IronBox Advantage</h2>
+            <h2 className="text-3xl md:text-5xl font-display font-bold uppercase tracking-tight mb-4">The Built Box Advantage</h2>
             <p className="text-muted-foreground text-lg">We don't just sell steel boxes. We provide structurally sound, highly versatile solutions for serious projects.</p>
           </div>
           

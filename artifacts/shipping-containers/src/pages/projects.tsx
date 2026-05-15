@@ -40,7 +40,7 @@ const PROJECTS = [
     location: "Nashville, TN",
     size: "20 ft",
     mods: ["Roll-up Door", "Electrical Package", "Interior Shelving", "Custom Paint"],
-    desc: "A clothing boutique designed to pop up at markets and festivals. The full-width roll-up door opens the container completely. Interior shelving and track lighting installed in one IronBox fabrication run.",
+    desc: "A clothing boutique designed to pop up at markets and festivals. The full-width roll-up door opens the container completely. Interior shelving and track lighting installed in one Built Box Containers fabrication run.",
     image: "/images/project-retail-unit.png",
   },
   {
@@ -50,7 +50,7 @@ const PROJECTS = [
     location: "Phoenix, AZ",
     size: "20 ft & 40 ft",
     mods: ["Custom Paint", "Vents (x4)"],
-    desc: "A 22-unit fleet delivered and positioned to spec for a self-storage operator. All containers painted to brand spec in IronBox's facility. Ventilated for long-term contents storage in a high-heat climate.",
+    desc: "A 22-unit fleet delivered and positioned to spec for a self-storage operator. All containers painted to brand spec in Built Box Containers' facility. Ventilated for long-term contents storage in a high-heat climate.",
     image: "/images/project-storage-yard.png",
   },
   {
@@ -80,7 +80,7 @@ export default function Projects() {
       {/* Page Header */}
       <section className="border-b border-border bg-card py-16">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
-          <p className="text-primary text-sm font-bold tracking-widest uppercase mb-3">Built by IronBox</p>
+          <p className="text-primary text-sm font-bold tracking-widest uppercase mb-3">Built by Built Box Containers</p>
           <h1 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-4">
             Project Showcase
           </h1>
