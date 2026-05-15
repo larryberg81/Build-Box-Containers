@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Shipping Container Website"
+version = "1.0.0"
+id = "artifacts/shipping-containers"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 18084
+
+[services.development]
+run = "pnpm --filter @workspace/shipping-containers run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/shipping-containers", "run", "build" ]
+publicDir = "artifacts/shipping-containers/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "18084"
+BASE_PATH = "/"

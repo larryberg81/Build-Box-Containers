@@ -1,0 +1,32 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "XYlVujdaz-Mn5S2bwnefE"
+uri = "file://artifacts/shipping-containers/public/images/hero.png"
+type = "image"
+title = "Industrial container yard hero"
+
+[[generated]]
+id = "fEIZoHVT2XSQUFi-hmoVF"
+uri = "file://artifacts/shipping-containers/public/images/product-20ft.png"
+type = "image"
+title = "20ft container product"
+
+[[generated]]
+id = "M1VigJwfMSH_cbDqDWz0i"
+uri = "file://artifacts/shipping-containers/public/images/product-40ft.png"
+type = "image"
+title = "40ft container product"
+
+[[generated]]
+id = "C-MhjO-gyvU5WDYO6zjAI"
+uri = "file://artifacts/shipping-containers/public/images/product-retail.png"
+type = "image"
+title = "Pop-up retail container"
+
+[[generated]]
+id = "jRbHSQ-uOkIZ2ggdAR4WK"
+uri = "file://artifacts/shipping-containers/public/images/product-modular.png"
+type = "image"
+title = "Modular building container"
