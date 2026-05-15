@@ -13,6 +13,7 @@ export function Navbar() {
         <nav className="hidden md:flex gap-6">
           <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Home</Link>
           <Link href="/containers" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Containers</Link>
+          <Link href="/projects" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Projects</Link>
           <Link href="/quote" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Quote</Link>
           <Link href="/contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
         </nav>

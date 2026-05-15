@@ -30,3 +30,39 @@ id = "jRbHSQ-uOkIZ2ggdAR4WK"
 uri = "file://artifacts/shipping-containers/public/images/product-modular.png"
 type = "image"
 title = "Modular building container"
+
+[[generated]]
+id = "MhI4Go7U11AyR_x-eLROY"
+uri = "file://artifacts/shipping-containers/public/images/project-popup-cafe.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "dmdPS8H_4K-lhGgLOuzHG"
+uri = "file://artifacts/shipping-containers/public/images/project-site-office.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "TyTCIy89P06Kicop_QCEC"
+uri = "file://artifacts/shipping-containers/public/images/project-modular-home.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "A4Kbhb3Mubf8LVyc8fgZq"
+uri = "file://artifacts/shipping-containers/public/images/project-retail-unit.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "kbr81anOk1bLe0NCdH0H0"
+uri = "file://artifacts/shipping-containers/public/images/project-storage-yard.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "rEFL4_JUx9BJyy3fEG2Cg"
+uri = "file://artifacts/shipping-containers/public/images/project-workshop.png"
+type = "image"
+title = "generated_image"

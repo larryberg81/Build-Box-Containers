@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import Containers from "@/pages/containers";
 import Contact from "@/pages/contact";
 import Quote from "@/pages/quote";
+import Projects from "@/pages/projects";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
@@ -22,6 +23,7 @@ function Router() {
           <Route path="/containers" component={Containers} />
           <Route path="/contact" component={Contact} />
           <Route path="/quote" component={Quote} />
+          <Route path="/projects" component={Projects} />
           <Route component={NotFound} />
         </Switch>
       </main>
