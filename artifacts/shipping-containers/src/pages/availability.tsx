@@ -344,8 +344,8 @@ export default function Availability() {
             <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mt-1">Containers Ready to Ship</p>
           </div>
           <div>
-            <p className="text-3xl font-display font-bold">48h</p>
-            <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mt-1">Avg. Delivery Time</p>
+            <p className="text-3xl font-display font-bold">72h</p>
+            <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mt-1">Avg. Delivery (Depot States)</p>
           </div>
         </div>
       </div>
