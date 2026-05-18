@@ -100,7 +100,7 @@ function InquiryWidget({
 }) {
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", message: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,9 +170,18 @@ function InquiryWidget({
                 className="w-full h-10 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
               />
               <input
-                placeholder="Phone (optional)"
+                required
+                type="tel"
+                placeholder="Phone number *"
                 value={form.phone}
                 onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                className="w-full h-10 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
+              />
+              <input
+                required
+                placeholder="Shipping address *"
+                value={form.address}
+                onChange={e => setForm(f => ({ ...f, address: e.target.value }))}
                 className="w-full h-10 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
               />
               <textarea
