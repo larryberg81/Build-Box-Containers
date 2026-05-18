@@ -1,26 +1,25 @@
 import { useState, useMemo } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send } from "lucide-react";
 
-// ── Real container catalog (matches /containers page) ───────────────────────
+// ── Real container catalog ───────────────────────────────────────────────────
 const CONTAINERS = [
-  // 10 ft
-  { id: "10-used",      label: "10' Used",                  size: "10 ft",    condition: "Used",     buyPrice: 850,  rentPrice: 95  },
-  { id: "10-new-side",  label: "10' New — Side Door",       size: "10 ft",    condition: "New",      buyPrice: 1200, rentPrice: 120 },
-  // 20 ft
-  { id: "20-used",      label: "20' Used",                  size: "20 ft",    condition: "Used",     buyPrice: 1100, rentPrice: 140 },
-  { id: "20-new",       label: "20' New",                   size: "20 ft",    condition: "New",      buyPrice: 2200, rentPrice: 175 },
-  { id: "20-hc-side",   label: "20' HC — Side Doors",       size: "20 ft HC", condition: "Modified", buyPrice: 2600, rentPrice: 210 },
-  { id: "20-heated",    label: "20' Heated — Side Doors",   size: "20 ft",    condition: "Modified", buyPrice: 3400, rentPrice: 280 },
-  // 30 ft
-  { id: "30-used",      label: "30' Used",                  size: "30 ft",    condition: "Used",     buyPrice: 1650, rentPrice: 195 },
-  { id: "30-new",       label: "30' New",                   size: "30 ft",    condition: "New",      buyPrice: 2550, rentPrice: 235 },
-  // 40 ft
-  { id: "40-used",      label: "40' Used",                  size: "40 ft",    condition: "Used",     buyPrice: 1900, rentPrice: 220 },
-  { id: "40-new",       label: "40' New",                   size: "40 ft",    condition: "New",      buyPrice: 3200, rentPrice: 270 },
-  { id: "40-hc-side",   label: "40' HC — Side Doors",       size: "40 ft HC", condition: "Modified", buyPrice: 3600, rentPrice: 310 },
-  { id: "40-heated",    label: "40' Heated — Side Doors",   size: "40 ft",    condition: "Modified", buyPrice: 4400, rentPrice: 380 },
+  { id: "10-used",     label: "10' Used",                size: "10 ft",    sizeGroup: "10",  condition: "Used",     buyPrice: 850,  rentPrice: 95  },
+  { id: "10-new-side", label: "10' New — Side Door",     size: "10 ft",    sizeGroup: "10",  condition: "New",      buyPrice: 1200, rentPrice: 120 },
+  { id: "20-used",     label: "20' Used",                size: "20 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1100, rentPrice: 140 },
+  { id: "20-new",      label: "20' New",                 size: "20 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 2200, rentPrice: 175 },
+  { id: "20-hc-side",  label: "20' HC — Side Doors",     size: "20 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 2600, rentPrice: 210 },
+  { id: "20-heated",   label: "20' Heated — Side Doors", size: "20 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 3400, rentPrice: 280 },
+  { id: "30-used",     label: "30' Used",                size: "30 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1650, rentPrice: 195 },
+  { id: "30-new",      label: "30' New",                 size: "30 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 2550, rentPrice: 235 },
+  { id: "40-used",     label: "40' Used",                size: "40 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1900, rentPrice: 220 },
+  { id: "40-new",      label: "40' New",                 size: "40 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 3200, rentPrice: 270 },
+  { id: "40-hc-side",  label: "40' HC — Side Doors",     size: "40 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 3600, rentPrice: 310 },
+  { id: "40-heated",   label: "40' Heated — Side Doors", size: "40 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 4400, rentPrice: 380 },
 ];
+
+// Delivery fee: 10ft = $380, everything else = $580
+const DELIVERY_FEE = (sizeGroup: string) => sizeGroup === "10" ? 380 : 580;
 
 const CONDITION_COLORS: Record<string, string> = {
   Used:     "bg-muted text-muted-foreground",
@@ -29,14 +28,14 @@ const CONDITION_COLORS: Record<string, string> = {
 };
 
 const MODIFICATIONS = [
-  { id: "rollup",      label: "Roll-up Door",          price: 650,  desc: "Forklift-friendly full-width access" },
-  { id: "windows",     label: "Windows (x2)",          price: 480,  desc: "Security-barred steel-frame windows" },
-  { id: "hvac",        label: "HVAC Unit",             price: 1800, desc: "Climate control for offices or cold storage" },
-  { id: "electrical",  label: "Electrical Package",    price: 1200, desc: "Panel, outlets, LED lighting" },
-  { id: "insulation",  label: "Spray Foam Insulation", price: 900,  desc: "Full interior insulation" },
-  { id: "paint",       label: "Custom Paint",          price: 350,  desc: "Any RAL color, industrial-grade finish" },
-  { id: "shelving",    label: "Interior Shelving",     price: 420,  desc: "Heavy-duty bolt-in racking" },
-  { id: "vent",        label: "Vents (x4)",            price: 220,  desc: "Anti-condensation louvered vents" },
+  { id: "rollup",     label: "Roll-up Door",          price: 650,  desc: "Forklift-friendly full-width access" },
+  { id: "windows",    label: "Windows (x2)",          price: 480,  desc: "Security-barred steel-frame windows" },
+  { id: "hvac",       label: "HVAC Unit",             price: 1800, desc: "Climate control for offices or cold storage" },
+  { id: "electrical", label: "Electrical Package",    price: 1200, desc: "Panel, outlets, LED lighting" },
+  { id: "insulation", label: "Spray Foam Insulation", price: 900,  desc: "Full interior insulation" },
+  { id: "paint",      label: "Custom Paint",          price: 350,  desc: "Any RAL color, industrial-grade finish" },
+  { id: "shelving",   label: "Interior Shelving",     price: 420,  desc: "Heavy-duty bolt-in racking" },
+  { id: "vent",       label: "Vents (x4)",            price: 220,  desc: "Anti-condensation louvered vents" },
 ];
 
 const RENTAL_DURATIONS = [
@@ -46,22 +45,21 @@ const RENTAL_DURATIONS = [
   { id: "12mo", label: "12 Months", months: 12, discount: 0.15 },
 ];
 
-// ── Delivery logic ───────────────────────────────────────────────────────────
-// States where we have depots → 72-hour delivery
-const DEPOT_STATES = new Set(["WA", "CA", "AZ", "CO", "TX", "IL", "GA", "NY", "FL"]);
-// Adjacent/regional states → 4 days
-const NEAR_STATES = new Set([
-  "OR","ID","NV","MT","UT","NM","KS","OK","MO","LA","MS","AL","TN","NC","SC","VA","MD","PA","NJ","CT","MA","RI","IN","OH","MI","WI","MN","IA","NE","SD","ND","KY","WV","DE",
+// ── Delivery timeline ────────────────────────────────────────────────────────
+const DEPOT_STATES = new Set(["WA","CA","AZ","CO","TX","IL","GA","NY","FL"]);
+const NEAR_STATES  = new Set([
+  "OR","ID","NV","MT","UT","NM","KS","OK","MO","LA","MS","AL","TN","NC","SC",
+  "VA","MD","PA","NJ","CT","MA","RI","IN","OH","MI","WI","MN","IA","NE","SD","ND","KY","WV","DE",
 ]);
 
-function getDelivery(state: string): { days: string; label: string; color: string } {
-  if (!state) return { days: "3 – 5 business days", label: "Select a state to see estimated delivery", color: "text-muted-foreground" };
-  if (DEPOT_STATES.has(state)) return { days: "72 hours (3 days)", label: "Depot in your state — fastest delivery", color: "text-emerald-400" };
-  if (NEAR_STATES.has(state)) return { days: "4 – 5 business days", label: "Regional delivery from nearest depot", color: "text-amber-400" };
-  return { days: "5 business days", label: "Long-haul delivery from nearest depot", color: "text-muted-foreground" };
+function getDelivery(state: string) {
+  if (!state)                     return { days: "3 – 5 business days", label: "Select a state to see your estimated window", color: "text-muted-foreground" };
+  if (DEPOT_STATES.has(state))    return { days: "72 hours (3 days)",   label: "Depot in your state — fastest delivery",       color: "text-emerald-400" };
+  if (NEAR_STATES.has(state))     return { days: "4 – 5 business days", label: "Regional delivery from nearest depot",          color: "text-amber-400"   };
+  return                                 { days: "5 business days",     label: "Long-haul delivery from nearest depot",         color: "text-muted-foreground" };
 }
 
-const US_STATES = [
+const US_STATES: [string, string][] = [
   ["AL","Alabama"],["AK","Alaska"],["AZ","Arizona"],["AR","Arkansas"],["CA","California"],
   ["CO","Colorado"],["CT","Connecticut"],["DE","Delaware"],["FL","Florida"],["GA","Georgia"],
   ["HI","Hawaii"],["ID","Idaho"],["IL","Illinois"],["IN","Indiana"],["IA","Iowa"],
@@ -80,21 +78,134 @@ function SectionHeader({ step, title, subtitle }: { step: number; title: string;
       <span className="inline-block bg-primary text-primary-foreground text-xs font-bold tracking-widest uppercase px-3 py-1 mb-3">
         Step {step}
       </span>
-      <h2 className="text-2xl font-display font-bold uppercase tracking-tight text-foreground">{title}</h2>
+      <h2 className="text-2xl font-display font-bold uppercase tracking-tight">{title}</h2>
       {subtitle && <p className="text-muted-foreground mt-1 text-sm">{subtitle}</p>}
     </div>
   );
 }
 
+// ── Floating inquiry widget ──────────────────────────────────────────────────
+function InquiryWidget({
+  containerLabel,
+  totalPrice,
+  deliveryState,
+  deliveryZip,
+  mode,
+}: {
+  containerLabel: string;
+  totalPrice: number;
+  deliveryState: string;
+  deliveryZip: string;
+  mode: "purchase" | "rental";
+}) {
+  const [open, setOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+  };
+
+  const defaultMessage = `Hi, I'm interested in the ${containerLabel} (${mode === "purchase" ? "purchase" : "rental"})${
+    deliveryState ? ` — delivery to ${deliveryState}${deliveryZip ? ` ${deliveryZip}` : ""}` : ""
+  }. My estimated total is $${totalPrice.toLocaleString()}. Please send me a formal quote.`;
+
+  return (
+    <>
+      {/* Floating button */}
+      <button
+        data-testid="inquiry-widget-toggle"
+        onClick={() => { setOpen(v => !v); setSubmitted(false); }}
+        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm h-12 px-5 shadow-2xl hover:bg-primary/90 transition-all"
+      >
+        {open ? <X className="h-4 w-4" /> : <MessageCircle className="h-4 w-4" />}
+        {open ? "Close" : "Talk to Us"}
+      </button>
+
+      {/* Drawer */}
+      {open && (
+        <div className="fixed bottom-20 right-6 z-50 w-80 bg-card border border-border shadow-2xl overflow-hidden">
+          <div className="bg-primary px-5 py-4">
+            <p className="text-primary-foreground font-display font-bold uppercase tracking-tight text-base">Quick Inquiry</p>
+            <p className="text-primary-foreground/70 text-xs mt-0.5">We respond within 24 hours</p>
+          </div>
+
+          {submitted ? (
+            <div className="p-6 text-center">
+              <div className="w-12 h-12 bg-primary/20 flex items-center justify-center mx-auto mb-4">
+                <Check className="h-6 w-6 text-primary" />
+              </div>
+              <p className="font-display font-bold uppercase text-lg mb-2">Got it!</p>
+              <p className="text-sm text-muted-foreground">
+                We'll reach out to <strong className="text-foreground">{form.email || "you"}</strong> within 24 hours with your formal quote.
+              </p>
+              <button onClick={() => { setOpen(false); setSubmitted(false); }} className="mt-5 w-full h-10 bg-primary text-primary-foreground text-sm font-bold uppercase tracking-wider hover:bg-primary/90 transition-colors">
+                Done
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="p-5 space-y-3">
+              {/* Pre-filled context */}
+              <div className="bg-background/60 border border-border p-3 text-xs text-muted-foreground space-y-1">
+                <p><span className="font-bold text-foreground">Container:</span> {containerLabel}</p>
+                <p><span className="font-bold text-foreground">Type:</span> {mode === "purchase" ? "Purchase" : "Rental"}</p>
+                <p><span className="font-bold text-foreground">Estimate:</span> ${totalPrice.toLocaleString()} (incl. delivery)</p>
+                {deliveryState && <p><span className="font-bold text-foreground">Delivery to:</span> {deliveryState}{deliveryZip ? ` ${deliveryZip}` : ""}</p>}
+              </div>
+
+              <input
+                required
+                placeholder="Your name"
+                value={form.name}
+                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                className="w-full h-10 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
+              />
+              <input
+                required
+                type="email"
+                placeholder="Email address"
+                value={form.email}
+                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                className="w-full h-10 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
+              />
+              <input
+                placeholder="Phone (optional)"
+                value={form.phone}
+                onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                className="w-full h-10 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
+              />
+              <textarea
+                rows={3}
+                value={form.message || defaultMessage}
+                onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+                className="w-full px-3 py-2 bg-background border border-border text-xs text-muted-foreground focus:outline-none focus:border-primary transition-colors resize-none leading-relaxed"
+              />
+
+              <button
+                type="submit"
+                className="w-full h-10 bg-primary text-primary-foreground text-sm font-bold uppercase tracking-wider hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+              >
+                Send Inquiry <Send className="h-3.5 w-3.5" />
+              </button>
+            </form>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+// ── Main page ────────────────────────────────────────────────────────────────
 export default function Quote() {
   const [selectedContainer, setSelectedContainer] = useState<string>("20-used");
-  const [mode, setMode] = useState<"purchase" | "rental">("purchase");
-  const [selectedDuration, setSelectedDuration] = useState<string>("3mo");
-  const [selectedMods, setSelectedMods] = useState<Set<string>>(new Set());
-  const [showBreakdown, setShowBreakdown] = useState(false);
-  const [selectedState, setSelectedState] = useState<string>("");
-  const [zipCode, setZipCode] = useState<string>("");
-  const [sizeFilter, setSizeFilter] = useState<string>("All");
+  const [mode, setMode]                           = useState<"purchase" | "rental">("purchase");
+  const [selectedDuration, setSelectedDuration]   = useState<string>("3mo");
+  const [selectedMods, setSelectedMods]           = useState<Set<string>>(new Set());
+  const [showBreakdown, setShowBreakdown]         = useState(false);
+  const [selectedState, setSelectedState]         = useState<string>("");
+  const [zipCode, setZipCode]                     = useState<string>("");
+  const [sizeFilter, setSizeFilter]               = useState<string>("All");
 
   const SIZE_GROUPS = ["All", "10 ft", "20 ft", "30 ft", "40 ft"];
 
@@ -111,35 +222,37 @@ export default function Quote() {
     });
   };
 
-  const container = CONTAINERS.find(c => c.id === selectedContainer)!;
-  const delivery = getDelivery(selectedState);
+  const container  = CONTAINERS.find(c => c.id === selectedContainer)!;
+  const delivery   = getDelivery(selectedState);
+  const deliveryFee = DELIVERY_FEE(container.sizeGroup);
 
   const estimate = useMemo(() => {
+    const fee      = DELIVERY_FEE(container.sizeGroup);
     const modsTotal = MODIFICATIONS.filter(m => selectedMods.has(m.id)).reduce((sum, m) => sum + m.price, 0);
 
     if (mode === "purchase") {
-      const base = container.buyPrice;
-      const total = base + modsTotal;
-      return { base, mods: modsTotal, total, monthly: null, label: "Estimated Purchase Price" };
+      const base  = container.buyPrice;
+      const total = base + modsTotal + fee;
+      return { base, mods: modsTotal, delivery: fee, total, monthly: null, label: "Estimated Purchase Price" };
     } else {
-      const duration = RENTAL_DURATIONS.find(d => d.id === selectedDuration)!;
+      const duration    = RENTAL_DURATIONS.find(d => d.id === selectedDuration)!;
       const monthlyBase = Math.round(container.rentPrice * (1 - duration.discount));
       const modsMonthly = Math.round(modsTotal * 0.08);
-      const monthly = monthlyBase + modsMonthly;
-      const total = monthly * duration.months;
-      return { base: monthlyBase, mods: modsMonthly, total, monthly, label: "Estimated Rental Total", months: duration.months };
+      const monthly     = monthlyBase + modsMonthly;
+      const total       = monthly * duration.months + fee; // delivery is one-time
+      return { base: monthlyBase, mods: modsMonthly, delivery: fee, total, monthly, label: "Estimated Rental Total", months: duration.months };
     }
   }, [selectedContainer, mode, selectedDuration, selectedMods]);
 
   return (
     <div className="bg-background min-h-screen pt-16">
-      {/* Page Header */}
+      {/* Header */}
       <section className="border-b border-border bg-card py-16">
         <div className="container mx-auto px-4 md:px-8 max-w-5xl">
           <p className="text-primary text-sm font-bold tracking-widest uppercase mb-3">Instant Estimate</p>
           <h1 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-4">Quote Calculator</h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
-            Pick your container, add-ons, and delivery location — get a real price in seconds.
+            Pick your container, add-ons, and delivery location — get a real all-in price in seconds.
           </p>
         </div>
       </section>
@@ -147,14 +260,12 @@ export default function Quote() {
       <div className="container mx-auto px-4 md:px-8 max-w-5xl py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-          {/* Left: Configuration */}
+          {/* ── Left: Config ─────────────────────────────────────────────── */}
           <div className="lg:col-span-2 flex flex-col gap-10">
 
-            {/* Step 1: Container Selection */}
+            {/* Step 1: Container */}
             <div>
               <SectionHeader step={1} title="Select Your Container" subtitle="Choose the exact size and type you need." />
-
-              {/* Size group filter */}
               <div className="flex gap-1 flex-wrap mb-4">
                 {SIZE_GROUPS.map(g => (
                   <button
@@ -171,7 +282,6 @@ export default function Quote() {
                   </button>
                 ))}
               </div>
-
               <div className="flex flex-col gap-2">
                 {filteredContainers.map(c => (
                   <button
@@ -184,27 +294,14 @@ export default function Quote() {
                         : "border-border bg-card hover:border-muted-foreground"
                     }`}
                   >
-                    {/* Radio dot */}
                     <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
                       selectedContainer === c.id ? "border-primary bg-primary" : "border-muted-foreground"
                     }`}>
                       {selectedContainer === c.id && <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground" />}
                     </div>
-
-                    {/* Size badge */}
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5 flex-shrink-0">
-                      {c.size}
-                    </span>
-
-                    {/* Name */}
+                    <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5 flex-shrink-0">{c.size}</span>
                     <span className="font-bold text-sm uppercase tracking-wide flex-1">{c.label}</span>
-
-                    {/* Condition badge */}
-                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 flex-shrink-0 ${CONDITION_COLORS[c.condition]}`}>
-                      {c.condition}
-                    </span>
-
-                    {/* Price */}
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 flex-shrink-0 ${CONDITION_COLORS[c.condition]}`}>{c.condition}</span>
                     <span className="font-display font-bold text-foreground flex-shrink-0">
                       {mode === "purchase" ? `$${c.buyPrice.toLocaleString()}` : `$${c.rentPrice}/mo`}
                     </span>
@@ -217,7 +314,7 @@ export default function Quote() {
             <div>
               <SectionHeader step={2} title="Purchase or Rent" />
               <div className="grid grid-cols-2 gap-3">
-                {(["purchase", "rental"] as const).map(m => (
+                {(["purchase","rental"] as const).map(m => (
                   <button
                     key={m}
                     data-testid={`mode-${m}`}
@@ -232,7 +329,6 @@ export default function Quote() {
                   </button>
                 ))}
               </div>
-
               {mode === "rental" && (
                 <div className="mt-4">
                   <p className="text-sm text-muted-foreground font-semibold uppercase tracking-wider mb-3">Rental Duration</p>
@@ -250,9 +346,7 @@ export default function Quote() {
                       >
                         {d.label}
                         {d.discount > 0 && (
-                          <span className="block text-[10px] font-semibold text-primary mt-0.5 tracking-wider">
-                            Save {d.discount * 100}%
-                          </span>
+                          <span className="block text-[10px] font-semibold text-primary mt-0.5 tracking-wider">Save {d.discount * 100}%</span>
                         )}
                       </button>
                     ))}
@@ -295,14 +389,10 @@ export default function Quote() {
 
             {/* Step 4: Delivery Location */}
             <div>
-              <SectionHeader step={4} title="Delivery Location" subtitle="We'll estimate your delivery timeline based on the nearest depot." />
-
+              <SectionHeader step={4} title="Delivery Location" subtitle="We'll estimate your delivery timeline from the nearest depot." />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                {/* State selector */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">
-                    State
-                  </label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">State</label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                     <select
@@ -318,12 +408,8 @@ export default function Quote() {
                     </select>
                   </div>
                 </div>
-
-                {/* ZIP code */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">
-                    ZIP Code
-                  </label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">ZIP Code</label>
                   <input
                     data-testid="zip-input"
                     type="text"
@@ -337,7 +423,7 @@ export default function Quote() {
                 </div>
               </div>
 
-              {/* Delivery estimate card */}
+              {/* Delivery timeline card */}
               <div className={`border-2 p-4 flex items-center gap-4 transition-all ${
                 selectedState ? "border-border bg-card" : "border-dashed border-border bg-transparent"
               }`}>
@@ -357,13 +443,20 @@ export default function Quote() {
                 )}
               </div>
 
-              <p className="text-xs text-muted-foreground mt-3">
-                Minimum delivery lead time is 3 business days. Remote locations may require additional scheduling.
-              </p>
+              {/* Delivery fee callout */}
+              <div className="mt-3 flex items-center gap-3 px-4 py-3 bg-primary/5 border border-primary/20">
+                <Truck className="h-4 w-4 text-primary flex-shrink-0" />
+                <p className="text-sm">
+                  <span className="font-bold text-foreground">Delivery fee included: </span>
+                  <span className="text-primary font-bold">${deliveryFee.toLocaleString()}</span>
+                  <span className="text-muted-foreground text-xs ml-2">(flat rate, one-time)</span>
+                </p>
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Minimum lead time is 3 business days. Remote locations may require additional scheduling.</p>
             </div>
           </div>
 
-          {/* Right: Sticky Price Panel */}
+          {/* ── Right: Sticky Price Panel ─────────────────────────────────── */}
           <div className="lg:sticky lg:top-24">
             <div className="border-2 border-border bg-card overflow-hidden">
               <div className="bg-primary px-6 py-4">
@@ -382,16 +475,13 @@ export default function Quote() {
                 </div>
 
                 {/* Total */}
-                <div className="mb-6">
-                  <p className="text-5xl font-display font-bold text-foreground">
-                    ${estimate.total.toLocaleString()}
-                  </p>
+                <div className="mb-2">
+                  <p className="text-5xl font-display font-bold text-foreground">${estimate.total.toLocaleString()}</p>
                   {estimate.monthly !== null && (
-                    <p className="text-muted-foreground text-sm mt-1">
-                      ${estimate.monthly.toLocaleString()}/mo &times; {estimate.months} months
-                    </p>
+                    <p className="text-muted-foreground text-sm mt-1">${estimate.monthly.toLocaleString()}/mo × {estimate.months} mo + ${estimate.delivery} delivery</p>
                   )}
                 </div>
+                <p className="text-xs text-primary font-semibold mb-6">Includes ${estimate.delivery} delivery fee</p>
 
                 {/* Breakdown toggle */}
                 <button
@@ -425,14 +515,20 @@ export default function Quote() {
                         <span className="font-bold">${estimate.monthly!.toLocaleString()}</span>
                       </div>
                     )}
-                    <div className="flex justify-between px-4 py-2.5 font-bold">
-                      <span>Total estimate</span>
+                    <div className="flex justify-between px-4 py-2.5">
+                      <span className="text-muted-foreground flex items-center gap-1.5">
+                        <Truck className="h-3 w-3" /> Delivery fee
+                      </span>
+                      <span className="font-bold">${estimate.delivery.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between px-4 py-2.5 font-bold bg-card">
+                      <span>All-in total</span>
                       <span>${estimate.total.toLocaleString()}</span>
                     </div>
                   </div>
                 )}
 
-                {/* Delivery summary in panel */}
+                {/* Delivery summary */}
                 {selectedState && (
                   <div className="mb-5 p-3 border border-border bg-background/50 flex items-center gap-3">
                     <Truck className={`h-4 w-4 flex-shrink-0 ${delivery.color}`} />
@@ -444,7 +540,7 @@ export default function Quote() {
                 )}
 
                 <p className="text-xs text-muted-foreground mb-6 leading-relaxed">
-                  Estimates are indicative. Final pricing depends on delivery distance and any site-specific requirements.
+                  Estimates are indicative. Final pricing depends on site-specific requirements.
                 </p>
 
                 <Link
@@ -456,28 +552,31 @@ export default function Quote() {
                 </Link>
 
                 <div className="mt-4 pt-4 border-t border-border space-y-1.5">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Check className="h-3 w-3 text-primary flex-shrink-0" />
-                    No commitment required
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Check className="h-3 w-3 text-primary flex-shrink-0" />
-                    Response within 24 hours
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Check className="h-3 w-3 text-primary flex-shrink-0" />
-                    Min. delivery 3 business days
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Check className="h-3 w-3 text-primary flex-shrink-0" />
-                    Nationwide delivery available
-                  </div>
+                  {[
+                    "No commitment required",
+                    "Response within 24 hours",
+                    "Min. delivery 3 business days",
+                    "Nationwide delivery available",
+                  ].map(t => (
+                    <div key={t} className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Check className="h-3 w-3 text-primary flex-shrink-0" /> {t}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Floating inquiry widget */}
+      <InquiryWidget
+        containerLabel={container.label}
+        totalPrice={estimate.total}
+        deliveryState={selectedState}
+        deliveryZip={zipCode}
+        mode={mode}
+      />
     </div>
   );
 }
