@@ -20,6 +20,7 @@ export function Footer() {
             <ul className="flex flex-col gap-2">
               <li><Link href="/containers" className="text-sm text-muted-foreground hover:text-primary transition-colors">Storage Containers</Link></li>
               <li><Link href="/containers" className="text-sm text-muted-foreground hover:text-primary transition-colors">Modified Containers</Link></li>
+              <li><Link href="/gensets" className="text-sm text-muted-foreground hover:text-primary transition-colors">Undermount Gensets</Link></li>
               <li><Link href="/containers" className="text-sm text-muted-foreground hover:text-primary transition-colors">Pop-up Retail</Link></li>
               <li><Link href="/containers" className="text-sm text-muted-foreground hover:text-primary transition-colors">Modular Buildings</Link></li>
             </ul>

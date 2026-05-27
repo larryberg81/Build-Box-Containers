@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { ArrowRight, Box, Shield, Zap, Wrench } from "lucide-react";
+import { ArrowRight, Box, Shield, Zap, Wrench, BatteryCharging } from "lucide-react";
 
 export default function Home() {
   return (
@@ -108,6 +108,47 @@ export default function Home() {
                 <div className="absolute bottom-0 left-0 h-1 bg-primary w-0 group-hover:w-full transition-all duration-300" />
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Gensets banner */}
+      <section className="py-20 bg-background border-y border-border">
+        <div className="container mx-auto px-4 md:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-primary text-sm font-bold tracking-widest uppercase mb-3">Power Solutions</p>
+              <h2 className="text-3xl md:text-5xl font-display font-bold uppercase tracking-tight mb-4">
+                Undermount Gensets
+              </h2>
+              <p className="text-muted-foreground text-lg mb-6">
+                Keep your reefer running anywhere. We stock and rent diesel and hybrid generator sets from the world's top brands — pre-mounted and tested before delivery.
+              </p>
+              <div className="flex flex-wrap gap-2 mb-8">
+                {["Thermo King", "Carrier Transicold", "Genmark", "ReeGen"].map(b => (
+                  <span key={b} className="text-xs font-bold uppercase tracking-wider bg-card border border-border px-3 py-1.5 text-muted-foreground">
+                    {b}
+                  </span>
+                ))}
+              </div>
+              <Link href="/gensets" className="inline-flex h-12 items-center gap-2 bg-primary px-8 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-all uppercase tracking-wider">
+                Browse Gensets <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { label: "11 Models", sub: "Across 4 brands" },
+                { label: "4.6 – 12 kW", sub: "Power range" },
+                { label: "Diesel + Hybrid", sub: "Fuel options" },
+                { label: "Buy or Rent", sub: "Flexible terms" },
+              ].map(({ label, sub }) => (
+                <div key={label} className="border border-border bg-card p-6 flex flex-col gap-1">
+                  <BatteryCharging className="h-6 w-6 text-primary mb-2" />
+                  <p className="font-display font-bold text-xl uppercase">{label}</p>
+                  <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">{sub}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

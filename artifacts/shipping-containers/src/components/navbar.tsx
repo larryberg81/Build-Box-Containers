@@ -5,6 +5,7 @@ import { Box, Menu, X, ArrowRight } from "lucide-react";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/containers", label: "Containers" },
+  { href: "/gensets", label: "Gensets" },
   { href: "/projects", label: "Projects" },
   { href: "/availability", label: "Availability" },
   { href: "/resources", label: "Resources" },

@@ -38,6 +38,18 @@ const MODIFICATIONS = [
   { id: "vent",       label: "Vents (x4)",            price: 220,  desc: "Anti-condensation louvered vents" },
 ];
 
+const GENSET_ADDONS = [
+  { id: "gs-none",    label: "No Genset",                   price: 0,     desc: "Skip genset — power connection not required" },
+  { id: "gs-gm460",   label: "Genmark GM-460 (4.6 kW)",    price: 4200,  desc: "Lightest & quietest — 20ft reefers, urban sites" },
+  { id: "gs-ct6300",  label: "Carrier GEN 6300 (6.3 kW)",  price: 5500,  desc: "Compact Kubota engine, ideal for 20ft" },
+  { id: "gs-tk800",   label: "Thermo King UT-800 (8 kW)",  price: 7200,  desc: "Best-selling TK model — all reefer sizes" },
+  { id: "gs-ct7500",  label: "Carrier GEN 7500 (7.5 kW)",  price: 7000,  desc: "Fleet favorite — APX+ controller, 20–40ft" },
+  { id: "gs-gm750",   label: "Genmark GM-750 (7.5 kW)",    price: 6800,  desc: "Best value in class — 20/30/40ft" },
+  { id: "gs-rg6500",  label: "ReeGen RG-6500 Eco (hybrid)", price: 8400, desc: "Hybrid diesel-electric, ultra-low noise" },
+  { id: "gs-tk1000",  label: "Thermo King UT-1000 (10 kW)", price: 8900, desc: "Heavy-duty 4-cylinder — 40ft & HC" },
+  { id: "gs-rg9000",  label: "ReeGen RG-9000 Pro (hybrid)", price: 11200, desc: "High-output hybrid, cloud monitoring" },
+];
+
 const RENTAL_DURATIONS = [
   { id: "1mo",  label: "1 Month",   months: 1,  discount: 0 },
   { id: "3mo",  label: "3 Months",  months: 3,  discount: 0.05 },
@@ -211,6 +223,7 @@ export default function Quote() {
   const [mode, setMode]                           = useState<"purchase" | "rental">("purchase");
   const [selectedDuration, setSelectedDuration]   = useState<string>("3mo");
   const [selectedMods, setSelectedMods]           = useState<Set<string>>(new Set());
+  const [selectedGenset, setSelectedGenset]       = useState<string>("gs-none");
   const [showBreakdown, setShowBreakdown]         = useState(false);
   const [selectedState, setSelectedState]         = useState<string>("");
   const [zipCode, setZipCode]                     = useState<string>("");
@@ -236,22 +249,25 @@ export default function Quote() {
   const deliveryFee = DELIVERY_FEE(container.sizeGroup);
 
   const estimate = useMemo(() => {
-    const fee      = DELIVERY_FEE(container.sizeGroup);
-    const modsTotal = MODIFICATIONS.filter(m => selectedMods.has(m.id)).reduce((sum, m) => sum + m.price, 0);
+    const fee        = DELIVERY_FEE(container.sizeGroup);
+    const modsTotal  = MODIFICATIONS.filter(m => selectedMods.has(m.id)).reduce((sum, m) => sum + m.price, 0);
+    const genset     = GENSET_ADDONS.find(g => g.id === selectedGenset)!;
+    const gensetPrice = genset.price;
 
     if (mode === "purchase") {
       const base  = container.buyPrice;
-      const total = base + modsTotal + fee;
-      return { base, mods: modsTotal, delivery: fee, total, monthly: null, label: "Estimated Purchase Price" };
+      const total = base + modsTotal + gensetPrice + fee;
+      return { base, mods: modsTotal, genset: gensetPrice, gensetLabel: genset.label, delivery: fee, total, monthly: null, label: "Estimated Purchase Price" };
     } else {
       const duration    = RENTAL_DURATIONS.find(d => d.id === selectedDuration)!;
       const monthlyBase = Math.round(container.rentPrice * (1 - duration.discount));
       const modsMonthly = Math.round(modsTotal * 0.08);
-      const monthly     = monthlyBase + modsMonthly;
-      const total       = monthly * duration.months + fee; // delivery is one-time
-      return { base: monthlyBase, mods: modsMonthly, delivery: fee, total, monthly, label: "Estimated Rental Total", months: duration.months };
+      const gensetMonthly = Math.round(gensetPrice * 0.08);
+      const monthly     = monthlyBase + modsMonthly + gensetMonthly;
+      const total       = monthly * duration.months + fee;
+      return { base: monthlyBase, mods: modsMonthly, genset: gensetMonthly, gensetLabel: genset.label, delivery: fee, total, monthly, label: "Estimated Rental Total", months: duration.months };
     }
-  }, [selectedContainer, mode, selectedDuration, selectedMods]);
+  }, [selectedContainer, mode, selectedDuration, selectedMods, selectedGenset]);
 
   return (
     <div className="bg-background min-h-screen pt-16">
@@ -396,9 +412,41 @@ export default function Quote() {
               </div>
             </div>
 
-            {/* Step 4: Delivery Location */}
+            {/* Step 4: Genset */}
             <div>
-              <SectionHeader step={4} title="Delivery Location" subtitle="We'll estimate your delivery timeline from the nearest depot." />
+              <SectionHeader step={4} title="Undermount Genset" subtitle="Optional — add a pre-mounted generator set for off-grid or reefer operation." />
+              <div className="flex flex-col gap-2">
+                {GENSET_ADDONS.map(g => (
+                  <button
+                    key={g.id}
+                    data-testid={`genset-option-${g.id}`}
+                    onClick={() => setSelectedGenset(g.id)}
+                    className={`text-left px-4 py-4 border-2 transition-all flex items-center gap-4 ${
+                      selectedGenset === g.id
+                        ? "border-primary bg-primary/5"
+                        : "border-border bg-card hover:border-muted-foreground"
+                    }`}
+                  >
+                    <div className={`w-4 h-4 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${
+                      selectedGenset === g.id ? "border-primary bg-primary" : "border-muted-foreground"
+                    }`}>
+                      {selectedGenset === g.id && <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground" />}
+                    </div>
+                    <span className="font-bold text-sm uppercase tracking-wide flex-1">{g.label}</span>
+                    <span className="font-display font-bold flex-shrink-0 text-foreground">
+                      {g.price === 0 ? "—" : `+$${g.price.toLocaleString()}`}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-muted-foreground mt-3">
+                <Link href="/gensets" className="text-primary underline underline-offset-2">Browse all 11 genset models</Link> — including hybrid ReeGen units.
+              </p>
+            </div>
+
+            {/* Step 5: Delivery Location */}
+            <div>
+              <SectionHeader step={5} title="Delivery Location" subtitle="We'll estimate your delivery timeline from the nearest depot." />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">State</label>
@@ -518,6 +566,14 @@ export default function Quote() {
                         </div>
                       );
                     })}
+                    {estimate.genset > 0 && (
+                      <div className="flex justify-between px-4 py-2.5">
+                        <span className="text-muted-foreground flex items-center gap-1.5">
+                          <Zap className="h-3 w-3 text-primary" /> Genset
+                        </span>
+                        <span className="font-bold text-primary">+${estimate.genset.toLocaleString()}</span>
+                      </div>
+                    )}
                     {mode === "rental" && (
                       <div className="flex justify-between px-4 py-2.5 bg-primary/5">
                         <span className="text-muted-foreground">Monthly total</span>
