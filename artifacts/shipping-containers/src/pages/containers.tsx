@@ -5,7 +5,7 @@ import { ArrowRight, Thermometer, Flame, DoorOpen } from "lucide-react";
 interface Container {
   id: string;
   name: string;
-  condition: "Used" | "New" | "Modified";
+  condition: "Used" | "New" | "Modified" | "Reefer";
   category: string;
   size: string;
   extDimensions: string;
@@ -229,15 +229,86 @@ const CONTAINERS: Container[] = [
     features: ["Integrated heating system", "Side access doors", "Spray foam insulation", "Electrical package included", "Thermostat control", "220V power ready"],
     desc: "Full-size, year-round ready. Insulated, heated, and side-door accessible — built for northern climate job sites, large workshops, and permanent installs.",
   },
+
+  // ── REEFER ─────────────────────────────────────────────────────
+  {
+    id: "reefer-20-used",
+    name: "20' Reefer — Used",
+    condition: "Reefer",
+    category: "Reefer",
+    size: "20 ft",
+    extDimensions: "20'L × 8'W × 8.5'H",
+    intDimensions: "17'8\"L × 7'6\"W × 7'5\"H",
+    payload: "47,900 lbs",
+    volume: "1,000 cu ft",
+    price: "$3,500",
+    rentPrice: "From $320/mo",
+    image: "/images/container-reefer.png",
+    badge: "Reefer",
+    features: ["Refrigeration unit included", "Temp range: -25°F to +77°F", "Insulated floor & walls", "Wind & watertight", "Genset-ready mounting"],
+    desc: "Wind and watertight 20ft reefer with operational refrigeration unit. Light cosmetic wear — temperature-verified and tested before delivery.",
+  },
+  {
+    id: "reefer-20-new",
+    name: "20' Reefer — New",
+    condition: "Reefer",
+    category: "Reefer",
+    size: "20 ft",
+    extDimensions: "20'L × 8'W × 8.5'H",
+    intDimensions: "17'8\"L × 7'6\"W × 7'5\"H",
+    payload: "47,900 lbs",
+    volume: "1,000 cu ft",
+    price: "$6,800",
+    rentPrice: "From $520/mo",
+    image: "/images/container-reefer.png",
+    badge: "Reefer",
+    features: ["One-trip condition", "Refrigeration unit included", "Temp range: -25°F to +77°F", "T-floor aluminum decking", "Insulated walls & ceiling", "Genset-ready mounting"],
+    desc: "One-trip factory-fresh 20ft reefer. Pristine insulated interior with full refrigeration system — the right choice for cold-chain, food storage, and pharma logistics.",
+  },
+  {
+    id: "reefer-40-used",
+    name: "40' Reefer — Used",
+    condition: "Reefer",
+    category: "Reefer",
+    size: "40 ft",
+    extDimensions: "40'L × 8'W × 8.5'H",
+    intDimensions: "37'9\"L × 7'6\"W × 7'5\"H",
+    payload: "59,040 lbs",
+    volume: "2,100 cu ft",
+    price: "$4,800",
+    rentPrice: "From $420/mo",
+    image: "/images/container-reefer.png",
+    badge: "Reefer",
+    features: ["Refrigeration unit included", "Temp range: -25°F to +77°F", "T-floor aluminum decking", "Insulated walls & ceiling", "Wind & watertight", "Genset-ready mounting"],
+    desc: "Maximum cold-storage capacity at used pricing. Structurally sound with standard cosmetic wear — temperature-tested and ready for immediate deployment.",
+  },
+  {
+    id: "reefer-40hc-new",
+    name: "40' HC Reefer — New",
+    condition: "Reefer",
+    category: "Reefer",
+    size: "40 ft HC",
+    extDimensions: "40'L × 8'W × 9.5'H",
+    intDimensions: "37'9\"L × 7'6\"W × 8'5\"H",
+    payload: "58,600 lbs",
+    volume: "2,400 cu ft",
+    price: "$9,200",
+    rentPrice: "From $680/mo",
+    image: "/images/container-reefer.png",
+    badge: "Reefer",
+    features: ["One-trip condition", "High Cube — extra 1ft headroom", "Refrigeration unit included", "Temp range: -25°F to +77°F", "T-floor aluminum decking", "Insulated walls & ceiling", "Genset-ready mounting"],
+    desc: "Premium one-trip 40ft high-cube reefer. Extra headroom, maximum capacity, and full refrigeration system — the flagship choice for large-scale cold-chain operations.",
+  },
 ];
 
-const CATEGORIES = ["All", "10 ft", "20 ft", "30 ft", "40 ft"];
-const CONDITIONS = ["All", "Used", "New", "Modified"];
+const CATEGORIES = ["All", "10 ft", "20 ft", "30 ft", "40 ft", "Reefer"];
+const CONDITIONS = ["All", "Used", "New", "Modified", "Reefer"];
 
 const CONDITION_COLORS: Record<string, string> = {
   Used:     "bg-muted text-muted-foreground border border-border",
   New:      "bg-emerald-900/60 text-emerald-300",
   Modified: "bg-primary/20 text-primary",
+  Reefer:   "bg-blue-900/60 text-blue-300",
 };
 
 function SpecRow({ label, value }: { label: string; value: string }) {

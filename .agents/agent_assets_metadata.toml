@@ -126,3 +126,27 @@ id = "v_KwGbNuA1TMUvX1_VQSE"
 uri = "file://artifacts/shipping-containers/public/images/blog-modular-building.png"
 type = "image"
 title = "generated_image"
+
+[[generated]]
+id = "DNrT6IaC5O9PWGJ70FxBg"
+uri = "file://artifacts/shipping-containers/public/images/genset-thermo-king.png"
+type = "image"
+title = "thermo king undermount genset"
+
+[[generated]]
+id = "5wz9Ezb-rez-lL9HdjwGv"
+uri = "file://artifacts/shipping-containers/public/images/genset-carrier.png"
+type = "image"
+title = "carrier transicold genset"
+
+[[generated]]
+id = "hqcsJcp2lO6y4djakhNfa"
+uri = "file://artifacts/shipping-containers/public/images/genset-genmark.png"
+type = "image"
+title = "genmark compact genset"
+
+[[generated]]
+id = "E_ASqvknXceQyZ5JBn-iB"
+uri = "file://artifacts/shipping-containers/public/images/genset-reegen.png"
+type = "image"
+title = "reegen hybrid genset"

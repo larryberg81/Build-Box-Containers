@@ -225,6 +225,13 @@ const BRAND_COLORS: Record<string, string> = {
   "ReeGen":            "bg-emerald-900/50 text-emerald-300",
 };
 
+const BRAND_IMAGES: Record<string, string> = {
+  "Thermo King":        "/images/genset-thermo-king.png",
+  "Carrier Transicold": "/images/genset-carrier.png",
+  "Genmark":            "/images/genset-genmark.png",
+  "ReeGen":             "/images/genset-reegen.png",
+};
+
 const BADGE_COLORS: Record<string, string> = {
   "Best Seller":  "bg-primary/20 text-primary",
   "Most Popular": "bg-primary/20 text-primary",
@@ -306,16 +313,25 @@ export default function Gensets() {
                 data-testid={`genset-card-${g.id}`}
                 className="group border border-border bg-card hover:border-primary/50 transition-all duration-300 relative cursor-pointer flex flex-col"
               >
-                {/* Header stripe */}
-                <div className={`px-5 py-3 flex items-center justify-between ${BRAND_COLORS[g.brand]?.replace("text-", "border-b border-")?.split(" ")[0] ?? ""} border-b border-border`}>
-                  <span className={`text-[10px] font-bold uppercase tracking-widest ${BRAND_COLORS[g.brand]?.split(" ")[1] ?? "text-foreground"}`}>
-                    {g.brand}
-                  </span>
+                {/* Product image */}
+                <div className="aspect-[4/3] overflow-hidden bg-muted relative">
+                  <img
+                    src={BRAND_IMAGES[g.brand]}
+                    alt={`${g.brand} ${g.model}`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                   {g.badge && (
-                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 ${BADGE_COLORS[g.badge] ?? "bg-muted text-muted-foreground"}`}>
+                    <span className={`absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider px-2 py-1 ${BADGE_COLORS[g.badge] ?? "bg-muted text-muted-foreground"}`}>
                       {g.badge}
                     </span>
                   )}
+                </div>
+
+                {/* Header stripe */}
+                <div className={`px-5 py-3 flex items-center justify-between border-b border-border`}>
+                  <span className={`text-[10px] font-bold uppercase tracking-widest ${BRAND_COLORS[g.brand]?.split(" ")[1] ?? "text-foreground"}`}>
+                    {g.brand}
+                  </span>
                 </div>
 
                 <div className="p-6 flex flex-col flex-1">
@@ -446,6 +462,14 @@ export default function Gensets() {
             className="bg-card border border-border max-w-2xl w-full max-h-[90vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
+            {/* Modal image */}
+            <div className="aspect-video overflow-hidden bg-muted">
+              <img
+                src={BRAND_IMAGES[selected.brand]}
+                alt={`${selected.brand} ${selected.model}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
             {/* Brand header */}
             <div className={`px-8 py-4 border-b border-border ${BRAND_COLORS[selected.brand]?.split(" ")[0] ?? "bg-muted"}`}>
               <span className={`text-xs font-bold uppercase tracking-widest ${BRAND_COLORS[selected.brand]?.split(" ")[1] ?? "text-foreground"}`}>
