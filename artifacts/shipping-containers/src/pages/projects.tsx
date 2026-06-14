@@ -63,9 +63,19 @@ const PROJECTS = [
     desc: "A fully equipped fabrication workshop for a small manufacturing startup. 200A electrical service, heavy-duty racking, and four louvered vents keep the space cool during long production runs.",
     image: "/images/project-workshop.png",
   },
+  {
+    id: "cold-chain-fleet",
+    title: "PolarPath Logistics — Mobile Cold Chain",
+    category: "Cold Chain",
+    location: "Chicago, IL",
+    size: "6 × 40 ft Reefer",
+    mods: ["Carrier GEN 7500 XR Underslung Genset", "Thermo King UT-800 Underslung Genset", "Custom Paint", "Fleet Telematics"],
+    desc: "A six-unit refrigerated fleet for a regional perishables distributor. Each 40ft reefer container is paired with a Carrier or Thermo King underslung genset mounted to the chassis — giving every trailer 100+ hours of autonomous cold-chain runtime without shore power. Deployed across IL, WI, IN, and OH corridors.",
+    image: "/images/container-reefer.png",
+  },
 ];
 
-const CATEGORIES = ["All", "Retail", "Construction", "Residential", "Storage", "Industrial"];
+const CATEGORIES = ["All", "Retail", "Construction", "Residential", "Storage", "Industrial", "Cold Chain"];
 
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState("All");

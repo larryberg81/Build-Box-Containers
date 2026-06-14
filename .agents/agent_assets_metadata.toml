@@ -131,13 +131,13 @@ title = "generated_image"
 id = "DNrT6IaC5O9PWGJ70FxBg"
 uri = "file://artifacts/shipping-containers/public/images/genset-thermo-king.png"
 type = "image"
-title = "thermo king undermount genset white"
+title = "thermo king underslung genset"
 
 [[generated]]
 id = "5wz9Ezb-rez-lL9HdjwGv"
 uri = "file://artifacts/shipping-containers/public/images/genset-carrier.png"
 type = "image"
-title = "carrier undermount genset white box"
+title = "carrier underslung genset white box"
 
 [[generated]]
 id = "hqcsJcp2lO6y4djakhNfa"
@@ -162,3 +162,15 @@ id = "OauvfT9vV8m78sc0fZnt7"
 uri = "file://artifacts/shipping-containers/public/images/product-30ft.png"
 type = "image"
 title = "30ft shipping container"
+
+[[generated]]
+id = "fdjEzQApjQ8JeWQKXEw9v"
+uri = "file://artifacts/shipping-containers/public/images/genset-karlier.png"
+type = "image"
+title = "karlier power genset white"
+
+[[generated]]
+id = "fY5ALZ_Quw4o9_k8nZmg7"
+uri = "file://artifacts/shipping-containers/public/images/blog-genset-guide.png"
+type = "image"
+title = "reefer cold chain genset blog"

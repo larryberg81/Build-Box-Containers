@@ -81,6 +81,26 @@ const ARTICLES: Article[] = [
     ],
   },
   {
+    id: "genset-guide",
+    title: "Underslung Gensets: Powering Reefers Without Shore Power",
+    category: "Gensets",
+    readTime: "7 min read",
+    date: "Jun 10, 2026",
+    image: "/images/blog-genset-guide.png",
+    excerpt: "What is an underslung genset, how does it mount, and which brand is right for your fleet? A plain-English guide to the 15 kW / 18.75 kVA standard and the four brands we carry.",
+    body: [
+      "If you're running a reefer container on the road without access to shore power, an underslung genset is the solution. It mounts permanently to the trailer chassis beneath the container, powering the reefer unit continuously from its own diesel engine and onboard fuel tank — no external cables, no power hookups, no problem.",
+      "**What does 'underslung' mean?** The unit bolts directly to the ISO corner castings on the underside of the trailer frame. It lives beneath the container, completely out of the way, and travels with the chassis. When you swap containers, the genset stays on the trailer. This makes it ideal for fleet operators running the same trailers continuously.",
+      "**The 15 kW / 18.75 kVA standard.** Almost every underslung genset on the market — Carrier, Thermo King, Phasebox, Karlier — produces 15 kW prime (18.75 kVA) at 60 Hz and 12.5 kW (15.6 kVA) at 50 Hz. The reason: a reefer container's actual power draw is 6.5–7.5 kW under normal operating conditions. The 15 kW output provides a comfortable headroom margin for startup spikes and cold-ambient conditions.",
+      "**Engine brands and what they mean.** The engine is the most important differentiator. Perkins (used by Carrier) and Yanmar (used by Thermo King) are the established workhorses — proven in millions of hours of field use, with global service networks. Mitsubishi's S4L2 (used by Phasebox) is newer to underslung applications but meets EPA Tier 4 Final — the stricter standard required in California (CARB) and port-restricted zones. Cummins (Karlier KP-15C) offers strong North American service coverage at a competitive price.",
+      "**Fuel tank size and runtime.** Standard tanks are 50 US gallons (189 L), giving 72–80 hours of continuous runtime. Extended tanks at 58–68 US gallons push runtime past 100 hours — equivalent to 600+ km of road transport without refueling. If you're running long cross-border routes, specify the extended tank at the time of order.",
+      "**Cycle-run mode.** Most modern units support cycle-run operation, where the genset starts and stops automatically based on the reefer unit's load demand. In moderate ambient temperatures with a stable product load, cycle-run can reduce fuel consumption by 30–40%. The APX+ (Carrier) and SmartPower+ (Thermo King) controllers both support this.",
+      "**Emissions: Tier 3 vs. Tier 4 Final.** Most underslung gensets are EPA Tier 3 certified — sufficient for all U.S. states except California and for most port zones. If you operate in California or in CARB-restricted port areas, you'll need EPA Tier 4 Final certification. Currently, only the Phasebox PB-15 Tier4 in our lineup meets this standard. Plan accordingly if your routes cross into California.",
+      "**Carrier vs. Thermo King: the real difference.** Both brands produce virtually identical output and reliability. The main practical differences: Carrier uses Perkins engines (lighter at ~1,370 lbs), Thermo King uses Yanmar (heavier at ~1,495 lbs but with a robust welded crash-rated frame). Carrier's APX+ controller has a slight edge in cloud connectivity; Thermo King's SmartPower+ has a longer service network in rural North America. For most buyers, price and existing service relationships are the deciding factor.",
+      "**What we supply and how we install it.** Built Box Containers supplies Carrier, Thermo King, Phasebox, and Karlier underslung units. We can mount and test any genset before delivery. If you're ordering a genset alongside a reefer container, we'll configure and test the complete system — power output, auto-start function, and fuel tank — before the unit leaves our facility.",
+    ],
+  },
+  {
     id: "maintenance-guide",
     title: "Container Maintenance: 5 Things That Actually Matter",
     category: "Maintenance",
@@ -99,7 +119,7 @@ const ARTICLES: Article[] = [
   },
 ];
 
-const CATEGORIES = ["All", "Buying Advice", "Reefer", "Modifications", "Modular Builds", "Maintenance"];
+const CATEGORIES = ["All", "Buying Advice", "Reefer", "Gensets", "Modifications", "Modular Builds", "Maintenance"];
 
 function ArticleBody({ body }: { body: string[] }) {
   return (
