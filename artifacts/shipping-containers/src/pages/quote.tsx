@@ -14,8 +14,13 @@ const CONTAINERS = [
   { id: "30-new",      label: "30' New",                 size: "30 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 2550, rentPrice: 235 },
   { id: "40-used",     label: "40' Used",                size: "40 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1900, rentPrice: 220 },
   { id: "40-new",      label: "40' New",                 size: "40 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 3200, rentPrice: 270 },
-  { id: "40-hc-side",  label: "40' HC — Side Doors",     size: "40 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 3600, rentPrice: 310 },
-  { id: "40-heated",   label: "40' Heated — Side Doors", size: "40 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 4400, rentPrice: 380 },
+  { id: "40-hc-side",      label: "40' HC — Side Doors",     size: "40 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 3600,  rentPrice: 310 },
+  { id: "40-heated",       label: "40' Heated — Side Doors", size: "40 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 4400,  rentPrice: 380 },
+  // Reefer containers
+  { id: "reefer-20-used",  label: "20' Reefer — Used",       size: "20 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 3500,  rentPrice: 320 },
+  { id: "reefer-20-new",   label: "20' Reefer — New",        size: "20 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 6800,  rentPrice: 520 },
+  { id: "reefer-40-used",  label: "40' Reefer — Used",       size: "40 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 4800,  rentPrice: 420 },
+  { id: "reefer-40hc-new", label: "40' HC Reefer — New",     size: "40 ft HC", sizeGroup: "20+", condition: "Reefer",   buyPrice: 9200,  rentPrice: 680 },
 ];
 
 // Delivery fee: 10ft = $380, everything else = $580
@@ -25,6 +30,7 @@ const CONDITION_COLORS: Record<string, string> = {
   Used:     "bg-muted text-muted-foreground",
   New:      "bg-emerald-900/60 text-emerald-300",
   Modified: "bg-primary/20 text-primary",
+  Reefer:   "bg-blue-900/60 text-blue-300",
 };
 
 const MODIFICATIONS = [

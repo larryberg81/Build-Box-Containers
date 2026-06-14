@@ -150,3 +150,15 @@ id = "E_ASqvknXceQyZ5JBn-iB"
 uri = "file://artifacts/shipping-containers/public/images/genset-reegen.png"
 type = "image"
 title = "reegen hybrid genset"
+
+[[generated]]
+id = "eKqwj6udAxFGovE6kcbpX"
+uri = "file://artifacts/shipping-containers/public/images/product-10ft.png"
+type = "image"
+title = "10ft shipping container"
+
+[[generated]]
+id = "OauvfT9vV8m78sc0fZnt7"
+uri = "file://artifacts/shipping-containers/public/images/product-30ft.png"
+type = "image"
+title = "30ft shipping container"
