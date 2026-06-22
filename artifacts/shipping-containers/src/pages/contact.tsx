@@ -108,23 +108,22 @@ export default function Contact() {
     const genset   = params.get("genset") ?? "";
     const modList  = mods ? mods.split(" | ").filter(Boolean) : [];
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          access_key:  import.meta.env.VITE_WEB3FORMS_KEY,
-          subject:     `Built Box Containers — Formal Quote Request: ${params.get("container")}`,
-          from_name:   data.name,
-          email:       data.email,
-          phone:       data.phone || "Not provided",
-          address:     data.address || "Not provided",
-          container:   params.get("container"),
-          mode:        params.get("mode"),
-          mods:        modList.length ? modList.join(", ") : "None",
-          genset:      genset || "None",
-          total:       `$${Number(params.get("total")).toLocaleString()}`,
-          base:        `$${Number(params.get("base")).toLocaleString()}`,
-          delivery:    `$${Number(params.get("delivery")).toLocaleString()}`,
+          subject:        `Built Box Containers — Formal Quote Request: ${params.get("container")}`,
+          name:           data.name,
+          email:          data.email,
+          phone:          data.phone || "Not provided",
+          address:        data.address || "Not provided",
+          container:      params.get("container"),
+          mode:           params.get("mode"),
+          mods:           modList.length ? modList.join(", ") : "None",
+          genset:         genset || "None",
+          total:          `$${Number(params.get("total")).toLocaleString()}`,
+          base_price:     `$${Number(params.get("base")).toLocaleString()}`,
+          delivery_fee:   `$${Number(params.get("delivery")).toLocaleString()}`,
           ...(params.get("monthly") ? {
             monthly:  `$${Number(params.get("monthly")).toLocaleString()}/mo`,
             duration: params.get("duration") ?? "",
@@ -138,7 +137,7 @@ export default function Contact() {
       if (result.success) {
         setDone(true);
       } else {
-        toast({ title: "Send failed", description: "Please try again or email us directly.", variant: "destructive" });
+        toast({ title: "Send failed", description: result.error ?? "Please try again or email us directly.", variant: "destructive" });
       }
     } catch {
       toast({ title: "Network error", description: "Please email sales@builtboxcontainers.com", variant: "destructive" });
@@ -154,17 +153,16 @@ export default function Contact() {
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form));
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
-          subject:    `Built Box Containers — Contact Form: ${interest || "General Inquiry"}`,
-          from_name:  `${data.firstName} ${data.lastName}`,
-          email:      data.email,
-          phone:      data.phone || "Not provided",
-          interest:   interest || "Not specified",
-          message:    data.message || "No details provided",
+          subject:  `Built Box Containers — Contact Form: ${interest || "General Inquiry"}`,
+          name:     `${data.firstName} ${data.lastName}`,
+          email:    data.email,
+          phone:    data.phone || "Not provided",
+          interest: interest || "Not specified",
+          message:  data.message || "No details provided",
         }),
       });
       const result = await res.json();
@@ -173,7 +171,7 @@ export default function Contact() {
         form.reset();
         setInterest("");
       } else {
-        toast({ title: "Send failed", description: "Please try again or email us directly.", variant: "destructive" });
+        toast({ title: "Send failed", description: result.error ?? "Please try again or email us directly.", variant: "destructive" });
       }
     } catch {
       toast({ title: "Network error", description: "Please email sales@builtboxcontainers.com", variant: "destructive" });
