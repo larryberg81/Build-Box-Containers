@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send, Zap } from "lucide-react";
 
 // ── Real container catalog ───────────────────────────────────────────────────
 const CONTAINERS = [
@@ -118,11 +118,43 @@ function InquiryWidget({
 }) {
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", message: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    try {
+      const body = {
+        access_key: import.meta.env.VITE_WEB3FORMS_KEY,
+        subject: `Built Box Containers — Quote Inquiry: ${containerLabel}`,
+        from_name: form.name,
+        email: form.email,
+        phone: form.phone,
+        address: form.address,
+        container: containerLabel,
+        mode,
+        estimate: `$${totalPrice.toLocaleString()} (incl. delivery)`,
+        delivery_state: deliveryState || "Not specified",
+        delivery_zip: deliveryZip || "Not specified",
+        message: form.message || defaultMessage,
+      };
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        alert("Submission failed — please try again or email us directly.");
+      }
+    } catch {
+      alert("Network error — please email us at sales@builtboxcontainers.com");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const defaultMessage = `Hi, I'm interested in the ${containerLabel} (${mode === "purchase" ? "purchase" : "rental"})${
@@ -211,9 +243,10 @@ function InquiryWidget({
 
               <button
                 type="submit"
-                className="w-full h-10 bg-primary text-primary-foreground text-sm font-bold uppercase tracking-wider hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                disabled={loading}
+                className="w-full h-10 bg-primary text-primary-foreground text-sm font-bold uppercase tracking-wider hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60"
               >
-                Send Inquiry <Send className="h-3.5 w-3.5" />
+                {loading ? "Sending..." : <><span>Send Inquiry</span> <Send className="h-3.5 w-3.5" /></>}
               </button>
             </form>
           )}
