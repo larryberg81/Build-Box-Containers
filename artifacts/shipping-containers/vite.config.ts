@@ -58,6 +58,9 @@ export default defineConfig({
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
   },
+  define: {
+    "import.meta.env.VITE_WEB3FORMS_KEY": JSON.stringify(process.env.VITE_WEB3FORMS_KEY ?? ""),
+  },
   server: {
     port,
     strictPort: true,
