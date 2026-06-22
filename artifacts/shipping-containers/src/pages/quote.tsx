@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send, Zap } from "lucide-react";
 
 // ── Real container catalog ───────────────────────────────────────────────────
@@ -258,6 +258,7 @@ function InquiryWidget({
 
 // ── Main page ────────────────────────────────────────────────────────────────
 export default function Quote() {
+  const [, navigate]                              = useLocation();
   const [selectedContainer, setSelectedContainer] = useState<string>("20-used");
   const [mode, setMode]                           = useState<"purchase" | "rental">("purchase");
   const [selectedDuration, setSelectedDuration]   = useState<string>("3mo");
@@ -267,6 +268,28 @@ export default function Quote() {
   const [selectedState, setSelectedState]         = useState<string>("");
   const [zipCode, setZipCode]                     = useState<string>("");
   const [sizeFilter, setSizeFilter]               = useState<string>("All");
+
+  const goToFormalQuote = () => {
+    const gensetObj = GENSET_ADDONS.find(g => g.id === selectedGenset)!;
+    const modLabels = MODIFICATIONS.filter(m => selectedMods.has(m.id)).map(m => m.label);
+    const durationObj = RENTAL_DURATIONS.find(d => d.id === selectedDuration)!;
+    const params = new URLSearchParams({
+      container: container.label,
+      containerId: container.id,
+      mode,
+      total:    String(estimate.total),
+      base:     String(estimate.base),
+      delivery: String(estimate.delivery),
+      genset:   gensetObj.id !== "gs-none" ? gensetObj.label : "",
+      mods:     modLabels.join(" | "),
+      state:    selectedState,
+      zip:      zipCode,
+      ...(mode === "rental" && estimate.monthly !== null
+        ? { monthly: String(estimate.monthly), duration: durationObj.label }
+        : {}),
+    });
+    navigate(`/contact?${params.toString()}`);
+  };
 
   const SIZE_GROUPS = ["All", "10 ft", "20 ft", "30 ft", "40 ft"];
 
@@ -647,13 +670,13 @@ export default function Quote() {
                   Estimates are indicative. Final pricing depends on site-specific requirements.
                 </p>
 
-                <Link
-                  href="/contact"
+                <button
                   data-testid="cta-get-formal-quote"
+                  onClick={goToFormalQuote}
                   className="flex w-full h-12 items-center justify-center gap-2 bg-primary text-primary-foreground font-bold uppercase tracking-wider hover:bg-primary/90 transition-all text-sm"
                 >
                   Get a Formal Quote <ArrowRight className="h-4 w-4" />
-                </Link>
+                </button>
 
                 <div className="mt-4 pt-4 border-t border-border space-y-1.5">
                   {[
