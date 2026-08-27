@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Thermometer, Flame, DoorOpen } from "lucide-react";
+import { ArrowRight, Thermometer, Flame, DoorOpen, ShieldCheck, Truck, ClipboardCheck } from "lucide-react";
 
 interface Container {
   id: string;
@@ -573,6 +573,34 @@ export default function Containers() {
                       {f}
                     </span>
                   ))}
+                </div>
+              </div>
+
+              <div className="mb-8 border border-primary/30 bg-primary/5 p-5">
+                <p className="text-xs font-bold uppercase tracking-widest text-primary mb-4">Coverage &amp; Delivery</p>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <div className="flex items-start gap-3">
+                    <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
+                    <div>
+                      <p className="text-sm font-bold">Guaranteed watertight</p>
+                      <p className="text-xs text-muted-foreground mt-1">10-year structural warranty</p>
+                      <p className="text-xs text-muted-foreground">3-year watertight warranty</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <ClipboardCheck className="h-5 w-5 shrink-0 text-primary" />
+                    <div>
+                      <p className="text-sm font-bold">Inspected before delivery</p>
+                      <p className="text-xs text-muted-foreground mt-1">Floors, doors, hinges, seals, and structure checked</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Truck className="h-5 w-5 shrink-0 text-primary" />
+                    <div>
+                      <p className="text-sm font-bold">Fast delivery</p>
+                      <p className="text-xs text-muted-foreground mt-1">Typically delivered to your specified location within 3–5 days</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
