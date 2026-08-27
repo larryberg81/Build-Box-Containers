@@ -18,9 +18,18 @@ interface Container {
   rentPrice?: string;
   image: string;
   gallery?: string[];
+  colorOptions?: ContainerColor[];
   badge?: string;
   features: string[];
   desc: string;
+}
+
+interface ContainerColor {
+  id: string;
+  name: string;
+  hex: string;
+  image: string;
+  gallery: string[];
 }
 
 const CONTAINERS: Container[] = [
@@ -57,8 +66,28 @@ const CONTAINERS: Container[] = [
     price: "$1,200",
     rentPrice: "From $120/mo",
     doorOpening: "Cargo doors: 7'8\" W × 7'5\" H",
-    image: "/images/container-10-new-1.jpg",
-    gallery: ["/images/container-10-new-1.jpg", "/images/container-10-new-2.jpg"],
+    image: "/images/container-10-new-blue-open.jpg",
+    gallery: ["/images/container-10-new-blue-open.jpg", "/images/container-10-new-blue-side.jpg", "/images/container-10-new-blue-doors.jpg"],
+    colorOptions: [
+      {
+        id: "blue",
+        name: "Blue",
+        hex: "#075fc4",
+        image: "/images/container-10-new-blue-open.jpg",
+        gallery: [
+          "/images/container-10-new-blue-open.jpg",
+          "/images/container-10-new-blue-side.jpg",
+          "/images/container-10-new-blue-doors.jpg",
+        ],
+      },
+      {
+        id: "white",
+        name: "White",
+        hex: "#f1f3f2",
+        image: "/images/container-10-new-white.jpg",
+        gallery: ["/images/container-10-new-white.jpg"],
+      },
+    ],
     badge: "New",
     features: ["One-trip condition", "Double cargo doors", "Lockbox ready", "Forklift pockets"],
     desc: "Factory-fresh one-trip unit with clean steel and standard cargo doors — a dependable fit for storage, conversions, and compact sites.",
@@ -393,6 +422,17 @@ export default function Containers() {
   const [activeCondition, setActiveCondition] = useState("All");
   const [activeType, setActiveType] = useState("All");
   const [selectedContainer, setSelectedContainer] = useState<Container | null>(null);
+  const [selectedColor, setSelectedColor] = useState<ContainerColor | null>(null);
+
+  const openContainer = (container: Container) => {
+    setSelectedContainer(container);
+    setSelectedColor(container.colorOptions?.[0] ?? null);
+  };
+
+  const closeContainer = () => {
+    setSelectedContainer(null);
+    setSelectedColor(null);
+  };
 
   const filtered = CONTAINERS.filter(c => {
     const catMatch = activeCategory === "All" || c.category === activeCategory;
@@ -440,7 +480,7 @@ export default function Containers() {
               <div
                 key={container.id}
                 data-testid={`container-card-${container.id}`}
-                onClick={() => setSelectedContainer(container)}
+                onClick={() => openContainer(container)}
                 className="group border border-border bg-card flex flex-col hover:border-primary/60 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/20 transition-all duration-300 relative cursor-pointer"
               >
                 {/* Image */}
@@ -502,6 +542,11 @@ export default function Containers() {
                         +{container.features.length - 3} more
                       </span>
                     )}
+                    {container.colorOptions && (
+                      <span className="text-[10px] font-semibold uppercase tracking-wider bg-muted text-muted-foreground px-2 py-1 border border-border">
+                        {container.colorOptions.length} colors
+                      </span>
+                    )}
                   </div>
 
                   {container.doorOpening && (
@@ -553,7 +598,7 @@ export default function Containers() {
                 {CONTAINERS.map(c => (
                   <tr
                     key={c.id}
-                    onClick={() => setSelectedContainer(c)}
+                    onClick={() => openContainer(c)}
                     className="hover:bg-muted/50 cursor-pointer transition-colors"
                   >
                     <td className="px-4 py-3 font-bold">{c.name}</td>
@@ -597,22 +642,26 @@ export default function Containers() {
       {selectedContainer && (
         <div
           className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setSelectedContainer(null)}
+          onClick={closeContainer}
         >
           <div
             className="bg-card border border-border max-w-2xl w-full max-h-[90vh] overflow-y-auto relative"
             onClick={e => e.stopPropagation()}
           >
             <div className="aspect-video overflow-hidden">
-              <img src={selectedContainer.image} alt={selectedContainer.name} className="w-full h-full object-cover" />
+              <img
+                src={selectedColor?.image ?? selectedContainer.image}
+                alt={`${selectedContainer.name}${selectedColor ? ` in ${selectedColor.name}` : ""}`}
+                className="w-full h-full object-cover"
+              />
             </div>
-            {selectedContainer.gallery && selectedContainer.gallery.length > 1 && (
+            {(selectedColor?.gallery ?? selectedContainer.gallery ?? []).length > 1 && (
               <div className="grid grid-cols-2 gap-2 border-b border-border bg-muted p-2">
-                {selectedContainer.gallery.map((image, index) => (
+                {(selectedColor?.gallery ?? selectedContainer.gallery ?? [selectedContainer.image]).map((image, index) => (
                   <img
                     key={image}
                     src={image}
-                    alt={`${selectedContainer.name} view ${index + 1}`}
+                    alt={`${selectedContainer.name}${selectedColor ? ` in ${selectedColor.name}` : ""} view ${index + 1}`}
                     className="aspect-[4/3] w-full object-cover"
                   />
                 ))}
@@ -632,6 +681,38 @@ export default function Containers() {
                 <h2 className="w-full text-2xl font-display font-bold uppercase">{selectedContainer.name}</h2>
               </div>
               <p className="text-muted-foreground mb-6">{selectedContainer.desc}</p>
+
+              {selectedContainer.colorOptions && (
+                <div className="mb-6 border border-border bg-background/40 p-4">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Choose a Color</p>
+                  <div className="flex flex-wrap gap-3">
+                    {selectedContainer.colorOptions.map(color => (
+                      <button
+                        key={color.id}
+                        type="button"
+                        data-testid={`color-option-${color.id}`}
+                        aria-label={`Choose ${color.name}`}
+                        aria-pressed={selectedColor?.id === color.id}
+                        onClick={() => setSelectedColor(color)}
+                        className={`flex items-center gap-2 border-2 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
+                          selectedColor?.id === color.id
+                            ? "border-primary bg-primary/10 text-foreground"
+                            : "border-border bg-card text-muted-foreground hover:border-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        <span
+                          className="h-5 w-5 rounded-full border border-foreground/30 shadow-inner"
+                          style={{ backgroundColor: color.hex }}
+                        />
+                        {color.name}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Select your preferred color before requesting a quote.
+                  </p>
+                </div>
+              )}
 
               <div className="mb-6">
                 <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Specifications</p>
@@ -692,14 +773,14 @@ export default function Containers() {
                 </div>
                 <div className="flex gap-3">
                   <Link
-                    href="/quote"
-                    onClick={() => setSelectedContainer(null)}
+                    href={`/quote?containerId=${encodeURIComponent(selectedContainer.id)}${selectedColor ? `&color=${encodeURIComponent(selectedColor.id)}` : ""}`}
+                    onClick={closeContainer}
                     className="inline-flex h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-all uppercase tracking-wider"
                   >
                     Get a Quote
                   </Link>
                   <button
-                    onClick={() => setSelectedContainer(null)}
+                    onClick={closeContainer}
                     className="inline-flex h-11 items-center justify-center border border-border px-6 text-sm font-bold hover:bg-muted transition-all uppercase tracking-wider"
                   >
                     Close

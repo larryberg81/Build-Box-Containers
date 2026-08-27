@@ -11,6 +11,7 @@ import { Check, Package, Truck, Zap, Wrench, ArrowRight } from "lucide-react";
 function OrderSummary({ p }: { p: URLSearchParams }) {
   const mode      = p.get("mode") ?? "purchase";
   const container = p.get("container") ?? "";
+  const color      = p.get("color") ?? "";
   const total     = p.get("total") ?? "";
   const base      = p.get("base") ?? "";
   const delivery  = p.get("delivery") ?? "";
@@ -36,6 +37,9 @@ function OrderSummary({ p }: { p: URLSearchParams }) {
           <div>
             <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-0.5">Container</p>
             <p className="font-display font-bold text-lg uppercase leading-tight">{container}</p>
+            {color && (
+              <p className="mt-1 text-xs font-bold uppercase tracking-wider text-primary">Color: {color}</p>
+            )}
             <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-primary/20 text-primary">
               {mode === "purchase" ? "Purchase" : `Rental — ${duration}`}
             </span>
@@ -118,6 +122,7 @@ export default function Contact() {
           phone:          data.phone || "Not provided",
           address:        data.address || "Not provided",
           container:      params.get("container"),
+          color:          params.get("color") || "Not specified",
           mode:           params.get("mode"),
           mods:           modList.length ? modList.join(", ") : "None",
           genset:         genset || "None",
@@ -193,7 +198,8 @@ export default function Contact() {
               </div>
               <h1 className="text-4xl font-display font-bold uppercase tracking-tight mb-3">Quote Request Sent</h1>
               <p className="text-muted-foreground mb-2">
-                We've received your request for a <strong className="text-foreground">{params.get("container")}</strong>.
+                We've received your request for a <strong className="text-foreground">{params.get("container")}</strong>
+                {params.get("color") ? <> in <strong className="text-foreground">{params.get("color")}</strong></> : ""}.
               </p>
               <p className="text-muted-foreground text-sm mb-8">
                 A Built Box Containers specialist will reach out within 24 hours with your formal quote.

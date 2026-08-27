@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Link, useLocation } from "wouter";
+import { Link, useLocation, useSearch } from "wouter";
 import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send, Zap } from "lucide-react";
 
 // ── Real container catalog ───────────────────────────────────────────────────
@@ -22,6 +22,13 @@ const CONTAINERS = [
   { id: "reefer-40-used",  label: "40' Reefer — Used",       size: "40 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 4800,  rentPrice: 420 },
   { id: "reefer-40hc-new", label: "40' HC Reefer — New",     size: "40 ft HC", sizeGroup: "20+", condition: "Reefer",   buyPrice: 9200,  rentPrice: 680 },
 ];
+
+const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]> = {
+  "10-new-side": [
+    { id: "blue", label: "Blue", hex: "#075fc4" },
+    { id: "white", label: "White", hex: "#f1f3f2" },
+  ],
+};
 
 // Delivery fee: 10ft = $380, everything else = $580
 const DELIVERY_FEE = (sizeGroup: string) => sizeGroup === "10" ? 380 : 580;
@@ -105,12 +112,14 @@ function SectionHeader({ step, title, subtitle }: { step: number; title: string;
 // ── Floating inquiry widget ──────────────────────────────────────────────────
 function InquiryWidget({
   containerLabel,
+  colorLabel,
   totalPrice,
   deliveryState,
   deliveryZip,
   mode,
 }: {
   containerLabel: string;
+  colorLabel?: string;
   totalPrice: number;
   deliveryState: string;
   deliveryZip: string;
@@ -120,6 +129,7 @@ function InquiryWidget({
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "", message: "" });
+  const configuredContainerLabel = colorLabel ? `${containerLabel} — ${colorLabel}` : containerLabel;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,12 +137,12 @@ function InquiryWidget({
     try {
       const body = {
         access_key: import.meta.env.VITE_WEB3FORMS_KEY,
-        subject: `Built Box Containers — Quote Inquiry: ${containerLabel}`,
+        subject: `Built Box Containers — Quote Inquiry: ${configuredContainerLabel}`,
         from_name: form.name,
         email: form.email,
         phone: form.phone,
         address: form.address,
-        container: containerLabel,
+        container: configuredContainerLabel,
         mode,
         estimate: `$${totalPrice.toLocaleString()} (incl. delivery)`,
         delivery_state: deliveryState || "Not specified",
@@ -157,7 +167,7 @@ function InquiryWidget({
     }
   };
 
-  const defaultMessage = `Hi, I'm interested in the ${containerLabel} (${mode === "purchase" ? "purchase" : "rental"})${
+  const defaultMessage = `Hi, I'm interested in the ${configuredContainerLabel} (${mode === "purchase" ? "purchase" : "rental"})${
     deliveryState ? ` — delivery to ${deliveryState}${deliveryZip ? ` ${deliveryZip}` : ""}` : ""
   }. My estimated total is $${totalPrice.toLocaleString()}. Please send me a formal quote.`;
 
@@ -259,7 +269,19 @@ function InquiryWidget({
 // ── Main page ────────────────────────────────────────────────────────────────
 export default function Quote() {
   const [, navigate]                              = useLocation();
-  const [selectedContainer, setSelectedContainer] = useState<string>("20-used");
+  const search                                     = useSearch();
+  const searchParams                               = new URLSearchParams(search);
+  const requestedContainerId                       = searchParams.get("containerId");
+  const requestedColorId                           = searchParams.get("color");
+  const requestedColors                            = requestedContainerId ? COLOR_OPTIONS[requestedContainerId] ?? [] : [];
+  const initialContainerId                         = requestedContainerId && CONTAINERS.some(c => c.id === requestedContainerId)
+    ? requestedContainerId
+    : "20-used";
+  const initialColorId                             = requestedColors.some(color => color.id === requestedColorId)
+    ? requestedColorId ?? ""
+    : requestedColors[0]?.id ?? "";
+  const [selectedContainer, setSelectedContainer] = useState<string>(initialContainerId);
+  const [selectedColor, setSelectedColor]         = useState<string>(initialColorId);
   const [mode, setMode]                           = useState<"purchase" | "rental">("purchase");
   const [selectedDuration, setSelectedDuration]   = useState<string>("3mo");
   const [selectedMods, setSelectedMods]           = useState<Set<string>>(new Set());
@@ -273,9 +295,11 @@ export default function Quote() {
     const gensetObj = GENSET_ADDONS.find(g => g.id === selectedGenset)!;
     const modLabels = MODIFICATIONS.filter(m => selectedMods.has(m.id)).map(m => m.label);
     const durationObj = RENTAL_DURATIONS.find(d => d.id === selectedDuration)!;
+    const selectedColorLabel = colorOptions.find(color => color.id === selectedColor)?.label ?? "";
     const params = new URLSearchParams({
       container: container.label,
       containerId: container.id,
+      color: selectedColorLabel,
       mode,
       total:    String(estimate.total),
       base:     String(estimate.base),
@@ -307,6 +331,8 @@ export default function Quote() {
   };
 
   const container  = CONTAINERS.find(c => c.id === selectedContainer)!;
+  const colorOptions = COLOR_OPTIONS[container.id] ?? [];
+  const colorLabel = colorOptions.find(color => color.id === selectedColor)?.label ?? "";
   const delivery   = getDelivery(selectedState);
   const deliveryFee = DELIVERY_FEE(container.sizeGroup);
 
@@ -374,7 +400,10 @@ export default function Quote() {
                   <button
                     key={c.id}
                     data-testid={`container-option-${c.id}`}
-                    onClick={() => setSelectedContainer(c.id)}
+                    onClick={() => {
+                      setSelectedContainer(c.id);
+                      setSelectedColor(COLOR_OPTIONS[c.id]?.[0]?.id ?? "");
+                    }}
                     className={`text-left px-4 py-4 border-2 transition-all flex items-center gap-4 ${
                       selectedContainer === c.id
                         ? "border-primary bg-primary/5"
@@ -395,6 +424,35 @@ export default function Quote() {
                   </button>
                 ))}
               </div>
+              {colorOptions.length > 0 && (
+                <div className="mt-5 border border-border bg-background/40 p-4">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Choose a Color</p>
+                  <div className="flex flex-wrap gap-3">
+                    {colorOptions.map(color => (
+                      <button
+                        key={color.id}
+                        type="button"
+                        data-testid={`quote-color-option-${color.id}`}
+                        aria-label={`Choose ${color.label}`}
+                        aria-pressed={selectedColor === color.id}
+                        onClick={() => setSelectedColor(color.id)}
+                        className={`flex items-center gap-2 border-2 px-3 py-2 text-xs font-bold uppercase tracking-wider transition-all ${
+                          selectedColor === color.id
+                            ? "border-primary bg-primary/10 text-foreground"
+                            : "border-border bg-card text-muted-foreground hover:border-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        <span
+                          className="h-5 w-5 rounded-full border border-foreground/30 shadow-inner"
+                          style={{ backgroundColor: color.hex }}
+                        />
+                        {color.label}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">Your color choice will be included with your formal quote request.</p>
+                </div>
+              )}
             </div>
 
             {/* Step 2: Purchase vs Rental */}
@@ -587,6 +645,9 @@ export default function Quote() {
                 <div className="mb-5 pb-5 border-b border-border">
                   <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-1">Selected</p>
                   <p className="font-display font-bold uppercase text-sm leading-tight">{container.label}</p>
+                  {colorLabel && (
+                    <p className="text-xs text-primary font-semibold uppercase tracking-wider mt-1">Color: {colorLabel}</p>
+                  )}
                   <div className="flex gap-2 mt-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5">{container.size}</span>
                     <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 ${CONDITION_COLORS[container.condition]}`}>{container.condition}</span>
@@ -699,6 +760,7 @@ export default function Quote() {
       {/* Floating inquiry widget */}
       <InquiryWidget
         containerLabel={container.label}
+        colorLabel={colorLabel}
         totalPrice={estimate.total}
         deliveryState={selectedState}
         deliveryZip={zipCode}
