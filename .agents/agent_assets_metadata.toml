@@ -1,5 +1,4 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "XYlVujdaz-Mn5S2bwnefE"
@@ -174,3 +173,10 @@ id = "fY5ALZ_Quw4o9_k8nZmg7"
 uri = "file://artifacts/shipping-containers/public/images/blog-genset-guide.png"
 type = "image"
 title = "reefer cold chain genset blog"
+
+[[outputs]]
+id = "PhQorYv3QKmXodxcMxkSq"
+uri = "file://attached_assets/generated_images/replit-transfer-guide.png"
+type = "image"
+title = "Replit Site Transfer Guide"
+description = "A step-by-step visual guide for sharing a Replit project, having the recipient fork or remix it, re-adding secrets, and publishing the new copy."
