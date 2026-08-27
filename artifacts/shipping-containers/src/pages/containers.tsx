@@ -17,6 +17,7 @@ interface Container {
   price: string;
   rentPrice?: string;
   image: string;
+  gallery?: string[];
   badge?: string;
   features: string[];
   desc: string;
@@ -44,9 +45,9 @@ const CONTAINERS: Container[] = [
   },
   {
     id: "10-new-side",
-    name: "10' New — Side Door",
+    name: "10' New",
     condition: "One-Trip",
-    type: "Modified",
+    type: "Standard",
     category: "10 ft",
     size: "10 ft",
     extDimensions: "10'L × 8'W × 8.5'H",
@@ -55,11 +56,12 @@ const CONTAINERS: Container[] = [
     volume: "573 cu ft",
     price: "$1,200",
     rentPrice: "From $120/mo",
-    doorOpening: "Personnel side door: 3' W × 6'8\" H",
-    image: "/images/container-10-side-door-yard.jpg",
+    doorOpening: "Cargo doors: 7'8\" W × 7'5\" H",
+    image: "/images/container-10-new-1.jpg",
+    gallery: ["/images/container-10-new-1.jpg", "/images/container-10-new-2.jpg"],
     badge: "New",
-    features: ["One-trip condition", "Personnel side door", "Lockbox ready", "Forklift pockets"],
-    desc: "Factory-fresh one-trip unit with a fitted personnel side door — great for tool sheds and backyard studios where front access isn't practical.",
+    features: ["One-trip condition", "Double cargo doors", "Lockbox ready", "Forklift pockets"],
+    desc: "Factory-fresh one-trip unit with clean steel and standard cargo doors — a dependable fit for storage, conversions, and compact sites.",
   },
 
   // ── 20 FT ──────────────────────────────────────────────────────
@@ -604,6 +606,18 @@ export default function Containers() {
             <div className="aspect-video overflow-hidden">
               <img src={selectedContainer.image} alt={selectedContainer.name} className="w-full h-full object-cover" />
             </div>
+            {selectedContainer.gallery && selectedContainer.gallery.length > 1 && (
+              <div className="grid grid-cols-2 gap-2 border-b border-border bg-muted p-2">
+                {selectedContainer.gallery.map((image, index) => (
+                  <img
+                    key={image}
+                    src={image}
+                    alt={`${selectedContainer.name} view ${index + 1}`}
+                    className="aspect-[4/3] w-full object-cover"
+                  />
+                ))}
+              </div>
+            )}
             <div className="p-8">
               <div className="flex items-start gap-3 mb-2 flex-wrap">
                 <span className="bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-widest px-2 py-1">

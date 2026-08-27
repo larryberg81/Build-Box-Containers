@@ -5,7 +5,7 @@ import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle
 // ── Real container catalog ───────────────────────────────────────────────────
 const CONTAINERS = [
   { id: "10-used",     label: "10' Used",                size: "10 ft",    sizeGroup: "10",  condition: "Used",     buyPrice: 850,  rentPrice: 95  },
-  { id: "10-new-side", label: "10' New — Side Door",     size: "10 ft",    sizeGroup: "10",  condition: "New",      buyPrice: 1200, rentPrice: 120 },
+  { id: "10-new-side", label: "10' New",                  size: "10 ft",    sizeGroup: "10",  condition: "New",      buyPrice: 1200, rentPrice: 120 },
   { id: "20-used",     label: "20' Used",                size: "20 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1100, rentPrice: 140 },
   { id: "20-new",      label: "20' New",                 size: "20 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 2200, rentPrice: 175 },
   { id: "20-hc-side",  label: "20' HC — Side Doors",     size: "20 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 2600, rentPrice: 210 },
