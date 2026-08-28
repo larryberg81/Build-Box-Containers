@@ -32,6 +32,79 @@ interface ContainerColor {
   gallery: string[];
 }
 
+const HIGH_CUBE_20_COLORS: ContainerColor[] = [
+  {
+    id: "gray",
+    name: "Gray",
+    hex: "#7b858d",
+    image: "/images/container-20-hc-gray-angle-right.jpg",
+    gallery: [
+      "/images/container-20-hc-gray-angle-right.jpg",
+      "/images/container-20-hc-gray-doors.jpg",
+      "/images/container-20-hc-gray-angle.jpg",
+      "/images/container-20-hc-gray-end.jpg",
+      "/images/container-20-hc-gray-angle-left.jpg",
+      "/images/container-20-hc-gray-open.jpg",
+    ],
+  },
+  {
+    id: "blue",
+    name: "Blue",
+    hex: "#075fc4",
+    image: "/images/container-20-hc-blue-angle-right.jpg",
+    gallery: [
+      "/images/container-20-hc-blue-angle-right.jpg",
+      "/images/container-20-hc-blue-doors.jpg",
+      "/images/container-20-hc-blue-angle.jpg",
+      "/images/container-20-hc-blue-end.jpg",
+      "/images/container-20-hc-blue-angle-left.jpg",
+      "/images/container-20-hc-blue-open.jpg",
+    ],
+  },
+  {
+    id: "beige",
+    name: "Beige",
+    hex: "#c8b99d",
+    image: "/images/container-20-hc-beige-angle-right.jpg",
+    gallery: [
+      "/images/container-20-hc-beige-angle-right.jpg",
+      "/images/container-20-hc-beige-doors.jpg",
+      "/images/container-20-hc-beige-angle.jpg",
+      "/images/container-20-hc-beige-end.jpg",
+      "/images/container-20-hc-beige-angle-left.jpg",
+      "/images/container-20-hc-beige-open.jpg",
+    ],
+  },
+  {
+    id: "green",
+    name: "Dark Green",
+    hex: "#0e503c",
+    image: "/images/container-20-hc-green-angle-right.jpg",
+    gallery: [
+      "/images/container-20-hc-green-angle-right.jpg",
+      "/images/container-20-hc-green-doors.jpg",
+      "/images/container-20-hc-green-angle.jpg",
+      "/images/container-20-hc-green-end.jpg",
+      "/images/container-20-hc-green-angle-left.jpg",
+      "/images/container-20-hc-green-open.jpg",
+    ],
+  },
+  {
+    id: "red",
+    name: "Red",
+    hex: "#9f332f",
+    image: "/images/container-20-hc-red-angle-right.jpg",
+    gallery: [
+      "/images/container-20-hc-red-angle-right.jpg",
+      "/images/container-20-hc-red-doors.jpg",
+      "/images/container-20-hc-red-angle.jpg",
+      "/images/container-20-hc-red-end.jpg",
+      "/images/container-20-hc-red-angle-left.jpg",
+      "/images/container-20-hc-red-open.jpg",
+    ],
+  },
+];
+
 const CONTAINERS: Container[] = [
   // ── 10 FT ──────────────────────────────────────────────────────
   {
@@ -243,6 +316,34 @@ const CONTAINERS: Container[] = [
     badge: "Most Popular",
     features: ["One-trip condition", "Double cargo doors", "Forklift pockets", "Corner castings", "Vent plugs"],
     desc: "Fresh from the factory, one cargo trip. Pristine corten steel interior — the right choice when condition matters for conversions or client-facing use.",
+  },
+  {
+    id: "20-hc-new",
+    name: "20' High Cube — New",
+    condition: "One-Trip",
+    type: "Standard",
+    category: "20 ft",
+    size: "20 ft HC",
+    extDimensions: "20'L × 8'W × 9.5'H",
+    intDimensions: "19'4\"L × 7'8\"W × 8'10\"H",
+    payload: "44,100 lbs",
+    volume: "1,300 cu ft",
+    price: "$2,600",
+    rentPrice: "From $210/mo",
+    doorOpening: "Cargo doors: 7'8\" W × 8'5\" H",
+    image: "/images/container-20-hc-gray-angle-right.jpg",
+    gallery: [
+      "/images/container-20-hc-gray-angle-right.jpg",
+      "/images/container-20-hc-gray-doors.jpg",
+      "/images/container-20-hc-gray-angle.jpg",
+      "/images/container-20-hc-gray-end.jpg",
+      "/images/container-20-hc-gray-angle-left.jpg",
+      "/images/container-20-hc-gray-open.jpg",
+    ],
+    colorOptions: HIGH_CUBE_20_COLORS,
+    badge: "High Cube",
+    features: ["One-trip condition", "High Cube — extra 1ft headroom", "Double cargo doors", "Forklift pockets", "Open-door inspection view"],
+    desc: "Fresh from the factory with an extra foot of interior height. This one-trip 20ft High Cube is built for larger storage loads, conversions, and equipment access.",
   },
   {
     id: "20-hc-side",

@@ -9,6 +9,7 @@ const CONTAINERS = [
   { id: "10-new-rollup", label: "10' New Modified — Roll-up Door", size: "10 ft", sizeGroup: "10", condition: "Modified", buyPrice: 1850, rentPrice: 175 },
   { id: "20-used",     label: "20' Used",                size: "20 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1100, rentPrice: 140 },
   { id: "20-new",      label: "20' New",                 size: "20 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 2200, rentPrice: 175 },
+  { id: "20-hc-new",   label: "20' High Cube — New",     size: "20 ft HC", sizeGroup: "20+", condition: "New",      buyPrice: 2600, rentPrice: 210 },
   { id: "20-hc-side",  label: "20' HC — Side Doors",     size: "20 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 2600, rentPrice: 210 },
   { id: "20-heated",   label: "20' Heated — Side Doors", size: "20 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 3400, rentPrice: 280 },
   { id: "30-used",     label: "30' Used",                size: "30 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1650, rentPrice: 195 },
@@ -34,6 +35,13 @@ const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]
   ],
   "10-new-rollup": [
     { id: "charcoal", label: "Charcoal", hex: "#3f4448" },
+    { id: "blue", label: "Blue", hex: "#075fc4" },
+    { id: "beige", label: "Beige", hex: "#c8b99d" },
+    { id: "green", label: "Dark Green", hex: "#0e503c" },
+    { id: "red", label: "Red", hex: "#9f332f" },
+  ],
+  "20-hc-new": [
+    { id: "gray", label: "Gray", hex: "#7b858d" },
     { id: "blue", label: "Blue", hex: "#075fc4" },
     { id: "beige", label: "Beige", hex: "#c8b99d" },
     { id: "green", label: "Dark Green", hex: "#0e503c" },
