@@ -26,7 +26,7 @@ const CONTAINERS = [
 const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]> = {
   "10-new-side": [
     { id: "blue", label: "Blue", hex: "#075fc4" },
-    { id: "white", label: "White", hex: "#f1f3f2" },
+    { id: "beige", label: "Beige", hex: "#f1f3f2" },
     { id: "green", label: "Dark Green", hex: "#0e503c" },
     { id: "gray", label: "Gray", hex: "#667481" },
     { id: "red", label: "Red", hex: "#9f332f" },

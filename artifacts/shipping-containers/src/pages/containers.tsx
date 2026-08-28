@@ -81,8 +81,8 @@ const CONTAINERS: Container[] = [
         ],
       },
       {
-        id: "white",
-        name: "White",
+        id: "beige",
+        name: "Beige",
         hex: "#f1f3f2",
         image: "/images/container-10-new-white-open.jpg",
         gallery: [
