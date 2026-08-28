@@ -6,6 +6,7 @@ import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle
 const CONTAINERS = [
   { id: "10-used",     label: "10' Used",                size: "10 ft",    sizeGroup: "10",  condition: "Used",     buyPrice: 850,  rentPrice: 95  },
   { id: "10-new-side", label: "10' New",                  size: "10 ft",    sizeGroup: "10",  condition: "New",      buyPrice: 1200, rentPrice: 120 },
+  { id: "10-new-rollup", label: "10' New Modified — Roll-up Door", size: "10 ft", sizeGroup: "10", condition: "Modified", buyPrice: 1850, rentPrice: 175 },
   { id: "20-used",     label: "20' Used",                size: "20 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1100, rentPrice: 140 },
   { id: "20-new",      label: "20' New",                 size: "20 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 2200, rentPrice: 175 },
   { id: "20-hc-side",  label: "20' HC — Side Doors",     size: "20 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 2600, rentPrice: 210 },
@@ -29,6 +30,13 @@ const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]
     { id: "beige", label: "Beige", hex: "#f1f3f2" },
     { id: "green", label: "Dark Green", hex: "#0e503c" },
     { id: "gray", label: "Gray", hex: "#667481" },
+    { id: "red", label: "Red", hex: "#9f332f" },
+  ],
+  "10-new-rollup": [
+    { id: "charcoal", label: "Charcoal", hex: "#3f4448" },
+    { id: "blue", label: "Blue", hex: "#075fc4" },
+    { id: "beige", label: "Beige", hex: "#c8b99d" },
+    { id: "green", label: "Dark Green", hex: "#0e503c" },
     { id: "red", label: "Red", hex: "#9f332f" },
   ],
 };

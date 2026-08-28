@@ -129,6 +129,81 @@ const CONTAINERS: Container[] = [
     features: ["One-trip condition", "Double cargo doors", "Lockbox ready", "Forklift pockets"],
     desc: "Factory-fresh one-trip unit with clean steel and standard cargo doors — a dependable fit for storage, conversions, and compact sites.",
   },
+  {
+    id: "10-new-rollup",
+    name: "10' New Modified — Roll-up Door",
+    condition: "One-Trip",
+    type: "Modified",
+    category: "10 ft",
+    size: "10 ft",
+    extDimensions: "10'L × 8'W × 8.5'H",
+    intDimensions: "9'4\"L × 7'8\"W × 7'10\"H",
+    payload: "21,700 lbs",
+    volume: "573 cu ft",
+    price: "$1,850",
+    rentPrice: "From $175/mo",
+    doorOpening: "Roll-up opening: approx. 7' W × 7' H",
+    image: "/images/container-10-rollup-charcoal-closed.png",
+    gallery: [
+      "/images/container-10-rollup-charcoal-closed.png",
+      "/images/container-10-rollup-charcoal-open.png",
+    ],
+    colorOptions: [
+      {
+        id: "charcoal",
+        name: "Charcoal",
+        hex: "#3f4448",
+        image: "/images/container-10-rollup-charcoal-closed.png",
+        gallery: [
+          "/images/container-10-rollup-charcoal-closed.png",
+          "/images/container-10-rollup-charcoal-open.png",
+        ],
+      },
+      {
+        id: "blue",
+        name: "Blue",
+        hex: "#075fc4",
+        image: "/images/container-10-rollup-blue-closed.png",
+        gallery: [
+          "/images/container-10-rollup-blue-closed.png",
+          "/images/container-10-rollup-blue-open.png",
+        ],
+      },
+      {
+        id: "beige",
+        name: "Beige",
+        hex: "#c8b99d",
+        image: "/images/container-10-rollup-beige-closed.png",
+        gallery: [
+          "/images/container-10-rollup-beige-closed.png",
+          "/images/container-10-rollup-beige-open.png",
+        ],
+      },
+      {
+        id: "green",
+        name: "Dark Green",
+        hex: "#0e503c",
+        image: "/images/container-10-rollup-green-closed.png",
+        gallery: [
+          "/images/container-10-rollup-green-closed.png",
+          "/images/container-10-rollup-green-open.png",
+        ],
+      },
+      {
+        id: "red",
+        name: "Red",
+        hex: "#9f332f",
+        image: "/images/container-10-rollup-red-closed.png",
+        gallery: [
+          "/images/container-10-rollup-red-closed.png",
+          "/images/container-10-rollup-red-open.png",
+        ],
+      },
+    ],
+    badge: "New",
+    features: ["One-trip condition", "Roll-up access door", "Double cargo doors", "Lockbox ready", "Forklift pockets"],
+    desc: "Factory-fresh 10ft container modified with a full-width roll-up door for easy walk-in and equipment access, plus the original cargo doors.",
+  },
 
   // ── 20 FT ──────────────────────────────────────────────────────
   {
