@@ -1,0 +1,1 @@
+- [Container open-door renders](container-open-door-renders.md) — establish and inspect fully open door geometry before generating color variants.

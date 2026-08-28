@@ -44,7 +44,7 @@ const HIGH_CUBE_20_COLORS: ContainerColor[] = [
       "/images/container-20-hc-gray-angle.jpg",
       "/images/container-20-hc-gray-end.jpg",
       "/images/container-20-hc-gray-angle-left.jpg",
-      "/images/container-20-hc-gray-open.jpg",
+      "/images/container-20-hc-gray-open-wide-final.jpg",
     ],
   },
   {
@@ -58,7 +58,7 @@ const HIGH_CUBE_20_COLORS: ContainerColor[] = [
       "/images/container-20-hc-blue-angle.jpg",
       "/images/container-20-hc-blue-end.jpg",
       "/images/container-20-hc-blue-angle-left.jpg",
-      "/images/container-20-hc-blue-open.jpg",
+      "/images/container-20-hc-blue-open-wide-final.jpg",
     ],
   },
   {
@@ -72,7 +72,7 @@ const HIGH_CUBE_20_COLORS: ContainerColor[] = [
       "/images/container-20-hc-beige-angle.jpg",
       "/images/container-20-hc-beige-end.jpg",
       "/images/container-20-hc-beige-angle-left.jpg",
-      "/images/container-20-hc-beige-open.jpg",
+      "/images/container-20-hc-beige-open-wide-final.jpg",
     ],
   },
   {
@@ -86,7 +86,7 @@ const HIGH_CUBE_20_COLORS: ContainerColor[] = [
       "/images/container-20-hc-green-angle.jpg",
       "/images/container-20-hc-green-end.jpg",
       "/images/container-20-hc-green-angle-left.jpg",
-      "/images/container-20-hc-green-open.jpg",
+      "/images/container-20-hc-green-open-wide-final.jpg",
     ],
   },
   {
@@ -100,7 +100,7 @@ const HIGH_CUBE_20_COLORS: ContainerColor[] = [
       "/images/container-20-hc-red-angle.jpg",
       "/images/container-20-hc-red-end.jpg",
       "/images/container-20-hc-red-angle-left.jpg",
-      "/images/container-20-hc-red-open.jpg",
+      "/images/container-20-hc-red-open-wide-final.jpg",
     ],
   },
 ];
@@ -338,7 +338,7 @@ const CONTAINERS: Container[] = [
       "/images/container-20-hc-gray-angle.jpg",
       "/images/container-20-hc-gray-end.jpg",
       "/images/container-20-hc-gray-angle-left.jpg",
-      "/images/container-20-hc-gray-open.jpg",
+      "/images/container-20-hc-gray-open-wide-final.jpg",
     ],
     colorOptions: HIGH_CUBE_20_COLORS,
     badge: "High Cube",
