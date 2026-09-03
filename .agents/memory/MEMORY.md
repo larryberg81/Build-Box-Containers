@@ -1,1 +1,2 @@
 - [Container open-door renders](container-open-door-renders.md) — establish and inspect fully open door geometry before generating color variants.
+- [Container color photography](container-color-photography.md) — color variants should use distinct real-world viewpoints, not identical recolored compositions.
