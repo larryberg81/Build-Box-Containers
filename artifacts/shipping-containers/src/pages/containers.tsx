@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { ArrowRight, Thermometer, Flame, DoorOpen, ShieldCheck, Truck, ClipboardCheck } from "lucide-react";
+import { ArrowRight, Thermometer, Flame, DoorOpen, ShieldCheck, Truck, ClipboardCheck, Scale, X } from "lucide-react";
 
 interface Container {
   id: string;
@@ -630,12 +630,133 @@ function FilterGroup({
   );
 }
 
+function ComparisonView({
+  containers,
+  onRemove,
+  onViewDetails,
+}: {
+  containers: Container[];
+  onRemove: (id: string) => void;
+  onViewDetails: (container: Container) => void;
+}) {
+  const rows = [
+    { label: "Exterior dimensions", getValue: (c: Container) => c.extDimensions },
+    { label: "Interior dimensions", getValue: (c: Container) => c.intDimensions },
+    { label: "Door / opening", getValue: (c: Container) => c.doorOpening ?? "—" },
+    {
+      label: "Capacity",
+      getValue: (c: Container) => (
+        <span className="flex flex-col gap-1">
+          <span>{c.volume}</span>
+          <span className="text-xs font-normal text-muted-foreground">Payload: {c.payload}</span>
+        </span>
+      ),
+    },
+    {
+      label: "Condition",
+      getValue: (c: Container) => (
+        <span className={`inline-flex text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 ${CONDITION_COLORS[c.condition]}`}>
+          {c.condition}
+        </span>
+      ),
+    },
+    {
+      label: "Type",
+      getValue: (c: Container) => (
+        <span className={`inline-flex text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 ${TYPE_COLORS[c.type]}`}>
+          {c.type}
+        </span>
+      ),
+    },
+    {
+      label: "Purchase price",
+      getValue: (c: Container) => <span className="text-lg font-display font-bold text-primary">{c.price}</span>,
+    },
+    {
+      label: "Rental price",
+      getValue: (c: Container) => c.rentPrice ?? "—",
+    },
+  ];
+
+  return (
+    <section id="compare" className="border-y border-primary/30 bg-primary/5 py-10 scroll-mt-36">
+      <div className="container mx-auto max-w-7xl px-4 md:px-8">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
+              <Scale className="h-4 w-4" /> Side-by-side comparison
+            </p>
+            <h2 className="text-3xl font-display font-bold uppercase tracking-tight">Compare your options</h2>
+            <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+              Review the details that matter before requesting a quote.
+            </p>
+          </div>
+          <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {containers.length} of 3 options selected
+          </p>
+        </div>
+
+        <div className="overflow-x-auto border border-border bg-card">
+          <table className="w-full min-w-[760px] border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-border bg-muted/50">
+                <th className="sticky left-0 z-10 w-36 min-w-36 border-r border-border bg-muted/50 p-3 text-left text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:w-44 sm:min-w-44">
+                  Specification
+                </th>
+                {containers.map(container => (
+                  <th key={container.id} className="min-w-[190px] p-3 text-left align-top sm:min-w-[220px]">
+                    <div className="relative">
+                      <button
+                        type="button"
+                        aria-label={`Remove ${container.name} from comparison`}
+                        onClick={() => onRemove(container.id)}
+                        className="absolute right-0 top-0 inline-flex h-7 w-7 items-center justify-center border border-border bg-background text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                      <img src={container.image} alt="" className="mb-3 aspect-[16/9] w-full object-cover" />
+                      <p className="pr-8 text-base font-display font-bold uppercase leading-tight">{container.name}</p>
+                      <button
+                        type="button"
+                        onClick={() => onViewDetails(container)}
+                        className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-primary hover:text-primary/80"
+                      >
+                        Full specs <ArrowRight className="h-3 w-3" />
+                      </button>
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {rows.map(row => (
+                <tr key={row.label}>
+                  <th className="sticky left-0 z-10 border-r border-border bg-card p-3 text-left text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    {row.label}
+                  </th>
+                  {containers.map(container => (
+                    <td key={`${row.label}-${container.id}`} className="p-3 align-top font-mono text-xs font-semibold leading-relaxed">
+                      {row.getValue(container)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-center text-xs text-muted-foreground sm:hidden">Swipe sideways to see all options.</p>
+      </div>
+    </section>
+  );
+}
+
 export default function Containers() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeCondition, setActiveCondition] = useState("All");
   const [activeType, setActiveType] = useState("All");
   const [selectedContainer, setSelectedContainer] = useState<Container | null>(null);
   const [selectedColor, setSelectedColor] = useState<ContainerColor | null>(null);
+  const [compareIds, setCompareIds] = useState<string[]>([]);
 
   const openContainer = (container: Container) => {
     setSelectedContainer(container);
@@ -655,6 +776,16 @@ export default function Containers() {
       (activeType === "High Cube" ? c.size.includes("HC") : c.type === activeType);
     return catMatch && condMatch && typeMatch;
   });
+  const comparedContainers = compareIds
+    .map(id => CONTAINERS.find(container => container.id === id))
+    .filter((container): container is Container => Boolean(container));
+  const toggleCompare = (container: Container) => {
+    setCompareIds(current => {
+      if (current.includes(container.id)) return current.filter(id => id !== container.id);
+      if (current.length >= 3) return current;
+      return [...current, container.id];
+    });
+  };
 
   return (
     <div className="bg-background min-h-screen pt-16">
@@ -679,6 +810,45 @@ export default function Containers() {
           </div>
         </div>
       </section>
+
+      {compareIds.length > 0 && (
+        <div className="border-b border-border bg-card">
+          <div className="container mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 md:flex-row md:items-center md:justify-between md:px-8">
+            <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              <span className="text-primary">{compareIds.length} selected</span>
+              {compareIds.length < 2 ? " — select one more to compare" : " — up to 3 containers"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {comparedContainers.map(container => (
+                <button
+                  key={container.id}
+                  type="button"
+                  onClick={() => toggleCompare(container)}
+                  className="inline-flex items-center gap-2 border border-border bg-background px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-wider transition-colors hover:border-primary hover:text-primary"
+                >
+                  {container.name} <X className="h-3 w-3" />
+                </button>
+              ))}
+              {compareIds.length >= 2 && (
+                <a
+                  href="#compare"
+                  className="inline-flex items-center gap-2 bg-primary px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground transition-colors hover:bg-primary/90"
+                >
+                  View comparison <ArrowRight className="h-3 w-3" />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {comparedContainers.length >= 2 && (
+        <ComparisonView
+          containers={comparedContainers}
+          onRemove={id => setCompareIds(current => current.filter(compareId => compareId !== id))}
+          onViewDetails={openContainer}
+        />
+      )}
 
       {/* Grid */}
       <section className="py-12">
@@ -772,7 +942,31 @@ export default function Containers() {
                     </div>
                   )}
 
-                  <div className="mt-auto flex items-end justify-between border-t border-border pt-5">
+                  <div className="mb-4 flex items-center justify-between border-t border-border pt-4">
+                    <button
+                      type="button"
+                      aria-pressed={compareIds.includes(container.id)}
+                      disabled={!compareIds.includes(container.id) && compareIds.length >= 3}
+                      onClick={event => {
+                        event.stopPropagation();
+                        toggleCompare(container);
+                      }}
+                      className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors ${
+                        compareIds.includes(container.id)
+                          ? "text-primary"
+                          : "text-muted-foreground hover:text-primary"
+                      } disabled:cursor-not-allowed disabled:opacity-40`}
+                    >
+                      <span className={`inline-flex h-4 w-4 items-center justify-center border ${
+                        compareIds.includes(container.id) ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground"
+                      }`}>
+                        {compareIds.includes(container.id) && <span className="text-xs leading-none">✓</span>}
+                      </span>
+                      {compareIds.includes(container.id) ? "In comparison" : "Add to compare"}
+                    </button>
+                  </div>
+
+                  <div className="mt-auto flex items-end justify-between">
                     <div>
                       <div className="text-2xl font-display font-bold text-foreground">{container.price}</div>
                       {container.rentPrice && (
