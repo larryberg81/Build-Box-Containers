@@ -105,6 +105,64 @@ const HIGH_CUBE_20_COLORS: ContainerColor[] = [
   },
 ];
 
+const STANDARD_20_COLORS: ContainerColor[] = [
+  {
+    id: "orange",
+    name: "Orange",
+    hex: "#d68713",
+    image: "/images/container-20-new-orange-angle.jpg",
+    gallery: [
+      "/images/container-20-new-orange-angle.jpg",
+      "/images/container-20-new-orange-open.jpg",
+      "/images/container-20-new-orange-end.jpg",
+    ],
+  },
+  {
+    id: "blue",
+    name: "Blue",
+    hex: "#075fc4",
+    image: "/images/container-20-new-blue-angle-alt-angle.jpg",
+    gallery: [
+      "/images/container-20-new-blue-angle-alt-angle.jpg",
+      "/images/container-20-new-blue-open-alt-angle.jpg",
+      "/images/container-20-new-blue-end-alt-angle.jpg",
+    ],
+  },
+  {
+    id: "beige",
+    name: "Beige",
+    hex: "#c8b99d",
+    image: "/images/container-20-new-beige-angle-alt-angle.jpg",
+    gallery: [
+      "/images/container-20-new-beige-angle-alt-angle.jpg",
+      "/images/container-20-new-beige-open-alt-angle.jpg",
+      "/images/container-20-new-beige-end-alt-angle.jpg",
+    ],
+  },
+  {
+    id: "green",
+    name: "Dark Green",
+    hex: "#0e503c",
+    image: "/images/container-20-new-green-angle-alt-angle.jpg",
+    gallery: [
+      "/images/container-20-new-green-angle-alt-angle.jpg",
+      "/images/container-20-new-green-open-alt-angle.jpg",
+      "/images/container-20-new-green-end-alt-angle.jpg",
+    ],
+  },
+  {
+    id: "red",
+    name: "Red",
+    hex: "#9f332f",
+    image: "/images/container-20-new-red-angle-alt-angle.jpg",
+    gallery: [
+      "/images/container-20-new-red-angle-alt-angle.jpg",
+      "/images/container-20-new-red-open-alt-angle.jpg",
+      "/images/container-20-new-red-end-alt-angle.jpg",
+    ],
+  },
+];
+
 const CONTAINERS: Container[] = [
   // ── 10 FT ──────────────────────────────────────────────────────
   {
@@ -312,7 +370,13 @@ const CONTAINERS: Container[] = [
     price: "$2,200",
     rentPrice: "From $175/mo",
     doorOpening: "Cargo doors: 7'8\" W × 7'5\" H",
-    image: "/images/container-20-new-yard.jpg",
+    image: "/images/container-20-new-orange-angle.jpg",
+    gallery: [
+      "/images/container-20-new-orange-angle.jpg",
+      "/images/container-20-new-orange-open.jpg",
+      "/images/container-20-new-orange-end.jpg",
+    ],
+    colorOptions: STANDARD_20_COLORS,
     badge: "Most Popular",
     features: ["One-trip condition", "Double cargo doors", "Forklift pockets", "Corner castings", "Vent plugs"],
     desc: "Fresh from the factory, one cargo trip. Pristine corten steel interior — the right choice when condition matters for conversions or client-facing use.",
