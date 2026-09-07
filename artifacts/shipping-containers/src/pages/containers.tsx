@@ -19,6 +19,7 @@ interface Container {
   image: string;
   gallery?: string[];
   colorOptions?: ContainerColor[];
+  configurationOptions?: ContainerConfiguration[];
   badge?: string;
   features: string[];
   desc: string;
@@ -28,6 +29,13 @@ interface ContainerColor {
   id: string;
   name: string;
   hex: string;
+  image: string;
+  gallery: string[];
+}
+
+interface ContainerConfiguration {
+  id: string;
+  name: string;
   image: string;
   gallery: string[];
 }
@@ -429,7 +437,61 @@ const CONTAINERS: Container[] = [
     price: "$2,600",
     rentPrice: "From $210/mo",
     doorOpening: "Side access opening: approx. 14' W × 8'5\" H",
-    image: "/images/container-20-side-door-yard.jpg",
+    image: "/images/container-20-hc-side-storefront-open.jpg",
+    gallery: [
+      "/images/container-20-hc-side-storefront-open.jpg",
+      "/images/container-20-hc-side-storefront-interior.jpg",
+      "/images/container-20-hc-side-storefront-closed.jpg",
+    ],
+    configurationOptions: [
+      {
+        id: "storefront-rollup",
+        name: "Side Roll-Up + Glass Entry",
+        image: "/images/container-20-hc-side-storefront-open.jpg",
+        gallery: [
+          "/images/container-20-hc-side-storefront-open.jpg",
+          "/images/container-20-hc-side-storefront-interior.jpg",
+          "/images/container-20-hc-side-storefront-closed.jpg",
+        ],
+      },
+      {
+        id: "double-rollup",
+        name: "Double Side Roll-Up Doors",
+        image: "/images/container-20-hc-side-double-rollup-open.png",
+        gallery: [
+          "/images/container-20-hc-side-double-rollup-open.png",
+          "/images/container-20-hc-side-double-rollup-closed.png",
+        ],
+      },
+      {
+        id: "full-side-cargo",
+        name: "Full Side-Opening Cargo Doors",
+        image: "/images/container-20-hc-side-full-cargo-open.jpg",
+        gallery: [
+          "/images/container-20-hc-side-full-cargo-open.jpg",
+          "/images/container-20-hc-side-full-cargo-closed.jpg",
+          "/images/container-20-hc-side-full-cargo-angle.jpg",
+          "/images/container-20-hc-side-full-cargo-end-open.jpg",
+        ],
+      },
+      {
+        id: "single-rollup",
+        name: "Single Side Roll-Up Door",
+        image: "/images/container-20-hc-side-single-rollup-side-open.jpg",
+        gallery: [
+          "/images/container-20-hc-side-single-rollup-side-open.jpg",
+          "/images/container-20-hc-side-single-rollup-side-closed.jpg",
+          "/images/container-20-hc-side-single-rollup-end-open.jpg",
+          "/images/container-20-hc-side-single-rollup-end-closed.jpg",
+        ],
+      },
+      {
+        id: "interior-rollup",
+        name: "Interior Roll-Up Access",
+        image: "/images/container-20-hc-side-interior-rollup.jpg",
+        gallery: ["/images/container-20-hc-side-interior-rollup.jpg"],
+      },
+    ],
     features: ["High Cube — extra 1ft headroom", "Modified side access doors", "Wind & watertight", "Ideal for retail & office fitouts"],
     desc: "Extra headroom plus a side-door opening makes this the go-to for pop-up retail, cafés, and site offices where walk-in access from the side is key.",
   },
@@ -826,16 +888,19 @@ export default function Containers() {
   const [activeType, setActiveType] = useState("All");
   const [selectedContainer, setSelectedContainer] = useState<Container | null>(null);
   const [selectedColor, setSelectedColor] = useState<ContainerColor | null>(null);
+  const [selectedConfiguration, setSelectedConfiguration] = useState<ContainerConfiguration | null>(null);
   const [compareIds, setCompareIds] = useState<string[]>([]);
 
   const openContainer = (container: Container) => {
     setSelectedContainer(container);
     setSelectedColor(container.colorOptions?.[0] ?? null);
+    setSelectedConfiguration(container.configurationOptions?.[0] ?? null);
   };
 
   const closeContainer = () => {
     setSelectedContainer(null);
     setSelectedColor(null);
+    setSelectedConfiguration(null);
   };
 
   const filtered = CONTAINERS.filter(c => {
@@ -1000,6 +1065,11 @@ export default function Containers() {
                         {container.colorOptions.length} colors
                       </span>
                     )}
+                    {container.configurationOptions && (
+                      <span className="text-[10px] font-semibold uppercase tracking-wider bg-muted text-muted-foreground px-2 py-1 border border-border">
+                        {container.configurationOptions.length} configurations
+                      </span>
+                    )}
                   </div>
 
                   {container.doorOpening && (
@@ -1127,18 +1197,18 @@ export default function Containers() {
           >
             <div className="aspect-video overflow-hidden">
               <img
-                src={selectedColor?.image ?? selectedContainer.image}
-                alt={`${selectedContainer.name}${selectedColor ? ` in ${selectedColor.name}` : ""}`}
+                src={selectedConfiguration?.image ?? selectedColor?.image ?? selectedContainer.image}
+                alt={`${selectedContainer.name}${selectedConfiguration ? ` — ${selectedConfiguration.name}` : selectedColor ? ` in ${selectedColor.name}` : ""}`}
                 className="w-full h-full object-cover"
               />
             </div>
-            {(selectedColor?.gallery ?? selectedContainer.gallery ?? []).length > 1 && (
+            {(selectedConfiguration?.gallery ?? selectedColor?.gallery ?? selectedContainer.gallery ?? []).length > 1 && (
               <div className="grid grid-cols-2 gap-2 border-b border-border bg-muted p-2">
-                {(selectedColor?.gallery ?? selectedContainer.gallery ?? [selectedContainer.image]).map((image, index) => (
+                {(selectedConfiguration?.gallery ?? selectedColor?.gallery ?? selectedContainer.gallery ?? [selectedContainer.image]).map((image, index) => (
                   <img
                     key={image}
                     src={image}
-                    alt={`${selectedContainer.name}${selectedColor ? ` in ${selectedColor.name}` : ""} view ${index + 1}`}
+                    alt={`${selectedContainer.name}${selectedConfiguration ? ` — ${selectedConfiguration.name}` : selectedColor ? ` in ${selectedColor.name}` : ""} view ${index + 1}`}
                     className="aspect-[4/3] w-full object-cover"
                   />
                 ))}
@@ -1187,6 +1257,34 @@ export default function Containers() {
                   </div>
                   <p className="mt-3 text-xs text-muted-foreground">
                     Select your preferred color before requesting a quote.
+                  </p>
+                </div>
+              )}
+
+              {selectedContainer.configurationOptions && (
+                <div className="mb-6 border border-border bg-background/40 p-4">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Choose a Configuration</p>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {selectedContainer.configurationOptions.map(configuration => (
+                      <button
+                        key={configuration.id}
+                        type="button"
+                        data-testid={`configuration-option-${configuration.id}`}
+                        aria-label={`Choose ${configuration.name}`}
+                        aria-pressed={selectedConfiguration?.id === configuration.id}
+                        onClick={() => setSelectedConfiguration(configuration)}
+                        className={`border-2 px-3 py-3 text-left text-xs font-bold uppercase tracking-wider transition-all ${
+                          selectedConfiguration?.id === configuration.id
+                            ? "border-primary bg-primary/10 text-foreground"
+                            : "border-border bg-card text-muted-foreground hover:border-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {configuration.name}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Select the side-door layout that best matches your project.
                   </p>
                 </div>
               )}
@@ -1250,7 +1348,7 @@ export default function Containers() {
                 </div>
                 <div className="flex gap-3">
                   <Link
-                    href={`/quote?containerId=${encodeURIComponent(selectedContainer.id)}${selectedColor ? `&color=${encodeURIComponent(selectedColor.id)}` : ""}`}
+                    href={`/quote?containerId=${encodeURIComponent(selectedContainer.id)}${selectedColor ? `&color=${encodeURIComponent(selectedColor.id)}` : ""}${selectedConfiguration ? `&configuration=${encodeURIComponent(selectedConfiguration.id)}` : ""}`}
                     onClick={closeContainer}
                     className="inline-flex h-11 items-center justify-center bg-primary px-6 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-all uppercase tracking-wider"
                   >

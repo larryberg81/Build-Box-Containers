@@ -56,6 +56,16 @@ const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]
   ],
 };
 
+const CONFIGURATION_OPTIONS: Record<string, { id: string; label: string }[]> = {
+  "20-hc-side": [
+    { id: "storefront-rollup", label: "Side Roll-Up + Glass Entry" },
+    { id: "double-rollup", label: "Double Side Roll-Up Doors" },
+    { id: "full-side-cargo", label: "Full Side-Opening Cargo Doors" },
+    { id: "single-rollup", label: "Single Side Roll-Up Door" },
+    { id: "interior-rollup", label: "Interior Roll-Up Access" },
+  ],
+};
+
 // Delivery fee: 10ft = $380, everything else = $580
 const DELIVERY_FEE = (sizeGroup: string) => sizeGroup === "10" ? 380 : 580;
 
@@ -299,15 +309,21 @@ export default function Quote() {
   const searchParams                               = new URLSearchParams(search);
   const requestedContainerId                       = searchParams.get("containerId");
   const requestedColorId                           = searchParams.get("color");
+  const requestedConfigurationId                   = searchParams.get("configuration");
   const requestedColors                            = requestedContainerId ? COLOR_OPTIONS[requestedContainerId] ?? [] : [];
+  const requestedConfigurations                    = requestedContainerId ? CONFIGURATION_OPTIONS[requestedContainerId] ?? [] : [];
   const initialContainerId                         = requestedContainerId && CONTAINERS.some(c => c.id === requestedContainerId)
     ? requestedContainerId
     : "20-used";
   const initialColorId                             = requestedColors.some(color => color.id === requestedColorId)
     ? requestedColorId ?? ""
     : requestedColors[0]?.id ?? "";
+  const initialConfigurationId                     = requestedConfigurations.some(configuration => configuration.id === requestedConfigurationId)
+    ? requestedConfigurationId ?? ""
+    : requestedConfigurations[0]?.id ?? "";
   const [selectedContainer, setSelectedContainer] = useState<string>(initialContainerId);
   const [selectedColor, setSelectedColor]         = useState<string>(initialColorId);
+  const [selectedConfiguration, setSelectedConfiguration] = useState<string>(initialConfigurationId);
   const [mode, setMode]                           = useState<"purchase" | "rental">("purchase");
   const [selectedDuration, setSelectedDuration]   = useState<string>("3mo");
   const [selectedMods, setSelectedMods]           = useState<Set<string>>(new Set());
@@ -322,10 +338,12 @@ export default function Quote() {
     const modLabels = MODIFICATIONS.filter(m => selectedMods.has(m.id)).map(m => m.label);
     const durationObj = RENTAL_DURATIONS.find(d => d.id === selectedDuration)!;
     const selectedColorLabel = colorOptions.find(color => color.id === selectedColor)?.label ?? "";
+    const selectedConfigurationLabel = configurationOptions.find(configuration => configuration.id === selectedConfiguration)?.label ?? "";
     const params = new URLSearchParams({
       container: container.label,
       containerId: container.id,
       color: selectedColorLabel,
+      configuration: selectedConfigurationLabel,
       mode,
       total:    String(estimate.total),
       base:     String(estimate.base),
@@ -359,6 +377,8 @@ export default function Quote() {
   const container  = CONTAINERS.find(c => c.id === selectedContainer)!;
   const colorOptions = COLOR_OPTIONS[container.id] ?? [];
   const colorLabel = colorOptions.find(color => color.id === selectedColor)?.label ?? "";
+  const configurationOptions = CONFIGURATION_OPTIONS[container.id] ?? [];
+  const configurationLabel = configurationOptions.find(configuration => configuration.id === selectedConfiguration)?.label ?? "";
   const delivery   = getDelivery(selectedState);
   const deliveryFee = DELIVERY_FEE(container.sizeGroup);
 
@@ -429,6 +449,7 @@ export default function Quote() {
                     onClick={() => {
                       setSelectedContainer(c.id);
                       setSelectedColor(COLOR_OPTIONS[c.id]?.[0]?.id ?? "");
+                      setSelectedConfiguration(CONFIGURATION_OPTIONS[c.id]?.[0]?.id ?? "");
                     }}
                     className={`text-left px-4 py-4 border-2 transition-all flex items-center gap-4 ${
                       selectedContainer === c.id
@@ -477,6 +498,31 @@ export default function Quote() {
                     ))}
                   </div>
                   <p className="mt-3 text-xs text-muted-foreground">Your color choice will be included with your formal quote request.</p>
+                </div>
+              )}
+              {configurationOptions.length > 0 && (
+                <div className="mt-5 border border-border bg-background/40 p-4">
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3">Choose a Configuration</p>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {configurationOptions.map(configuration => (
+                      <button
+                        key={configuration.id}
+                        type="button"
+                        data-testid={`quote-configuration-option-${configuration.id}`}
+                        aria-label={`Choose ${configuration.label}`}
+                        aria-pressed={selectedConfiguration === configuration.id}
+                        onClick={() => setSelectedConfiguration(configuration.id)}
+                        className={`border-2 px-3 py-3 text-left text-xs font-bold uppercase tracking-wider transition-all ${
+                          selectedConfiguration === configuration.id
+                            ? "border-primary bg-primary/10 text-foreground"
+                            : "border-border bg-card text-muted-foreground hover:border-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        {configuration.label}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs text-muted-foreground">Your side-door layout will be included with your formal quote request.</p>
                 </div>
               )}
             </div>
@@ -674,6 +720,9 @@ export default function Quote() {
                   {colorLabel && (
                     <p className="text-xs text-primary font-semibold uppercase tracking-wider mt-1">Color: {colorLabel}</p>
                   )}
+                  {configurationLabel && (
+                    <p className="text-xs text-primary font-semibold uppercase tracking-wider mt-1">Configuration: {configurationLabel}</p>
+                  )}
                   <div className="flex gap-2 mt-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5">{container.size}</span>
                     <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 ${CONDITION_COLORS[container.condition]}`}>{container.condition}</span>
@@ -786,7 +835,7 @@ export default function Quote() {
       {/* Floating inquiry widget */}
       <InquiryWidget
         containerLabel={container.label}
-        colorLabel={colorLabel}
+        colorLabel={colorLabel || configurationLabel}
         totalPrice={estimate.total}
         deliveryState={selectedState}
         deliveryZip={zipCode}
