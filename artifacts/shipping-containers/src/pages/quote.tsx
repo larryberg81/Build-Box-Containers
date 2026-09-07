@@ -64,6 +64,11 @@ const CONFIGURATION_OPTIONS: Record<string, { id: string; label: string }[]> = {
     { id: "single-rollup", label: "Single Side Roll-Up Door" },
     { id: "interior-rollup", label: "Interior Roll-Up Access" },
   ],
+  "20-heated": [
+    { id: "white-office", label: "White Heated Office Package" },
+    { id: "gray-security-office", label: "Gray Security Office Package" },
+    { id: "beige-climate-office", label: "Beige Climate-Controlled Office" },
+  ],
 };
 
 // Delivery fee: 10ft = $380, everything else = $580

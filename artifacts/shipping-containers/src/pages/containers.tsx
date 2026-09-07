@@ -496,7 +496,7 @@ const CONTAINERS: Container[] = [
     desc: "Extra headroom plus a side-door opening makes this the go-to for pop-up retail, cafés, and site offices where walk-in access from the side is key.",
   },
   {
-    id: "20-heated-side",
+    id: "20-heated",
     name: "20' Heated — Side Doors",
     condition: "One-Trip",
     type: "Heated",
@@ -509,7 +509,45 @@ const CONTAINERS: Container[] = [
     price: "$3,400",
     rentPrice: "From $280/mo",
     doorOpening: "Side access door: 3' W × 6'8\" H",
-    image: "/images/container-20-heated-yard.jpg",
+    image: "/images/container-20-heated-white-entry.jpg",
+    gallery: [
+      "/images/container-20-heated-white-entry.jpg",
+      "/images/container-20-heated-white-hvac.jpg",
+      "/images/container-20-heated-white-interior-front.jpg",
+      "/images/container-20-heated-white-interior-rear.jpg",
+    ],
+    configurationOptions: [
+      {
+        id: "white-office",
+        name: "White Heated Office Package",
+        image: "/images/container-20-heated-white-entry.jpg",
+        gallery: [
+          "/images/container-20-heated-white-entry.jpg",
+          "/images/container-20-heated-white-hvac.jpg",
+          "/images/container-20-heated-white-interior-front.jpg",
+          "/images/container-20-heated-white-interior-rear.jpg",
+        ],
+      },
+      {
+        id: "gray-security-office",
+        name: "Gray Security Office Package",
+        image: "/images/container-20-heated-gray-entry.jpg",
+        gallery: [
+          "/images/container-20-heated-gray-entry.jpg",
+          "/images/container-20-heated-gray-interior.jpg",
+        ],
+      },
+      {
+        id: "beige-climate-office",
+        name: "Beige Climate-Controlled Office",
+        image: "/images/container-20-heated-beige-angle.jpg",
+        gallery: [
+          "/images/container-20-heated-beige-angle.jpg",
+          "/images/container-20-heated-beige-entry.png",
+          "/images/container-20-heated-beige-hvac.jpg",
+        ],
+      },
+    ],
     features: ["Integrated heating system", "Side access doors", "Spray foam insulation", "Electrical package included", "Thermostat control"],
     desc: "Cold-climate ready. A fully insulated and heated 20ft with side door access — built for year-round use in northern job sites, workshops, and storage.",
   },
