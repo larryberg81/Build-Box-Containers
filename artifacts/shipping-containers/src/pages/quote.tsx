@@ -43,7 +43,7 @@ const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]
   "20-new": [
     { id: "orange", label: "Orange", hex: "#d68713" },
     { id: "blue", label: "Blue", hex: "#075fc4" },
-    { id: "beige", label: "Beige", hex: "#c8b99d" },
+    { id: "beige", label: "Beige", hex: "#c9b99a" },
     { id: "green", label: "Dark Green", hex: "#0e503c" },
     { id: "red", label: "Red", hex: "#9f332f" },
   ],

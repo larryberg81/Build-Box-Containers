@@ -124,19 +124,19 @@ const STANDARD_20_COLORS: ContainerColor[] = [
     image: "/images/container-20-new-blue-angle-alt-angle.jpg",
     gallery: [
       "/images/container-20-new-blue-angle-alt-angle.jpg",
-      "/images/container-20-new-blue-open-alt-angle.jpg",
+      "/images/container-20-new-blue-open-fixed.jpg",
       "/images/container-20-new-blue-end-alt-angle.jpg",
     ],
   },
   {
     id: "beige",
     name: "Beige",
-    hex: "#c8b99d",
-    image: "/images/container-20-new-beige-angle-alt-angle.jpg",
+    hex: "#c9b99a",
+    image: "/images/container-20-new-beige-angle-fixed.jpg",
     gallery: [
-      "/images/container-20-new-beige-angle-alt-angle.jpg",
-      "/images/container-20-new-beige-open-alt-angle.jpg",
-      "/images/container-20-new-beige-end-alt-angle.jpg",
+      "/images/container-20-new-beige-angle-fixed.jpg",
+      "/images/container-20-new-beige-open-fixed.jpg",
+      "/images/container-20-new-beige-end-fixed.jpg",
     ],
   },
   {
