@@ -589,8 +589,28 @@ const CONTAINERS: Container[] = [
     gallery: [
       "/images/container-30-new-beige-exterior.jpg",
       "/images/container-30-new-beige-interior.jpg",
-      "/images/container-30-new-green-exterior.jpg",
-      "/images/container-30-new-green-interior.jpg",
+    ],
+    colorOptions: [
+      {
+        id: "beige",
+        name: "Beige",
+        hex: "#c9b99a",
+        image: "/images/container-30-new-beige-exterior.jpg",
+        gallery: [
+          "/images/container-30-new-beige-exterior.jpg",
+          "/images/container-30-new-beige-interior.jpg",
+        ],
+      },
+      {
+        id: "dark-green",
+        name: "Dark Green",
+        hex: "#244c3b",
+        image: "/images/container-30-new-green-exterior.jpg",
+        gallery: [
+          "/images/container-30-new-green-exterior.jpg",
+          "/images/container-30-new-green-interior.jpg",
+        ],
+      },
     ],
     badge: "New",
     features: ["One-trip condition", "Double cargo doors", "Forklift pockets", "Corner castings", "Vent plugs"],

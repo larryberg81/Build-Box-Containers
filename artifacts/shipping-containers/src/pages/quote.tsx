@@ -54,6 +54,10 @@ const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]
     { id: "green", label: "Dark Green", hex: "#0e503c" },
     { id: "red", label: "Red", hex: "#9f332f" },
   ],
+  "30-new": [
+    { id: "beige", label: "Beige", hex: "#c9b99a" },
+    { id: "dark-green", label: "Dark Green", hex: "#244c3b" },
+  ],
 };
 
 const CONFIGURATION_OPTIONS: Record<string, { id: string; label: string }[]> = {
