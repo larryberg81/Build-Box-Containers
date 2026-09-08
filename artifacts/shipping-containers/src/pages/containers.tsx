@@ -679,8 +679,8 @@ const CONTAINERS: Container[] = [
         image: "/images/container-40-used-navy-angle.jpg",
         gallery: [
           "/images/container-40-used-navy-angle.jpg",
-          "/images/container-40-used-navy-doors.jpg",
-          "/images/container-40-used-navy-interior.jpg",
+          "/images/container-40-used-navy-doors-enhanced.jpg",
+          "/images/container-40-used-navy-interior-enhanced.jpg",
         ],
       },
     ],
