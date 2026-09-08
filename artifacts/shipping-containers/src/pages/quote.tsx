@@ -64,6 +64,10 @@ const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]
     { id: "light-blue-gray", label: "Light Blue / Gray", hex: "#738b94" },
     { id: "navy-blue", label: "Navy Blue", hex: "#253f68" },
   ],
+  "40-new": [
+    { id: "dark-green", label: "Dark Green", hex: "#345543" },
+    { id: "charcoal-gray", label: "Charcoal Gray", hex: "#4a4c50" },
+  ],
 };
 
 const CONFIGURATION_OPTIONS: Record<string, { id: string; label: string }[]> = {

@@ -701,7 +701,36 @@ const CONTAINERS: Container[] = [
     price: "$3,200",
     rentPrice: "From $270/mo",
     doorOpening: "Cargo doors: 7'8\" W × 7'5\" H",
-    image: "/images/container-40-new-yard.jpg",
+    image: "/images/container-40-new-green-angle.jpg",
+    gallery: [
+      "/images/container-40-new-green-angle.jpg",
+      "/images/container-40-new-green-doors.jpg",
+      "/images/container-40-new-green-interior.jpg",
+    ],
+    colorOptions: [
+      {
+        id: "dark-green",
+        name: "Dark Green",
+        hex: "#345543",
+        image: "/images/container-40-new-green-angle.jpg",
+        gallery: [
+          "/images/container-40-new-green-angle.jpg",
+          "/images/container-40-new-green-doors.jpg",
+          "/images/container-40-new-green-interior.jpg",
+        ],
+      },
+      {
+        id: "charcoal-gray",
+        name: "Charcoal Gray",
+        hex: "#4a4c50",
+        image: "/images/container-40-new-charcoal-side.jpg",
+        gallery: [
+          "/images/container-40-new-charcoal-side.jpg",
+          "/images/container-40-new-charcoal-doors.jpg",
+          "/images/container-40-new-charcoal-interior.jpg",
+        ],
+      },
+    ],
     badge: "New",
     features: ["One-trip condition", "Double cargo doors", "Forklift pockets", "Corner castings", "Vent plugs"],
     desc: "One-trip 40ft. Clean steel throughout — the benchmark choice for large-scale modifications, multi-room layouts, and permanent installations.",
