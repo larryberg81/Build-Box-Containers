@@ -6,7 +6,7 @@ interface Container {
   id: string;
   name: string;
   condition: "Used" | "One-Trip";
-  type: "Standard" | "Modified" | "Heated" | "Reefer";
+  type: "Standard" | "High Cube" | "Modified" | "Heated" | "Reefer";
   category: string;
   size: string;
   extDimensions: string;
@@ -736,6 +736,56 @@ const CONTAINERS: Container[] = [
     desc: "One-trip 40ft. Clean steel throughout — the benchmark choice for large-scale modifications, multi-room layouts, and permanent installations.",
   },
   {
+    id: "40-hc-new",
+    name: "40' High Cube — New",
+    condition: "One-Trip",
+    type: "High Cube",
+    category: "40 ft",
+    size: "40 ft HC",
+    extDimensions: "40'L × 8'W × 9.5'H",
+    intDimensions: "39'5\"L × 7'8\"W × 8'10\"H",
+    payload: "58,600 lbs",
+    volume: "2,700 cu ft",
+    price: "$3,600",
+    rentPrice: "From $310/mo",
+    doorOpening: "Cargo doors: 7'8\" W × 8'5\" H",
+    image: "/images/container-40-hc-new-red.jpg",
+    gallery: ["/images/container-40-hc-new-red.jpg"],
+    colorOptions: [
+      {
+        id: "red",
+        name: "Red",
+        hex: "#98413a",
+        image: "/images/container-40-hc-new-red.jpg",
+        gallery: ["/images/container-40-hc-new-red.jpg"],
+      },
+      {
+        id: "gray",
+        name: "Gray",
+        hex: "#777d7e",
+        image: "/images/container-40-hc-new-gray.jpg",
+        gallery: ["/images/container-40-hc-new-gray.jpg"],
+      },
+      {
+        id: "blue",
+        name: "Blue",
+        hex: "#18509a",
+        image: "/images/container-40-hc-new-blue.jpg",
+        gallery: ["/images/container-40-hc-new-blue.jpg"],
+      },
+      {
+        id: "beige",
+        name: "Beige",
+        hex: "#d8cfaa",
+        image: "/images/container-40-hc-new-beige.jpg",
+        gallery: ["/images/container-40-hc-new-beige.jpg"],
+      },
+    ],
+    badge: "High Cube",
+    features: ["One-trip condition", "High Cube — extra 1ft headroom", "Double cargo doors", "2,700 cu ft capacity", "Forklift pockets"],
+    desc: "One-trip 40ft High Cube with an extra foot of interior height. Built for maximum-volume storage, equipment, conversions, and modular installations.",
+  },
+  {
     id: "40-hc-side",
     name: "40' HC — Side Doors",
     condition: "Used",
@@ -858,6 +908,7 @@ const CONDITION_COLORS: Record<string, string> = {
 
 const TYPE_COLORS: Record<string, string> = {
   Standard: "bg-muted text-foreground border border-border",
+  "High Cube": "bg-sky-950/70 text-sky-300 border border-sky-800/60",
   Modified: "bg-primary/10 text-primary border border-primary/30",
   Heated:   "bg-orange-950/70 text-orange-300 border border-orange-800/60",
   Reefer:   "bg-blue-950/70 text-blue-300 border border-blue-800/60",

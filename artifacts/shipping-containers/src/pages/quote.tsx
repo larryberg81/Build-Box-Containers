@@ -16,6 +16,7 @@ const CONTAINERS = [
   { id: "30-new",      label: "30' New",                 size: "30 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 2550, rentPrice: 235 },
   { id: "40-used",     label: "40' Used",                size: "40 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1900, rentPrice: 220 },
   { id: "40-new",      label: "40' New",                 size: "40 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 3200, rentPrice: 270 },
+  { id: "40-hc-new",   label: "40' High Cube — New",     size: "40 ft HC", sizeGroup: "20+", condition: "New",      buyPrice: 3600, rentPrice: 310 },
   { id: "40-hc-side",      label: "40' HC — Side Doors",     size: "40 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 3600,  rentPrice: 310 },
   { id: "40-heated",       label: "40' Heated — Side Doors", size: "40 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 4400,  rentPrice: 380 },
   // Reefer containers
@@ -67,6 +68,12 @@ const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]
   "40-new": [
     { id: "dark-green", label: "Dark Green", hex: "#345543" },
     { id: "charcoal-gray", label: "Charcoal Gray", hex: "#4a4c50" },
+  ],
+  "40-hc-new": [
+    { id: "red", label: "Red", hex: "#98413a" },
+    { id: "gray", label: "Gray", hex: "#777d7e" },
+    { id: "blue", label: "Blue", hex: "#18509a" },
+    { id: "beige", label: "Beige", hex: "#d8cfaa" },
   ],
 };
 
