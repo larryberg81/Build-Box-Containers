@@ -847,8 +847,71 @@ const CONTAINERS: Container[] = [
     price: "$4,400",
     rentPrice: "From $380/mo",
     doorOpening: "Side access door: 3' W × 6'8\" H",
-    image: "/images/container-40-side-door-yard.jpg",
-    features: ["Integrated heating system", "Side access doors", "Spray foam insulation", "Electrical package included", "Thermostat control", "220V power ready"],
+    image: "/images/container-40-heated-charcoal-restroom-entry.jpg",
+    gallery: [
+      "/images/container-40-heated-charcoal-restroom-entry.jpg",
+      "/images/container-40-heated-charcoal-hvac.jpg",
+    ],
+    configurationOptions: [
+      {
+        id: "charcoal-restroom-office",
+        name: "Charcoal Restroom Office",
+        image: "/images/container-40-heated-charcoal-restroom-entry.jpg",
+        gallery: [
+          "/images/container-40-heated-charcoal-restroom-entry.jpg",
+          "/images/container-40-heated-charcoal-hvac.jpg",
+        ],
+      },
+      {
+        id: "gray-glazed-office",
+        name: "Light Gray Glazed Office",
+        image: "/images/container-40-heated-gray-office-entry.jpg",
+        gallery: [
+          "/images/container-40-heated-gray-office-entry.jpg",
+          "/images/container-40-heated-gray-office-interior.jpg",
+        ],
+      },
+      {
+        id: "black-utility",
+        name: "Black Utility Package",
+        image: "/images/container-40-heated-black-utility.jpg",
+        gallery: ["/images/container-40-heated-black-utility.jpg"],
+      },
+      {
+        id: "tan-double-rollup",
+        name: "Tan Double Roll-Up Doors",
+        image: "/images/container-40-heated-tan-double-rollup.jpg",
+        gallery: ["/images/container-40-heated-tan-double-rollup.jpg"],
+      },
+      {
+        id: "beige-security-office",
+        name: "Beige Security Office",
+        image: "/images/container-40-heated-beige-security-office.jpg",
+        gallery: ["/images/container-40-heated-beige-security-office.jpg"],
+      },
+      {
+        id: "blue-dual-hvac-office",
+        name: "Blue Dual-HVAC Office",
+        image: "/images/container-40-heated-blue-office-entry.jpg",
+        gallery: [
+          "/images/container-40-heated-blue-office-entry.jpg",
+          "/images/container-40-heated-blue-dual-hvac.jpg",
+        ],
+      },
+      {
+        id: "green-storefront",
+        name: "Green Storefront Office",
+        image: "/images/container-40-heated-green-storefront.jpg",
+        gallery: ["/images/container-40-heated-green-storefront.jpg"],
+      },
+      {
+        id: "aqua-office",
+        name: "Aqua Heated Office",
+        image: "/images/container-40-heated-aqua-office.jpg",
+        gallery: ["/images/container-40-heated-aqua-office.jpg"],
+      },
+    ],
+    features: ["Integrated heating system", "Selectable office and side-access packages", "Spray foam insulation", "Electrical package included", "Thermostat control", "220V power ready"],
     desc: "Full-size, year-round ready. Insulated, heated, and side-door accessible — built for northern climate job sites, large workshops, and permanent installs.",
   },
 

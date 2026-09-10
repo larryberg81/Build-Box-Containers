@@ -18,7 +18,7 @@ const CONTAINERS = [
   { id: "40-new",      label: "40' New",                 size: "40 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 3200, rentPrice: 270 },
   { id: "40-hc-new",   label: "40' High Cube — New",     size: "40 ft HC", sizeGroup: "20+", condition: "New",      buyPrice: 3600, rentPrice: 310 },
   { id: "40-hc-side",      label: "40' HC — Side Doors",     size: "40 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 3600,  rentPrice: 310 },
-  { id: "40-heated",       label: "40' Heated — Side Doors", size: "40 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 4400,  rentPrice: 380 },
+  { id: "40-heated-side",  label: "40' Heated — Side Doors", size: "40 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 4400,  rentPrice: 380 },
   // Reefer containers
   { id: "reefer-20-used",  label: "20' Reefer — Used",       size: "20 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 3500,  rentPrice: 320 },
   { id: "reefer-20-new",   label: "20' Reefer — New",        size: "20 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 6800,  rentPrice: 520 },
@@ -95,6 +95,16 @@ const CONFIGURATION_OPTIONS: Record<string, { id: string; label: string }[]> = {
     { id: "orange-four-rollup", label: "Orange Four Roll-Up Doors" },
     { id: "gray-three-rollup", label: "Gray Three Roll-Up Doors" },
     { id: "beige-side-cargo", label: "Beige Full Side-Opening Doors" },
+  ],
+  "40-heated-side": [
+    { id: "charcoal-restroom-office", label: "Charcoal Restroom Office" },
+    { id: "gray-glazed-office", label: "Light Gray Glazed Office" },
+    { id: "black-utility", label: "Black Utility Package" },
+    { id: "tan-double-rollup", label: "Tan Double Roll-Up Doors" },
+    { id: "beige-security-office", label: "Beige Security Office" },
+    { id: "blue-dual-hvac-office", label: "Blue Dual-HVAC Office" },
+    { id: "green-storefront", label: "Green Storefront Office" },
+    { id: "aqua-office", label: "Aqua Heated Office" },
   ],
 };
 
