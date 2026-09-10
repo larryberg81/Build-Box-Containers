@@ -6,7 +6,7 @@ interface Container {
   id: string;
   name: string;
   condition: "Used" | "One-Trip";
-  type: "Standard" | "High Cube" | "Modified" | "Heated" | "Reefer";
+  type: "Standard" | "High Cube" | "Modified" | "Heated" | "Reefer" | "Capsule";
   category: string;
   size: string;
   extDimensions: string;
@@ -915,6 +915,33 @@ const CONTAINERS: Container[] = [
     desc: "Full-size, year-round ready. Insulated, heated, and side-door accessible — built for northern climate job sites, large workshops, and permanent installs.",
   },
 
+  // ── CAPSULE CONTAINERS ─────────────────────────────────────────
+  {
+    id: "capsule-container",
+    name: "Capsule Container",
+    condition: "One-Trip",
+    type: "Capsule",
+    category: "Capsule",
+    size: "11.5 m Capsule",
+    extDimensions: "11.5m L × 3.3m W (37'9\" × 10'10\")",
+    intDimensions: "Available on request",
+    payload: "Available on request",
+    volume: "Available on request",
+    price: "$20,000",
+    rentPrice: "From $1,500/mo",
+    doorOpening: "Panoramic glazed entry",
+    image: "/images/capsule-container-exterior.jpg",
+    gallery: [
+      "/images/capsule-container-exterior.jpg",
+      "/images/capsule-container-factory.jpg",
+      "/images/capsule-container-model-options.jpg",
+      "/images/capsule-container-floor-plan.jpg",
+    ],
+    badge: "Capsule",
+    features: ["11.5m × 3.3m footprint", "Panoramic glazing", "Integrated bathroom", "Air conditioning", "Bedroom and lounge layout", "Factory-built modular shell"],
+    desc: "A modern prefabricated capsule with panoramic glazing and a complete residential layout. Designed for hospitality, guest accommodation, retreats, and modular living projects.",
+  },
+
   // ── REEFER ─────────────────────────────────────────────────────
   {
     id: "reefer-20-used",
@@ -1001,9 +1028,9 @@ const CONTAINERS: Container[] = [
   },
 ];
 
-const CATEGORIES = ["All", "10 ft", "20 ft", "30 ft", "40 ft"];
+const CATEGORIES = ["All", "10 ft", "20 ft", "30 ft", "40 ft", "Capsule"];
 const CONDITIONS = ["All", "Used", "One-Trip"];
-const TYPES = ["All", "Standard", "High Cube", "Modified", "Heated", "Reefer"];
+const TYPES = ["All", "Standard", "High Cube", "Modified", "Heated", "Reefer", "Capsule"];
 
 const CONDITION_COLORS: Record<string, string> = {
   Used:      "bg-muted text-muted-foreground border border-border",
@@ -1016,6 +1043,7 @@ const TYPE_COLORS: Record<string, string> = {
   Modified: "bg-primary/10 text-primary border border-primary/30",
   Heated:   "bg-orange-950/70 text-orange-300 border border-orange-800/60",
   Reefer:   "bg-blue-950/70 text-blue-300 border border-blue-800/60",
+  Capsule:  "bg-violet-950/70 text-violet-300 border border-violet-800/60",
 };
 
 function SpecRow({ label, value }: { label: string; value: string }) {

@@ -19,6 +19,7 @@ const CONTAINERS = [
   { id: "40-hc-new",   label: "40' High Cube — New",     size: "40 ft HC", sizeGroup: "20+", condition: "New",      buyPrice: 3600, rentPrice: 310 },
   { id: "40-hc-side",      label: "40' HC — Side Doors",     size: "40 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 3600,  rentPrice: 310 },
   { id: "40-heated-side",  label: "40' Heated — Side Doors", size: "40 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 4400,  rentPrice: 380 },
+  { id: "capsule-container", label: "Capsule Container",       size: "11.5 m",   sizeGroup: "20+", condition: "New",      buyPrice: 20000, rentPrice: 1500 },
   // Reefer containers
   { id: "reefer-20-used",  label: "20' Reefer — Used",       size: "20 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 3500,  rentPrice: 320 },
   { id: "reefer-20-new",   label: "20' Reefer — New",        size: "20 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 6800,  rentPrice: 520 },
