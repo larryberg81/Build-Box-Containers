@@ -1,5 +1,16 @@
 import { Link } from "wouter";
 import { ArrowRight, Box, Shield, Zap, Wrench, BatteryCharging } from "lucide-react";
+import { CONTAINERS } from "@/pages/containers";
+
+const HOME_FLEET_CATEGORIES = [
+  { label: "Standard Containers", productId: "20-new" },
+  { label: "Modified Containers", productId: "40-hc-side" },
+  { label: "Reefer Containers", productId: "reefer-20-new" },
+  { label: "Capsule Containers", productId: "capsule-container" },
+].map(({ label, productId }) => ({
+  label,
+  product: CONTAINERS.find((container) => container.id === productId)!,
+}));
 
 export default function Home() {
   return (
@@ -85,29 +96,47 @@ export default function Home() {
               <p className="text-muted-foreground text-lg">From raw storage to fully finished modular spaces.</p>
             </div>
             <Link href="/containers" className="inline-flex items-center text-primary font-bold uppercase tracking-wider hover:text-primary/80 transition-colors">
-              See All Models <ArrowRight className="ml-2 h-4 w-4" />
+              Browse More Containers <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { title: "Standard 20ft", image: "/images/product-20ft.png", desc: "The industry standard for secure storage." },
-              { title: "Standard 40ft", image: "/images/product-40ft.png", desc: "Maximum capacity for major projects." },
-              { title: "Pop-up Retail", image: "/images/product-retail.png", desc: "Modified for cafes, bars, and shops." },
-              { title: "Modular Office", image: "/images/product-modular.png", desc: "Climate-controlled workspace anywhere." },
-            ].map((item, i) => (
-              <div key={i} className="group cursor-pointer border border-border bg-background overflow-hidden relative">
+            {HOME_FLEET_CATEGORIES.map(({ label, product: item }) => (
+              <Link
+                key={item.id}
+                href="/containers"
+                className="group cursor-pointer border border-border bg-background overflow-hidden relative flex flex-col"
+                data-testid={`home-container-${item.id}`}
+              >
                 <div className="aspect-[4/3] bg-muted relative overflow-hidden">
-                  <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-background/20 group-hover:bg-transparent transition-colors" />
+                  {item.badge && (
+                    <span className="absolute top-3 right-3 bg-background/90 border border-border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider">
+                      {item.badge}
+                    </span>
+                  )}
                 </div>
-                <div className="p-6">
-                  <h3 className="text-lg font-display font-bold uppercase mb-2">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                <div className="p-6 flex flex-col flex-1">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-2">{label}</p>
+                  <div className="flex items-center justify-between gap-3 mb-2">
+                    <h3 className="text-lg font-display font-bold uppercase">{item.name}</h3>
+                    <span className="text-xs font-bold uppercase tracking-wider text-primary whitespace-nowrap">{item.price}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground line-clamp-3">{item.desc}</p>
+                  <div className="mt-auto pt-5 flex items-center justify-between text-xs font-bold uppercase tracking-wider">
+                    <span className="text-muted-foreground">{item.size} · {item.type}</span>
+                    <span className="text-primary inline-flex items-center">Browse <ArrowRight className="ml-1 h-3.5 w-3.5" /></span>
+                  </div>
                 </div>
                 <div className="absolute bottom-0 left-0 h-1 bg-primary w-0 group-hover:w-full transition-all duration-300" />
-              </div>
+              </Link>
             ))}
+          </div>
+          <div className="mt-10 text-center">
+            <Link href="/containers" className="inline-flex h-12 items-center justify-center gap-2 border-2 border-primary px-8 text-sm font-bold uppercase tracking-wider text-primary hover:bg-primary hover:text-primary-foreground transition-colors">
+              Browse More Containers <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>

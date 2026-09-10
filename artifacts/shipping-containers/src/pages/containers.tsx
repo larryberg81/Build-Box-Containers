@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Thermometer, Flame, DoorOpen, ShieldCheck, Truck, ClipboardCheck, Scale, X } from "lucide-react";
 
-interface Container {
+export interface Container {
   id: string;
   name: string;
   condition: "Used" | "One-Trip";
@@ -171,7 +171,7 @@ const STANDARD_20_COLORS: ContainerColor[] = [
   },
 ];
 
-const CONTAINERS: Container[] = [
+export const CONTAINERS: Container[] = [
   // ── 10 FT ──────────────────────────────────────────────────────
   {
     id: "10-used",
