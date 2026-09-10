@@ -215,9 +215,8 @@ function InquiryWidget({
     setLoading(true);
     try {
       const body = {
-        access_key: import.meta.env.VITE_WEB3FORMS_KEY,
         subject: `Built Box Containers — Quote Inquiry: ${configuredContainerLabel}`,
-        from_name: form.name,
+        name: form.name,
         email: form.email,
         phone: form.phone,
         address: form.address,
@@ -228,9 +227,9 @@ function InquiryWidget({
         delivery_zip: deliveryZip || "Not specified",
         message: form.message || defaultMessage,
       };
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
       const data = await res.json();
@@ -240,7 +239,7 @@ function InquiryWidget({
         alert("Submission failed — please try again or email us directly.");
       }
     } catch {
-      alert("Network error — please email us at sales@builtboxcontainers.com");
+      alert("Network error — please email us at info@builtboxcontainer.com");
     } finally {
       setLoading(false);
     }

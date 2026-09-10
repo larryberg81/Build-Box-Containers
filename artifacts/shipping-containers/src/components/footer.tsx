@@ -37,7 +37,7 @@ export function Footer() {
             <h3 className="font-display font-semibold mb-4 uppercase tracking-wider text-sm">Contact</h3>
             <ul className="flex flex-col gap-2 text-sm text-muted-foreground">
               <li>1-800-BUILT-BOX</li>
-              <li>sales@builtboxcontainers.com</li>
+              <li>info@builtboxcontainer.com</li>
               <li>100 Industrial Parkway<br />Detroit, MI 48209</li>
             </ul>
           </div>

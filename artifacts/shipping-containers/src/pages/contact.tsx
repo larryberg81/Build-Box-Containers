@@ -150,7 +150,7 @@ export default function Contact() {
         toast({ title: "Send failed", description: result.error ?? "Please try again or email us directly.", variant: "destructive" });
       }
     } catch {
-      toast({ title: "Network error", description: "Please email sales@builtboxcontainers.com", variant: "destructive" });
+      toast({ title: "Network error", description: "Please email info@builtboxcontainer.com", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -184,7 +184,7 @@ export default function Contact() {
         toast({ title: "Send failed", description: result.error ?? "Please try again or email us directly.", variant: "destructive" });
       }
     } catch {
-      toast({ title: "Network error", description: "Please email sales@builtboxcontainers.com", variant: "destructive" });
+      toast({ title: "Network error", description: "Please email info@builtboxcontainer.com", variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -305,7 +305,7 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="font-display font-bold uppercase tracking-widest text-sm mb-2 text-primary">Contact</h3>
-                <p className="text-muted-foreground">1-800-BUILT-BOX<br />sales@builtboxcontainers.com</p>
+                <p className="text-muted-foreground">1-800-BUILT-BOX<br />info@builtboxcontainer.com</p>
               </div>
             </div>
           </div>
