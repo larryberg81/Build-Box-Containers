@@ -90,6 +90,12 @@ const CONFIGURATION_OPTIONS: Record<string, { id: string; label: string }[]> = {
     { id: "gray-security-office", label: "Gray Security Office Package" },
     { id: "beige-climate-office", label: "Beige Climate-Controlled Office" },
   ],
+  "40-hc-side": [
+    { id: "white-side-cargo", label: "White Full Side Cargo Doors" },
+    { id: "orange-four-rollup", label: "Orange Four Roll-Up Doors" },
+    { id: "gray-three-rollup", label: "Gray Three Roll-Up Doors" },
+    { id: "beige-side-cargo", label: "Beige Full Side-Opening Doors" },
+  ],
 };
 
 // Delivery fee: 10ft = $380, everything else = $580

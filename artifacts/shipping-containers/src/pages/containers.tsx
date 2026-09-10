@@ -799,8 +799,38 @@ const CONTAINERS: Container[] = [
     price: "$3,600",
     rentPrice: "From $310/mo",
     doorOpening: "Side access opening: approx. 14' W × 8'5\" H",
-    image: "/images/container-40-side-door-yard.jpg",
-    features: ["High Cube — extra 1ft headroom", "Modified side access doors", "2,700 cu ft capacity", "Preferred for modular builds"],
+    image: "/images/container-40-hc-side-white-cargo.jpg",
+    gallery: ["/images/container-40-hc-side-white-cargo.jpg"],
+    configurationOptions: [
+      {
+        id: "white-side-cargo",
+        name: "White Full Side Cargo Doors",
+        image: "/images/container-40-hc-side-white-cargo.jpg",
+        gallery: ["/images/container-40-hc-side-white-cargo.jpg"],
+      },
+      {
+        id: "orange-four-rollup",
+        name: "Orange Four Roll-Up Doors",
+        image: "/images/container-40-hc-side-orange-four-rollup.jpg",
+        gallery: ["/images/container-40-hc-side-orange-four-rollup.jpg"],
+      },
+      {
+        id: "gray-three-rollup",
+        name: "Gray Three Roll-Up Doors",
+        image: "/images/container-40-hc-side-gray-three-rollup.jpg",
+        gallery: ["/images/container-40-hc-side-gray-three-rollup.jpg"],
+      },
+      {
+        id: "beige-side-cargo",
+        name: "Beige Full Side-Opening Doors",
+        image: "/images/container-40-hc-side-beige-cargo.jpg",
+        gallery: [
+          "/images/container-40-hc-side-beige-cargo.jpg",
+          "/images/container-40-hc-side-beige-open-through.jpg",
+        ],
+      },
+    ],
+    features: ["High Cube — extra 1ft headroom", "Selectable side-access configurations", "2,700 cu ft capacity", "Preferred for modular builds"],
     desc: "The largest modified unit in the fleet. Extra headroom plus side-door access for walk-in layouts — the foundation of choice for modular offices and retail.",
   },
   {
