@@ -1,32 +1,11 @@
 import { useState, useMemo } from "react";
 import { Link, useLocation, useSearch } from "wouter";
 import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send, Zap } from "lucide-react";
-import { CONTAINERS as CATALOG_CONTAINERS, type Container } from "@/pages/containers";
+import { CONTAINERS as CATALOG_CONTAINERS } from "@/pages/containers";
+import { calculateQuoteEstimate, toQuoteContainer } from "@/lib/quote-pricing";
 
 // ── Quote view of the shared container catalog ───────────────────────────────
-function numericPrice(price: string | undefined, container: Container, kind: "purchase" | "rental") {
-  const value = Number(price?.replace(/[^\d.]/g, ""));
-  if (!Number.isFinite(value)) {
-    throw new Error(`Missing ${kind} price for catalog container "${container.id}"`);
-  }
-  return value;
-}
-
-function quoteCondition(container: Container) {
-  if (container.type === "Reefer") return "Reefer";
-  if (container.type === "Modified" || container.type === "Heated") return "Modified";
-  return container.condition === "Used" ? "Used" : "New";
-}
-
-const CONTAINERS = CATALOG_CONTAINERS.map(container => ({
-  id: container.id,
-  label: container.name,
-  size: container.size,
-  sizeGroup: container.category === "10 ft" ? "10" : "20+",
-  condition: quoteCondition(container),
-  buyPrice: numericPrice(container.price, container, "purchase"),
-  rentPrice: numericPrice(container.rentPrice, container, "rental"),
-}));
+const CONTAINERS = CATALOG_CONTAINERS.map(toQuoteContainer);
 
 const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]> = {
   "10-new-side": [
@@ -430,19 +409,22 @@ export default function Quote() {
     const modsTotal  = MODIFICATIONS.filter(m => selectedMods.has(m.id)).reduce((sum, m) => sum + m.price, 0);
     const genset     = GENSET_ADDONS.find(g => g.id === selectedGenset)!;
     const gensetPrice = genset.price;
+    const duration = RENTAL_DURATIONS.find(d => d.id === selectedDuration)!;
+    const calculated = calculateQuoteEstimate({
+      mode,
+      buyPrice: container.buyPrice,
+      rentPrice: container.rentPrice,
+      deliveryFee: fee,
+      modificationsTotal: modsTotal,
+      gensetPrice,
+      rentalMonths: duration.months,
+      rentalDiscount: duration.discount,
+    });
 
     if (mode === "purchase") {
-      const base  = container.buyPrice;
-      const total = base + modsTotal + gensetPrice + fee;
-      return { base, mods: modsTotal, genset: gensetPrice, gensetLabel: genset.label, delivery: fee, total, monthly: null, label: "Estimated Purchase Price" };
+      return { ...calculated, mods: calculated.modifications, gensetLabel: genset.label, label: "Estimated Purchase Price" };
     } else {
-      const duration    = RENTAL_DURATIONS.find(d => d.id === selectedDuration)!;
-      const monthlyBase = Math.round(container.rentPrice * (1 - duration.discount));
-      const modsMonthly = Math.round(modsTotal * 0.08);
-      const gensetMonthly = Math.round(gensetPrice * 0.08);
-      const monthly     = monthlyBase + modsMonthly + gensetMonthly;
-      const total       = monthly * duration.months + fee;
-      return { base: monthlyBase, mods: modsMonthly, genset: gensetMonthly, gensetLabel: genset.label, delivery: fee, total, monthly, label: "Estimated Rental Total", months: duration.months };
+      return { ...calculated, mods: calculated.modifications, gensetLabel: genset.label, label: "Estimated Rental Total" };
     }
   }, [selectedContainer, mode, selectedDuration, selectedMods, selectedGenset]);
 
