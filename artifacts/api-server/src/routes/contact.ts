@@ -17,7 +17,9 @@ router.post("/contact", async (req, res) => {
   }
 
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.zoho.com",
+    port: 465,
+    secure: true,
     auth: { user: smtpUser, pass: smtpPass },
   });
 
