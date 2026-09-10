@@ -948,8 +948,15 @@ const CONTAINERS: Container[] = [
     price: "$6,800",
     rentPrice: "From $520/mo",
     doorOpening: "Cargo doors: 7'6\" W × 7'5\" H",
-    image: "/images/container-20-reefer-yard.jpg",
-    features: ["One-trip condition", "Refrigeration unit included", "Temp range: -25°F to +77°F", "T-floor aluminum decking", "Insulated walls & ceiling", "Genset-ready mounting"],
+    image: "/images/container-20-reefer-new-angle.jpg",
+    gallery: [
+      "/images/container-20-reefer-new-angle.jpg",
+      "/images/container-20-reefer-new-interior-open.jpg",
+      "/images/container-20-reefer-new-unit-front.jpg",
+      "/images/container-20-reefer-new-thermo-king-angle.jpg",
+      "/images/container-20-reefer-new-service-side.jpg",
+    ],
+    features: ["One-trip condition", "Carrier refrigeration unit included", "Open-door inspection view", "Temp range: -25°F to +77°F", "T-floor aluminum decking", "Insulated walls & ceiling", "Genset-ready mounting"],
     desc: "One-trip factory-fresh 20ft reefer. Pristine insulated interior with full refrigeration system — the right choice for cold-chain, food storage, and pharma logistics.",
   },
   {
@@ -984,8 +991,12 @@ const CONTAINERS: Container[] = [
     price: "$9,200",
     rentPrice: "From $680/mo",
     doorOpening: "Cargo doors: 7'6\" W × 8'5\" H",
-    image: "/images/container-40-reefer-yard.jpg",
-    features: ["One-trip condition", "High Cube — extra 1ft headroom", "Refrigeration unit included", "Temp range: -25°F to +77°F", "T-floor aluminum decking", "Insulated walls & ceiling", "Genset-ready mounting"],
+    image: "/images/container-40-hc-reefer-new-exterior.jpg",
+    gallery: [
+      "/images/container-40-hc-reefer-new-exterior.jpg",
+      "/images/container-40-hc-reefer-new-interior-open.jpg",
+    ],
+    features: ["One-trip condition", "High Cube — extra 1ft headroom", "Refrigeration unit included", "Open-door inspection view", "Temp range: -25°F to +77°F", "T-floor aluminum decking", "Insulated walls & ceiling", "Genset-ready mounting"],
     desc: "Premium one-trip 40ft high-cube reefer. Extra headroom, maximum capacity, and full refrigeration system — the flagship choice for large-scale cold-chain operations.",
   },
 ];
