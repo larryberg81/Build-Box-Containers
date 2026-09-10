@@ -1,31 +1,32 @@
 import { useState, useMemo } from "react";
 import { Link, useLocation, useSearch } from "wouter";
 import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send, Zap } from "lucide-react";
+import { CONTAINERS as CATALOG_CONTAINERS, type Container } from "@/pages/containers";
 
-// ── Real container catalog ───────────────────────────────────────────────────
-const CONTAINERS = [
-  { id: "10-used",     label: "10' Used",                size: "10 ft",    sizeGroup: "10",  condition: "Used",     buyPrice: 850,  rentPrice: 95  },
-  { id: "10-new-side", label: "10' New",                  size: "10 ft",    sizeGroup: "10",  condition: "New",      buyPrice: 1200, rentPrice: 120 },
-  { id: "10-new-rollup", label: "10' New Modified — Roll-up Door", size: "10 ft", sizeGroup: "10", condition: "Modified", buyPrice: 1850, rentPrice: 175 },
-  { id: "20-used",     label: "20' Used",                size: "20 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1100, rentPrice: 140 },
-  { id: "20-new",      label: "20' New",                 size: "20 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 2200, rentPrice: 175 },
-  { id: "20-hc-new",   label: "20' High Cube — New",     size: "20 ft HC", sizeGroup: "20+", condition: "New",      buyPrice: 2600, rentPrice: 210 },
-  { id: "20-hc-side",  label: "20' HC — Side Doors",     size: "20 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 2600, rentPrice: 210 },
-  { id: "20-heated",   label: "20' Heated — Side Doors", size: "20 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 3400, rentPrice: 280 },
-  { id: "30-used",     label: "30' Used",                size: "30 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1650, rentPrice: 195 },
-  { id: "30-new",      label: "30' New",                 size: "30 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 2550, rentPrice: 235 },
-  { id: "40-used",     label: "40' Used",                size: "40 ft",    sizeGroup: "20+", condition: "Used",     buyPrice: 1900, rentPrice: 220 },
-  { id: "40-new",      label: "40' New",                 size: "40 ft",    sizeGroup: "20+", condition: "New",      buyPrice: 3200, rentPrice: 270 },
-  { id: "40-hc-new",   label: "40' High Cube — New",     size: "40 ft HC", sizeGroup: "20+", condition: "New",      buyPrice: 3600, rentPrice: 310 },
-  { id: "40-hc-side",      label: "40' HC — Side Doors",     size: "40 ft HC", sizeGroup: "20+", condition: "Modified", buyPrice: 3600,  rentPrice: 310 },
-  { id: "40-heated-side",  label: "40' Heated — Side Doors", size: "40 ft",    sizeGroup: "20+", condition: "Modified", buyPrice: 4400,  rentPrice: 380 },
-  { id: "capsule-container", label: "Capsule Container",       size: "11.5 m",   sizeGroup: "20+", condition: "New",      buyPrice: 20000, rentPrice: 1500 },
-  // Reefer containers
-  { id: "reefer-20-used",  label: "20' Reefer — Used",       size: "20 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 3500,  rentPrice: 320 },
-  { id: "reefer-20-new",   label: "20' Reefer — New",        size: "20 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 6800,  rentPrice: 520 },
-  { id: "reefer-40-used",  label: "40' Reefer — Used",       size: "40 ft",    sizeGroup: "20+", condition: "Reefer",   buyPrice: 4800,  rentPrice: 420 },
-  { id: "reefer-40hc-new", label: "40' HC Reefer — New",     size: "40 ft HC", sizeGroup: "20+", condition: "Reefer",   buyPrice: 9200,  rentPrice: 680 },
-];
+// ── Quote view of the shared container catalog ───────────────────────────────
+function numericPrice(price: string | undefined, container: Container, kind: "purchase" | "rental") {
+  const value = Number(price?.replace(/[^\d.]/g, ""));
+  if (!Number.isFinite(value)) {
+    throw new Error(`Missing ${kind} price for catalog container "${container.id}"`);
+  }
+  return value;
+}
+
+function quoteCondition(container: Container) {
+  if (container.type === "Reefer") return "Reefer";
+  if (container.type === "Modified" || container.type === "Heated") return "Modified";
+  return container.condition === "Used" ? "Used" : "New";
+}
+
+const CONTAINERS = CATALOG_CONTAINERS.map(container => ({
+  id: container.id,
+  label: container.name,
+  size: container.size,
+  sizeGroup: container.category === "10 ft" ? "10" : "20+",
+  condition: quoteCondition(container),
+  buyPrice: numericPrice(container.price, container, "purchase"),
+  rentPrice: numericPrice(container.rentPrice, container, "rental"),
+}));
 
 const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]> = {
   "10-new-side": [
