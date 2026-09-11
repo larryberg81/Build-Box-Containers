@@ -180,6 +180,7 @@ uri = "file://attached_assets/generated_images/replit-transfer-guide.png"
 type = "image"
 title = "Replit Site Transfer Guide"
 description = "A step-by-step visual guide for sharing a Replit project, having the recipient fork or remix it, re-adding secrets, and publishing the new copy."
+logical_id = "9ecc84ee-9189-46d4-b8b4-058b42f76703"
 
 [[outputs]]
 id = "geH9bBdNVNEAcIC9hD5uJ"
@@ -187,3 +188,18 @@ uri = "file://attached_assets/generated_images/replit-transfer-click-guide.png"
 type = "image"
 title = "Detailed Replit Transfer Click Guide"
 description = "A mouse-focused visual guide showing where to click Share, invite the other account, open Fork or Remix, re-add Secrets, and publish the copied site."
+logical_id = "a15fb690-6aee-47ff-aa5d-69b23b284415"
+
+[[outputs]]
+id = "ZH8jnv7cP0cXJYwxa7oBc"
+uri = "file://attached_assets/zoho-smtp-setup-guide.svg"
+type = "image"
+title = "Zoho SMTP Setup Guide"
+description = "Four-step visual guide for generating a Zoho app password and securely connecting the Built Box website."
+logical_id = "35b87a02-4653-4ae2-9833-e023bf0c5369"
+content_hash = "sha256:3950709fb93f9728d17ab3e46974bf6ccdc9da70401af13d5cd7f70fe694af9d"
+size = 5387
+mtime_ms = 1789094791813
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:d4dbae2e-d432-4319-9d5e-9c13e137e68f/35b87a02-4653-4ae2-9833-e023bf0c5369/45040379-b4ea-4509-a2e2-43883ed5411f"
+storage_version_token = "1789094793837660"
+content_type = "image/svg+xml"
