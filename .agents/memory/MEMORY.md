@@ -1,2 +1,3 @@
 - [Container open-door renders](container-open-door-renders.md) — establish and inspect fully open door geometry before generating color variants.
 - [Container color photography](container-color-photography.md) — color variants should use distinct real-world viewpoints, not identical recolored compositions.
+- [Zoho email delivery](zoho-email-delivery.md) — website inquiry and quote mail uses Zoho SMTP, with end-to-end delivery confirmed.
