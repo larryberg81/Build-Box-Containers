@@ -156,7 +156,7 @@ export default function Resources() {
       <section className="border-b border-border bg-card py-16">
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
           <p className="text-primary text-sm font-bold tracking-widest uppercase mb-3">Knowledge Base</p>
-          <h1 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-4">Resources</h1>
+          <h1 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-4">Shipping Container Guides &amp; Resources</h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
             Buying guides, modification breakdowns, reefer specs, and maintenance advice — straight from the field.
           </p>

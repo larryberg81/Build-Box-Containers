@@ -236,7 +236,7 @@ export default function Containers() {
       <section className="border-b border-border bg-card py-16">
         <div className="container mx-auto px-4 md:px-8 max-w-7xl">
           <p className="text-primary text-sm font-bold tracking-widest uppercase mb-3">Full Fleet</p>
-          <h1 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-4">Containers</h1>
+          <h1 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-4">Shipping Containers for Sale &amp; Rent</h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
              Used, one-trip, heated, modified, and refrigerated units from 10ft to 40ft — all available to buy or rent.
           </p>

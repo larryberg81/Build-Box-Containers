@@ -92,7 +92,7 @@ export default function Projects() {
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
           <p className="text-primary text-sm font-bold tracking-widest uppercase mb-3">Built by Built Box Containers</p>
           <h1 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-4">
-            Project Showcase
+            Shipping Container Projects
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
             Real containers. Real projects. From pop-up cafés to modular homes — see what's possible when serious steel meets serious vision.

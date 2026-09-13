@@ -13,6 +13,7 @@ import Resources from "@/pages/resources";
 import Gensets from "@/pages/gensets";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { Seo } from "@/components/seo";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL?.replace(/\/$/, "") || ""}>
+          <Seo />
           <Router />
         </WouterRouter>
         <Toaster />

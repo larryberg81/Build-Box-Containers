@@ -28,6 +28,7 @@ export default function Home() {
         
         <div className="container relative z-10 mx-auto px-4 md:px-8 text-center max-w-4xl mt-16">
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold tracking-tighter text-white uppercase mb-6 leading-none">
+            Shipping Containers<br />
             Built to <span className="text-primary">Last.</span><br />
             Built for <span className="text-primary">You.</span>
           </h1>

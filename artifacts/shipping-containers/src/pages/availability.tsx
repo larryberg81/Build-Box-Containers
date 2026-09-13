@@ -166,7 +166,7 @@ export default function Availability() {
         <div className="container mx-auto px-4 md:px-8 max-w-6xl">
           <p className="text-primary text-sm font-bold tracking-widest uppercase mb-3">Ready to Ship</p>
           <h1 className="text-4xl md:text-6xl font-display font-bold uppercase tracking-tight mb-4">
-            Depot Availability
+            Shipping Container Availability
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl">
             9 depots across the country. Click a location to see live stock levels and get containers on-site fast.
