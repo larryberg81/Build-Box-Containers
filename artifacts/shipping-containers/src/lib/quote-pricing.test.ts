@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { CONTAINERS } from "@/pages/containers";
+import { CONTAINERS } from "@/data/containers";
 import {
   calculateQuoteEstimate,
   numericCatalogPrice,

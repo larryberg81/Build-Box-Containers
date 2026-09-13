@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { ArrowRight, Box, Shield, Zap, Wrench, BatteryCharging } from "lucide-react";
-import { CONTAINERS } from "@/pages/containers";
+import { CONTAINERS } from "@/data/containers";
 
 const HOME_FLEET_CATEGORIES = [
   { label: "Standard Containers", productId: "20-new" },

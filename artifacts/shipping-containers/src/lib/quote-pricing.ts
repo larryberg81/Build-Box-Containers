@@ -1,4 +1,4 @@
-import type { Container } from "@/pages/containers";
+import type { Container } from "@/data/containers";
 
 export type QuoteContainer = {
   id: string;
