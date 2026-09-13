@@ -2,13 +2,14 @@ import { Link } from "wouter";
 import { ArrowRight, Box, Shield, Zap, Wrench, BatteryCharging } from "lucide-react";
 import { CONTAINERS } from "@/data/containers";
 
-const HOME_FLEET_CATEGORIES = [
+export const HOME_FLEET_CATEGORIES = [
   { label: "Standard Containers", productId: "20-new" },
   { label: "Modified Containers", productId: "40-hc-side" },
   { label: "Reefer Containers", productId: "reefer-20-new" },
   { label: "Capsule Containers", productId: "capsule-container" },
 ].map(({ label, productId }) => ({
   label,
+  productId,
   product: CONTAINERS.find((container) => container.id === productId)!,
 }));
 
