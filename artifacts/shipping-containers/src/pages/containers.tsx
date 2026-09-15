@@ -8,6 +8,7 @@ import {
   type ContainerColor,
   type ContainerConfiguration,
 } from "@/data/containers";
+import { useMarket } from "@/contexts/market";
 
 const CATEGORIES = ["All", "10 ft", "20 ft", "30 ft", "40 ft", "Capsule"];
 const CONDITIONS = ["All", "Used", "One-Trip"];
@@ -79,6 +80,7 @@ function ComparisonView({
   onRemove: (id: string) => void;
   onViewDetails: (container: Container) => void;
 }) {
+  const { formatPriceLabel } = useMarket();
   const rows = [
     { label: "Exterior dimensions", getValue: (c: Container) => c.extDimensions },
     { label: "Interior dimensions", getValue: (c: Container) => c.intDimensions },
@@ -110,11 +112,11 @@ function ComparisonView({
     },
     {
       label: "Purchase price",
-      getValue: (c: Container) => <span className="text-lg font-display font-bold text-primary">{c.price}</span>,
+      getValue: (c: Container) => <span className="text-lg font-display font-bold text-primary">{formatPriceLabel(c.price)}</span>,
     },
     {
       label: "Rental price",
-      getValue: (c: Container) => c.rentPrice ?? "—",
+      getValue: (c: Container) => formatPriceLabel(c.rentPrice) || "—",
     },
   ];
 
@@ -191,6 +193,7 @@ function ComparisonView({
 }
 
 export default function Containers() {
+  const { formatPriceLabel } = useMarket();
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeCondition, setActiveCondition] = useState("All");
   const [activeType, setActiveType] = useState("All");
@@ -416,9 +419,9 @@ export default function Containers() {
 
                   <div className="mt-auto flex items-end justify-between">
                     <div>
-                      <div className="text-2xl font-display font-bold text-foreground">{container.price}</div>
+                      <div className="text-2xl font-display font-bold text-foreground">{formatPriceLabel(container.price)}</div>
                       {container.rentPrice && (
-                        <div className="text-xs text-muted-foreground">{container.rentPrice}</div>
+                        <div className="text-xs text-muted-foreground">{formatPriceLabel(container.rentPrice)}</div>
                       )}
                     </div>
                     <button className="text-xs font-bold text-primary uppercase tracking-wider hover:text-primary/80 transition-colors flex items-center gap-1">
@@ -467,8 +470,8 @@ export default function Containers() {
                         {c.type}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-display font-bold text-primary">{c.price}</td>
-                    <td className="px-4 py-3 text-right text-muted-foreground hidden sm:table-cell">{c.rentPrice ?? "—"}</td>
+                    <td className="px-4 py-3 text-right font-display font-bold text-primary">{formatPriceLabel(c.price)}</td>
+                    <td className="px-4 py-3 text-right text-muted-foreground hidden sm:table-cell">{formatPriceLabel(c.rentPrice) || "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -649,9 +652,9 @@ export default function Containers() {
 
               <div className="flex items-center justify-between flex-wrap gap-4 pt-6 border-t border-border">
                 <div>
-                  <div className="text-3xl font-display font-bold">{selectedContainer.price}</div>
+                  <div className="text-3xl font-display font-bold">{formatPriceLabel(selectedContainer.price)}</div>
                   {selectedContainer.rentPrice && (
-                    <div className="text-sm text-muted-foreground">{selectedContainer.rentPrice}</div>
+                    <div className="text-sm text-muted-foreground">{formatPriceLabel(selectedContainer.rentPrice)}</div>
                   )}
                 </div>
                 <div className="flex gap-3">

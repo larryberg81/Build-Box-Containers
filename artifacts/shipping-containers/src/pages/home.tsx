@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { ArrowRight, Box, Shield, Zap, Wrench, BatteryCharging } from "lucide-react";
 import { CONTAINERS } from "@/data/containers";
+import { useMarket } from "@/contexts/market";
 
 export const HOME_FLEET_CATEGORIES = [
   { label: "Standard Containers", productId: "20-new" },
@@ -14,6 +15,7 @@ export const HOME_FLEET_CATEGORIES = [
 }));
 
 export default function Home() {
+  const { formatPriceLabel } = useMarket();
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -123,7 +125,7 @@ export default function Home() {
                   <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-2">{label}</p>
                   <div className="flex items-center justify-between gap-3 mb-2">
                     <h3 className="text-lg font-display font-bold uppercase">{item.name}</h3>
-                    <span className="text-xs font-bold uppercase tracking-wider text-primary whitespace-nowrap">{item.price}</span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-primary whitespace-nowrap">{formatPriceLabel(item.price)}</span>
                   </div>
                   <p className="text-sm text-muted-foreground line-clamp-3">{item.desc}</p>
                   <div className="mt-auto pt-5 flex items-center justify-between text-xs font-bold uppercase tracking-wider">

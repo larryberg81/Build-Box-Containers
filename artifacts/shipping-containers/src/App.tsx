@@ -14,6 +14,7 @@ import Gensets from "@/pages/gensets";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Seo } from "@/components/seo";
+import { MarketProvider } from "@/contexts/market";
 
 const queryClient = new QueryClient();
 
@@ -42,13 +43,15 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL?.replace(/\/$/, "") || ""}>
-          <Seo />
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
+      <MarketProvider>
+        <TooltipProvider>
+          <WouterRouter base={import.meta.env.BASE_URL?.replace(/\/$/, "") || ""}>
+            <Seo />
+            <Router />
+          </WouterRouter>
+          <Toaster />
+        </TooltipProvider>
+      </MarketProvider>
     </QueryClientProvider>
   );
 }

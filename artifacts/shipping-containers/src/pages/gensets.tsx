@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight, Zap, Weight, Volume2, Fuel, Gauge, X } from "lucide-react";
+import { useMarket } from "@/contexts/market";
 
 interface Genset {
   id: string;
@@ -338,6 +339,7 @@ function SpecCell({ label, value }: { label: string; value: string }) {
 }
 
 export default function Gensets() {
+  const { formatPriceLabel } = useMarket();
   const [activeBrand, setActiveBrand] = useState("All");
   const [selected, setSelected] = useState<Genset | null>(null);
 
@@ -472,8 +474,8 @@ export default function Gensets() {
 
                   <div className="mt-auto flex items-end justify-between">
                     <div>
-                      <div className="text-2xl font-display font-bold">{g.buyPrice}</div>
-                      <div className="text-xs text-muted-foreground">{g.rentPrice}</div>
+                      <div className="text-2xl font-display font-bold">{formatPriceLabel(g.buyPrice)}</div>
+                      <div className="text-xs text-muted-foreground">{formatPriceLabel(g.rentPrice)}</div>
                     </div>
                     <span className="text-[10px] font-bold text-primary uppercase tracking-wider flex items-center gap-1 group-hover:gap-2 transition-all">
                       Full Specs <ArrowRight className="h-3 w-3" />
@@ -596,8 +598,8 @@ export default function Gensets() {
                         {g.emissions.split(" / ")[0]}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right font-display font-bold text-primary">{g.buyPrice}</td>
-                    <td className="px-4 py-3 text-right text-muted-foreground hidden sm:table-cell">{g.rentPrice}</td>
+                    <td className="px-4 py-3 text-right font-display font-bold text-primary">{formatPriceLabel(g.buyPrice)}</td>
+                    <td className="px-4 py-3 text-right text-muted-foreground hidden sm:table-cell">{formatPriceLabel(g.rentPrice)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -713,8 +715,8 @@ export default function Gensets() {
 
               <div className="border border-border p-4 flex items-center justify-between gap-4 flex-wrap">
                 <div>
-                  <div className="text-3xl font-display font-bold">{selected.buyPrice}</div>
-                  <div className="text-xs text-muted-foreground">Or rent from {selected.rentPrice}</div>
+                  <div className="text-3xl font-display font-bold">{formatPriceLabel(selected.buyPrice)}</div>
+                  <div className="text-xs text-muted-foreground">Or rent from {formatPriceLabel(selected.rentPrice)}</div>
                 </div>
                 <Link
                   href="/quote"

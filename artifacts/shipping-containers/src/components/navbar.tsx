@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Box, Menu, X, ArrowRight } from "lucide-react";
+import { useMarket } from "@/contexts/market";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -16,6 +17,7 @@ const NAV_LINKS = [
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [location] = useLocation();
+  const { market, setMarket } = useMarket();
 
   const close = () => setMenuOpen(false);
 
@@ -48,6 +50,16 @@ export function Navbar() {
 
           {/* Desktop CTA + mobile burger */}
           <div className="flex items-center gap-3">
+            <select
+              aria-label="Country and currency"
+              data-testid="market-selector"
+              value={market}
+              onChange={event => setMarket(event.target.value as "US" | "CA")}
+              className="hidden sm:block h-9 border border-border bg-card px-2 text-xs font-bold uppercase text-foreground"
+            >
+              <option value="US">US · USD</option>
+              <option value="CA">Canada · CAD</option>
+            </select>
             <Link
               href="/quote"
               className="hidden lg:inline-flex h-9 items-center justify-center bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-colors uppercase tracking-wider"
@@ -101,6 +113,17 @@ export function Navbar() {
         </nav>
 
         <div className="p-4 border-t border-border">
+          <label className="mb-2 block text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">Country &amp; Currency</label>
+          <select
+            aria-label="Mobile country and currency"
+            data-testid="mobile-market-selector"
+            value={market}
+            onChange={event => setMarket(event.target.value as "US" | "CA")}
+            className="mb-3 h-11 w-full border border-border bg-background px-3 text-sm font-bold uppercase text-foreground"
+          >
+            <option value="US">United States · USD</option>
+            <option value="CA">Canada · CAD</option>
+          </select>
           <Link
             href="/quote"
             onClick={close}

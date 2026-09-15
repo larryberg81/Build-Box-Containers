@@ -1,8 +1,9 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link, useLocation, useSearch } from "wouter";
 import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send, Zap } from "lucide-react";
 import { CONTAINERS as CATALOG_CONTAINERS } from "@/data/containers";
 import { calculateQuoteEstimate, toQuoteContainer } from "@/lib/quote-pricing";
+import { CANADIAN_LOCATIONS, CANADIAN_PROVINCES, useMarket } from "@/contexts/market";
 
 // ── Quote view of the shared container catalog ───────────────────────────────
 const CONTAINERS = CATALOG_CONTAINERS.map(toQuoteContainer);
@@ -74,8 +75,9 @@ const NEAR_STATES  = new Set([
   "VA","MD","PA","NJ","CT","MA","RI","IN","OH","MI","WI","MN","IA","NE","SD","ND","KY","WV","DE",
 ]);
 
-function getDelivery(state: string) {
-  if (!state)                     return { days: "3 – 5 business days", label: "Select a state to see your estimated window", color: "text-muted-foreground" };
+function getDelivery(state: string, market: "US" | "CA") {
+  if (!state)                     return { days: market === "CA" ? "7 – 14 business days" : "3 – 5 business days", label: `Select a ${market === "CA" ? "province" : "state"} to see your estimated window`, color: "text-muted-foreground" };
+  if (market === "CA")            return { days: "7 – 14 business days", label: "Cross-border delivery — final timing confirmed with your quote", color: "text-amber-400" };
   if (DEPOT_STATES.has(state))    return { days: "72 hours (3 days)",   label: "Depot in your state — fastest delivery",       color: "text-emerald-400" };
   if (NEAR_STATES.has(state))     return { days: "4 – 5 business days", label: "Regional delivery from nearest depot",          color: "text-amber-400"   };
   return                                 { days: "5 business days",     label: "Long-haul delivery from nearest depot",         color: "text-muted-foreground" };
@@ -122,6 +124,7 @@ function InquiryWidget({
   deliveryZip: string;
   mode: "purchase" | "rental";
 }) {
+  const { market, currency, cadRate, formatMoney } = useMarket();
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -140,7 +143,8 @@ function InquiryWidget({
         address: form.address,
         container: configuredContainerLabel,
         mode,
-        estimate: `$${totalPrice.toLocaleString()} (incl. delivery)`,
+        estimate: `${formatMoney(totalPrice)} ${currency} (incl. delivery)`,
+        country: market === "CA" ? "Canada" : "United States",
         delivery_state: deliveryState || "Not specified",
         delivery_zip: deliveryZip || "Not specified",
         message: form.message || defaultMessage,
@@ -165,7 +169,7 @@ function InquiryWidget({
 
   const defaultMessage = `Hi, I'm interested in the ${configuredContainerLabel} (${mode === "purchase" ? "purchase" : "rental"})${
     deliveryState ? ` — delivery to ${deliveryState}${deliveryZip ? ` ${deliveryZip}` : ""}` : ""
-  }. My estimated total is $${totalPrice.toLocaleString()}. Please send me a formal quote.`;
+  }. My estimated total is ${formatMoney(totalPrice)} ${currency}. Please send me a formal quote.`;
 
   return (
     <>
@@ -206,7 +210,7 @@ function InquiryWidget({
               <div className="bg-background/60 border border-border p-3 text-xs text-muted-foreground space-y-1">
                 <p><span className="font-bold text-foreground">Container:</span> {containerLabel}</p>
                 <p><span className="font-bold text-foreground">Type:</span> {mode === "purchase" ? "Purchase" : "Rental"}</p>
-                <p><span className="font-bold text-foreground">Estimate:</span> ${totalPrice.toLocaleString()} (incl. delivery)</p>
+                <p><span className="font-bold text-foreground">Estimate:</span> {formatMoney(totalPrice)} {currency} (incl. delivery)</p>
                 {deliveryState && <p><span className="font-bold text-foreground">Delivery to:</span> {deliveryState}{deliveryZip ? ` ${deliveryZip}` : ""}</p>}
               </div>
 
@@ -264,6 +268,7 @@ function InquiryWidget({
 
 // ── Main page ────────────────────────────────────────────────────────────────
 export default function Quote() {
+  const { market, currency, cadRate, formatMoney } = useMarket();
   const [, navigate]                              = useLocation();
   const search                                     = useSearch();
   const searchParams                               = new URLSearchParams(search);
@@ -290,8 +295,15 @@ export default function Quote() {
   const [selectedGenset, setSelectedGenset]       = useState<string>("gs-none");
   const [showBreakdown, setShowBreakdown]         = useState(false);
   const [selectedState, setSelectedState]         = useState<string>("");
+  const [selectedCity, setSelectedCity]           = useState<string>("");
   const [zipCode, setZipCode]                     = useState<string>("");
   const [sizeFilter, setSizeFilter]               = useState<string>("All");
+
+  useEffect(() => {
+    setSelectedState("");
+    setSelectedCity("");
+    setZipCode("");
+  }, [market]);
 
   const goToFormalQuote = () => {
     const gensetObj = GENSET_ADDONS.find(g => g.id === selectedGenset)!;
@@ -311,7 +323,11 @@ export default function Quote() {
       genset:   gensetObj.id !== "gs-none" ? gensetObj.label : "",
       mods:     modLabels.join(" | "),
       state:    selectedState,
+      city:     selectedCity,
       zip:      zipCode,
+      country:  market === "CA" ? "Canada" : "United States",
+      currency,
+      rate:     String(cadRate),
       ...(mode === "rental" && estimate.monthly !== null
         ? { monthly: String(estimate.monthly), duration: durationObj.label }
         : {}),
@@ -339,7 +355,7 @@ export default function Quote() {
   const colorLabel = colorOptions.find(color => color.id === selectedColor)?.label ?? "";
   const configurationOptions = CONFIGURATION_OPTIONS[container.id] ?? [];
   const configurationLabel = configurationOptions.find(configuration => configuration.id === selectedConfiguration)?.label ?? "";
-  const delivery   = getDelivery(selectedState);
+  const delivery   = getDelivery(selectedState, market);
   const deliveryFee = DELIVERY_FEE(container.sizeGroup);
 
   const estimate = useMemo(() => {
@@ -429,7 +445,7 @@ export default function Quote() {
                     <span className="font-bold text-sm uppercase tracking-wide flex-1">{c.label}</span>
                     <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 flex-shrink-0 ${CONDITION_COLORS[c.condition]}`}>{c.condition}</span>
                     <span className="font-display font-bold text-foreground flex-shrink-0">
-                      {mode === "purchase" ? `$${c.buyPrice.toLocaleString()}` : `$${c.rentPrice}/mo`}
+                      {mode === "purchase" ? formatMoney(c.buyPrice) : `${formatMoney(c.rentPrice)}/mo`}
                     </span>
                   </button>
                 ))}
@@ -558,7 +574,7 @@ export default function Quote() {
                     <div className="flex-1">
                       <div className="flex items-baseline justify-between gap-2">
                         <span className="font-bold text-sm uppercase tracking-wide">{mod.label}</span>
-                        <span className="text-primary font-bold text-sm flex-shrink-0">+${mod.price.toLocaleString()}</span>
+                        <span className="text-primary font-bold text-sm flex-shrink-0">+{formatMoney(mod.price)}</span>
                       </div>
                       <div className="text-xs text-muted-foreground mt-0.5">{mod.desc}</div>
                     </div>
@@ -589,7 +605,7 @@ export default function Quote() {
                     </div>
                     <span className="font-bold text-sm uppercase tracking-wide flex-1">{g.label}</span>
                     <span className="font-display font-bold flex-shrink-0 text-foreground">
-                      {g.price === 0 ? "—" : `+$${g.price.toLocaleString()}`}
+                      {g.price === 0 ? "—" : `+${formatMoney(g.price)}`}
                     </span>
                   </button>
                 ))}
@@ -602,34 +618,49 @@ export default function Quote() {
             {/* Step 5: Delivery Location */}
             <div>
               <SectionHeader step={5} title="Delivery Location" subtitle="We'll estimate your delivery timeline from the nearest depot." />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+              <div className={`grid grid-cols-1 ${market === "CA" ? "sm:grid-cols-3" : "sm:grid-cols-2"} gap-4 mb-4`}>
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">State</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">{market === "CA" ? "Province / Territory" : "State"}</label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                     <select
                       data-testid="state-select"
                       value={selectedState}
-                      onChange={e => setSelectedState(e.target.value)}
+                      onChange={e => { setSelectedState(e.target.value); setSelectedCity(""); }}
                       className="w-full h-11 pl-9 pr-4 bg-card border border-border text-sm font-semibold appearance-none focus:outline-none focus:border-primary transition-colors text-foreground"
                     >
-                      <option value="">Select state…</option>
-                      {US_STATES.map(([code, name]) => (
+                      <option value="">Select {market === "CA" ? "province" : "state"}…</option>
+                      {(market === "CA" ? CANADIAN_PROVINCES : US_STATES).map(([code, name]) => (
                         <option key={code} value={code}>{name}</option>
                       ))}
                     </select>
                   </div>
                 </div>
+                {market === "CA" && (
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">City</label>
+                    <select
+                      data-testid="city-select"
+                      value={selectedCity}
+                      disabled={!selectedState}
+                      onChange={e => setSelectedCity(e.target.value)}
+                      className="w-full h-11 px-3 bg-card border border-border text-sm font-semibold focus:outline-none focus:border-primary disabled:opacity-50 text-foreground"
+                    >
+                      <option value="">Select city…</option>
+                      {(CANADIAN_LOCATIONS[selectedState] ?? []).map(city => <option key={city} value={city}>{city}</option>)}
+                    </select>
+                  </div>
+                )}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">ZIP Code</label>
+                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">{market === "CA" ? "Postal Code" : "ZIP Code"}</label>
                   <input
                     data-testid="zip-input"
                     type="text"
-                    inputMode="numeric"
-                    maxLength={5}
-                    placeholder="e.g. 90210"
+                    inputMode={market === "CA" ? "text" : "numeric"}
+                    maxLength={market === "CA" ? 7 : 5}
+                    placeholder={market === "CA" ? "e.g. M5V 2T6" : "e.g. 90210"}
                     value={zipCode}
-                    onChange={e => setZipCode(e.target.value.replace(/\D/g, "").slice(0, 5))}
+                    onChange={e => setZipCode(market === "CA" ? e.target.value.toUpperCase().replace(/[^A-Z0-9 ]/g, "").slice(0, 7) : e.target.value.replace(/\D/g, "").slice(0, 5))}
                     className="w-full h-11 px-4 bg-card border border-border text-sm font-semibold focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground text-foreground"
                   />
                 </div>
@@ -642,13 +673,13 @@ export default function Quote() {
                 <Truck className={`h-6 w-6 flex-shrink-0 ${selectedState ? delivery.color : "text-muted-foreground"}`} />
                 <div>
                   <p className={`font-bold text-sm uppercase tracking-wide ${selectedState ? delivery.color : "text-muted-foreground"}`}>
-                    {selectedState ? delivery.days : "3 – 5 business days"}
+                    {selectedState ? delivery.days : market === "CA" ? "7 – 14 business days" : "3 – 5 business days"}
                   </p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    {selectedState ? delivery.label : "Select a state to see your estimated delivery window"}
+                    {selectedState ? delivery.label : `Select a ${market === "CA" ? "province" : "state"} to see your estimated delivery window`}
                   </p>
                 </div>
-                {selectedState && DEPOT_STATES.has(selectedState) && (
+                {market === "US" && selectedState && DEPOT_STATES.has(selectedState) && (
                   <span className="ml-auto text-[10px] font-bold uppercase tracking-wider bg-emerald-900/50 text-emerald-300 px-2 py-1 flex-shrink-0">
                     Depot State
                   </span>
@@ -660,7 +691,7 @@ export default function Quote() {
                 <Truck className="h-4 w-4 text-primary flex-shrink-0" />
                 <p className="text-sm">
                   <span className="font-bold text-foreground">Delivery fee included: </span>
-                  <span className="text-primary font-bold">${deliveryFee.toLocaleString()}</span>
+                  <span className="text-primary font-bold">{formatMoney(deliveryFee)} {currency}</span>
                   <span className="text-muted-foreground text-xs ml-2">(flat rate, one-time)</span>
                 </p>
               </div>
@@ -694,12 +725,12 @@ export default function Quote() {
 
                 {/* Total */}
                 <div className="mb-2">
-                  <p className="text-5xl font-display font-bold text-foreground">${estimate.total.toLocaleString()}</p>
+                  <p className="text-5xl font-display font-bold text-foreground">{formatMoney(estimate.total)}</p>
                   {estimate.monthly !== null && (
-                    <p className="text-muted-foreground text-sm mt-1">${estimate.monthly.toLocaleString()}/mo × {estimate.months} mo + ${estimate.delivery} delivery</p>
+                    <p className="text-muted-foreground text-sm mt-1">{formatMoney(estimate.monthly)}/mo × {estimate.months} mo + {formatMoney(estimate.delivery)} delivery</p>
                   )}
                 </div>
-                <p className="text-xs text-primary font-semibold mb-6">Includes ${estimate.delivery} delivery fee</p>
+                <p className="text-xs text-primary font-semibold mb-6">Includes {formatMoney(estimate.delivery)} delivery fee · {currency}</p>
 
                 {/* Breakdown toggle */}
                 <button
@@ -715,7 +746,7 @@ export default function Quote() {
                   <div className="mb-6 border border-border divide-y divide-border text-sm">
                     <div className="flex justify-between px-4 py-2.5">
                       <span className="text-muted-foreground">{mode === "purchase" ? "Container" : "Monthly rent"}</span>
-                      <span className="font-bold">${estimate.base.toLocaleString()}</span>
+                      <span className="font-bold">{formatMoney(estimate.base)}</span>
                     </div>
                     {[...selectedMods].map(id => {
                       const mod = MODIFICATIONS.find(m => m.id === id)!;
@@ -723,7 +754,7 @@ export default function Quote() {
                       return (
                         <div key={id} className="flex justify-between px-4 py-2.5">
                           <span className="text-muted-foreground">{mod.label}</span>
-                          <span className="font-bold text-primary">+${displayPrice.toLocaleString()}</span>
+                          <span className="font-bold text-primary">+{formatMoney(displayPrice)}</span>
                         </div>
                       );
                     })}
@@ -732,24 +763,24 @@ export default function Quote() {
                         <span className="text-muted-foreground flex items-center gap-1.5">
                           <Zap className="h-3 w-3 text-primary" /> Genset
                         </span>
-                        <span className="font-bold text-primary">+${estimate.genset.toLocaleString()}</span>
+                        <span className="font-bold text-primary">+{formatMoney(estimate.genset)}</span>
                       </div>
                     )}
                     {mode === "rental" && (
                       <div className="flex justify-between px-4 py-2.5 bg-primary/5">
                         <span className="text-muted-foreground">Monthly total</span>
-                        <span className="font-bold">${estimate.monthly!.toLocaleString()}</span>
+                        <span className="font-bold">{formatMoney(estimate.monthly!)}</span>
                       </div>
                     )}
                     <div className="flex justify-between px-4 py-2.5">
                       <span className="text-muted-foreground flex items-center gap-1.5">
                         <Truck className="h-3 w-3" /> Delivery fee
                       </span>
-                      <span className="font-bold">${estimate.delivery.toLocaleString()}</span>
+                      <span className="font-bold">{formatMoney(estimate.delivery)}</span>
                     </div>
                     <div className="flex justify-between px-4 py-2.5 font-bold bg-card">
                       <span>All-in total</span>
-                      <span>${estimate.total.toLocaleString()}</span>
+                      <span>{formatMoney(estimate.total)}</span>
                     </div>
                   </div>
                 )}
@@ -760,7 +791,7 @@ export default function Quote() {
                     <Truck className={`h-4 w-4 flex-shrink-0 ${delivery.color}`} />
                     <div>
                       <p className={`text-xs font-bold uppercase tracking-wider ${delivery.color}`}>{delivery.days}</p>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{selectedState}{zipCode ? ` ${zipCode}` : ""}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{[selectedCity, selectedState, zipCode].filter(Boolean).join(", ")}</p>
                     </div>
                   </div>
                 )}
@@ -800,7 +831,7 @@ export default function Quote() {
         containerLabel={container.label}
         colorLabel={colorLabel || configurationLabel}
         totalPrice={estimate.total}
-        deliveryState={selectedState}
+        deliveryState={[selectedCity, selectedState].filter(Boolean).join(", ")}
         deliveryZip={zipCode}
         mode={mode}
       />

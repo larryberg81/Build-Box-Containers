@@ -22,6 +22,14 @@ function OrderSummary({ p }: { p: URLSearchParams }) {
   const zip       = p.get("zip") ?? "";
   const monthly   = p.get("monthly") ?? "";
   const duration  = p.get("duration") ?? "";
+  const city      = p.get("city") ?? "";
+  const country   = p.get("country") ?? "United States";
+  const currency  = p.get("currency") === "CAD" ? "CAD" : "USD";
+  const rate      = Number(p.get("rate")) || 1;
+  const formatMoney = (value: string) => {
+    const amount = Math.round(Number(value) * (currency === "CAD" ? rate : 1));
+    return currency === "CAD" ? `CA$${amount.toLocaleString("en-CA")}` : `$${amount.toLocaleString("en-US")}`;
+  };
 
   const modList = mods ? mods.split(" | ").filter(Boolean) : [];
 
@@ -49,10 +57,11 @@ function OrderSummary({ p }: { p: URLSearchParams }) {
             </span>
           </div>
           <div className="text-right flex-shrink-0">
-            <p className="text-3xl font-display font-bold text-primary">${Number(total).toLocaleString()}</p>
+            <p className="text-3xl font-display font-bold text-primary">{formatMoney(total)}</p>
             {mode === "rental" && monthly && (
-              <p className="text-xs text-muted-foreground">${Number(monthly).toLocaleString()}/mo</p>
+              <p className="text-xs text-muted-foreground">{formatMoney(monthly)}/mo</p>
             )}
+            <p className="text-[10px] font-bold text-muted-foreground">{currency}</p>
           </div>
         </div>
 
@@ -60,7 +69,7 @@ function OrderSummary({ p }: { p: URLSearchParams }) {
         <div className="divide-y divide-border border border-border text-xs">
           <div className="flex justify-between px-3 py-2 bg-background/50">
             <span className="text-muted-foreground">{mode === "purchase" ? "Container" : "Monthly base"}</span>
-            <span className="font-bold">${Number(base).toLocaleString()}</span>
+            <span className="font-bold">{formatMoney(base)}</span>
           </div>
           {modList.length > 0 && (
             <div className="flex justify-between px-3 py-2">
@@ -82,12 +91,12 @@ function OrderSummary({ p }: { p: URLSearchParams }) {
             <span className="text-muted-foreground flex items-center gap-1.5">
               <Truck className="h-3 w-3" /> Delivery fee
             </span>
-            <span className="font-bold">${Number(delivery).toLocaleString()}</span>
+            <span className="font-bold">{formatMoney(delivery)}</span>
           </div>
           {(state || zip) && (
             <div className="flex justify-between px-3 py-2 bg-background/50">
               <span className="text-muted-foreground">Deliver to</span>
-              <span className="font-semibold">{[state, zip].filter(Boolean).join(" ")}</span>
+              <span className="font-semibold">{[city, state, zip, country].filter(Boolean).join(", ")}</span>
             </div>
           )}
         </div>
@@ -115,6 +124,12 @@ export default function Contact() {
     const mods     = params.get("mods") ?? "";
     const genset   = params.get("genset") ?? "";
     const modList  = mods ? mods.split(" | ").filter(Boolean) : [];
+    const currency = params.get("currency") === "CAD" ? "CAD" : "USD";
+    const rate = Number(params.get("rate")) || 1;
+    const emailMoney = (value: string | null) => {
+      const amount = Math.round(Number(value) * (currency === "CAD" ? rate : 1));
+      return `${currency === "CAD" ? "CA$" : "$"}${amount.toLocaleString(currency === "CAD" ? "en-CA" : "en-US")} ${currency}`;
+    };
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -131,15 +146,18 @@ export default function Contact() {
           mode:           params.get("mode"),
           mods:           modList.length ? modList.join(", ") : "None",
           genset:         genset || "None",
-          total:          `$${Number(params.get("total")).toLocaleString()}`,
-          base_price:     `$${Number(params.get("base")).toLocaleString()}`,
-          delivery_fee:   `$${Number(params.get("delivery")).toLocaleString()}`,
+           total:          emailMoney(params.get("total")),
+           base_price:     emailMoney(params.get("base")),
+           delivery_fee:   emailMoney(params.get("delivery")),
           ...(params.get("monthly") ? {
-            monthly:  `$${Number(params.get("monthly")).toLocaleString()}/mo`,
+             monthly:  `${emailMoney(params.get("monthly"))}/mo`,
             duration: params.get("duration") ?? "",
           } : {}),
           delivery_state: params.get("state") || "Not specified",
+           delivery_city: params.get("city") || "Not specified",
           delivery_zip:   params.get("zip")   || "Not specified",
+           country: params.get("country") || "United States",
+           currency,
           notes:          data.notes || "None",
         }),
       });
@@ -261,7 +279,12 @@ export default function Contact() {
 
                   <div className="space-y-1.5">
                     <Label htmlFor="address">Delivery Address</Label>
-                    <Input id="address" name="address" placeholder="123 Main St, City, State ZIP" className="bg-background" />
+                    <Input
+                      id="address"
+                      name="address"
+                      placeholder={params.get("country") === "Canada" ? "123 Main St, City, Province, Postal Code" : "123 Main St, City, State ZIP"}
+                      className="bg-background"
+                    />
                     <p className="text-[10px] text-muted-foreground">Full address helps us give you the most accurate delivery quote.</p>
                   </div>
 
