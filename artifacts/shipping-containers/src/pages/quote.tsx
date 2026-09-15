@@ -7,87 +7,25 @@ import { calculateQuoteEstimate, toQuoteContainer } from "@/lib/quote-pricing";
 // ── Quote view of the shared container catalog ───────────────────────────────
 const CONTAINERS = CATALOG_CONTAINERS.map(toQuoteContainer);
 
-const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]> = {
-  "10-new-side": [
-    { id: "blue", label: "Blue", hex: "#075fc4" },
-    { id: "beige", label: "Beige", hex: "#f1f3f2" },
-    { id: "green", label: "Dark Green", hex: "#0e503c" },
-    { id: "gray", label: "Gray", hex: "#667481" },
-    { id: "red", label: "Red", hex: "#9f332f" },
-  ],
-  "10-new-rollup": [
-    { id: "charcoal", label: "Charcoal", hex: "#3f4448" },
-    { id: "blue", label: "Blue", hex: "#075fc4" },
-    { id: "beige", label: "Beige", hex: "#c8b99d" },
-    { id: "green", label: "Dark Green", hex: "#0e503c" },
-    { id: "red", label: "Red", hex: "#9f332f" },
-  ],
-  "20-new": [
-    { id: "orange", label: "Orange", hex: "#d68713" },
-    { id: "blue", label: "Blue", hex: "#075fc4" },
-    { id: "beige", label: "Beige", hex: "#c9b99a" },
-    { id: "green", label: "Dark Green", hex: "#0e503c" },
-    { id: "red", label: "Red", hex: "#9f332f" },
-  ],
-  "20-hc-new": [
-    { id: "gray", label: "Gray", hex: "#7b858d" },
-    { id: "blue", label: "Blue", hex: "#075fc4" },
-    { id: "beige", label: "Beige", hex: "#c8b99d" },
-    { id: "green", label: "Dark Green", hex: "#0e503c" },
-    { id: "red", label: "Red", hex: "#9f332f" },
-  ],
-  "30-new": [
-    { id: "beige", label: "Beige", hex: "#c9b99a" },
-    { id: "dark-green", label: "Dark Green", hex: "#244c3b" },
-  ],
-  "40-used": [
-    { id: "red", label: "Red", hex: "#8f342f" },
-    { id: "blue", label: "Blue", hex: "#2f5f91" },
-    { id: "light-blue-gray", label: "Light Blue / Gray", hex: "#738b94" },
-    { id: "navy-blue", label: "Navy Blue", hex: "#253f68" },
-  ],
-  "40-new": [
-    { id: "dark-green", label: "Dark Green", hex: "#345543" },
-    { id: "charcoal-gray", label: "Charcoal Gray", hex: "#4a4c50" },
-  ],
-  "40-hc-new": [
-    { id: "red", label: "Red", hex: "#98413a" },
-    { id: "gray", label: "Gray", hex: "#777d7e" },
-    { id: "blue", label: "Blue", hex: "#18509a" },
-    { id: "beige", label: "Beige", hex: "#d8cfaa" },
-  ],
-};
+const COLOR_OPTIONS: Record<string, { id: string; label: string; hex: string }[]> =
+  Object.fromEntries(
+    CATALOG_CONTAINERS
+      .filter(container => container.colorOptions?.length)
+      .map(container => [
+        container.id,
+        container.colorOptions!.map(({ id, name, hex }) => ({ id, label: name, hex })),
+      ]),
+  );
 
-const CONFIGURATION_OPTIONS: Record<string, { id: string; label: string }[]> = {
-  "20-hc-side": [
-    { id: "storefront-rollup", label: "Side Roll-Up + Glass Entry" },
-    { id: "double-rollup", label: "Double Side Roll-Up Doors" },
-    { id: "full-side-cargo", label: "Full Side-Opening Cargo Doors" },
-    { id: "single-rollup", label: "Single Side Roll-Up Door" },
-    { id: "interior-rollup", label: "Interior Roll-Up Access" },
-  ],
-  "20-heated": [
-    { id: "white-office", label: "White Heated Office Package" },
-    { id: "gray-security-office", label: "Gray Security Office Package" },
-    { id: "beige-climate-office", label: "Beige Climate-Controlled Office" },
-  ],
-  "40-hc-side": [
-    { id: "white-side-cargo", label: "White Full Side Cargo Doors" },
-    { id: "orange-four-rollup", label: "Orange Four Roll-Up Doors" },
-    { id: "gray-three-rollup", label: "Gray Three Roll-Up Doors" },
-    { id: "beige-side-cargo", label: "Beige Full Side-Opening Doors" },
-  ],
-  "40-heated-side": [
-    { id: "charcoal-restroom-office", label: "Charcoal Restroom Office" },
-    { id: "gray-glazed-office", label: "Light Gray Glazed Office" },
-    { id: "black-utility", label: "Black Utility Package" },
-    { id: "tan-double-rollup", label: "Tan Double Roll-Up Doors" },
-    { id: "beige-security-office", label: "Beige Security Office" },
-    { id: "blue-dual-hvac-office", label: "Blue Dual-HVAC Office" },
-    { id: "green-storefront", label: "Green Storefront Office" },
-    { id: "aqua-office", label: "Aqua Heated Office" },
-  ],
-};
+const CONFIGURATION_OPTIONS: Record<string, { id: string; label: string }[]> =
+  Object.fromEntries(
+    CATALOG_CONTAINERS
+      .filter(container => container.configurationOptions?.length)
+      .map(container => [
+        container.id,
+        container.configurationOptions!.map(({ id, name }) => ({ id, label: name })),
+      ]),
+  );
 
 // Delivery fee: 10ft = $380, everything else = $580
 const DELIVERY_FEE = (sizeGroup: string) => sizeGroup === "10" ? 380 : 580;
