@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Move Your Built Box Site to Another Replit Account</title>
+  <style>
+    :root{color-scheme:light;--ink:#13243a;--muted:#63748a;--line:#dce5ef;--paper:#f4f7fb;--blue:#1463d6;--blue-pale:#eaf2ff;--orange:#ef5a36;--green:#19845a}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--paper);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+    main{max-width:1000px;margin:auto;padding:36px 22px 56px}
+    .hero{padding:34px;border-radius:22px;background:#10243b;color:white;position:relative;overflow:hidden}
+    .hero:after{content:"";position:absolute;width:230px;height:230px;border-radius:50%;right:-55px;top:-95px;background:#1f4264;opacity:.8}
+    .eyebrow{margin:0 0 8px;color:#ff9b7f;font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+    h1{max-width:700px;margin:0;font-size:clamp(28px,5vw,44px);line-height:1.1;letter-spacing:-.035em}
+    .hero p:last-child{max-width:690px;margin:15px 0 0;color:#d4e1ef}
+    .notice{margin:20px 0;padding:15px 18px;border:1px solid #f0d5a7;border-radius:12px;background:#fff9ec;color:#64440d}
+    .notice strong{color:#4b3207}
+    .flow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
+    .account{padding:18px;border:1px solid var(--line);border-radius:16px;background:white}
+    .account h2{font-size:15px;margin:0 0 12px;text-transform:uppercase;letter-spacing:.08em}
+    .account-row{display:flex;align-items:center;gap:12px}
+    .avatar{display:grid;place-items:center;width:44px;height:44px;border-radius:13px;background:var(--blue-pale);color:var(--blue);font-size:14px;font-weight:900}
+    .account p{margin:0;color:var(--muted);font-size:14px}
+    .arrow{color:var(--orange);font-size:26px;font-weight:900}
+    .step-list{display:grid;gap:13px;margin:20px 0}
+    .step{display:grid;grid-template-columns:52px 1fr;gap:14px;padding:18px;border:1px solid var(--line);border-radius:16px;background:white}
+    .num{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:var(--blue);color:white;font-weight:900;font-size:18px}
+    .step h2{margin:0 0 5px;font-size:18px}
+    .step p{margin:0;color:var(--muted)}
+    .diagram{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:13px}
+    .tile{min-width:130px;padding:10px 13px;border:1px solid var(--line);border-radius:10px;background:#f8faff;font-size:13px;font-weight:750}
+    .tile small{display:block;color:var(--muted);font-size:11px;font-weight:500}
+    .chev{color:var(--orange);font-size:20px;font-weight:900}
+    .checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .check{padding:15px;border:1px solid var(--line);border-radius:14px;background:white}
+    .check b{display:block;margin-bottom:5px}
+    .check p{margin:0;color:var(--muted);font-size:14px}
+    code{padding:2px 5px;border-radius:5px;background:#edf2f8;font-size:.9em}
+    .warning{border-left:4px solid var(--orange);padding:13px 16px;background:#fff1ed;border-radius:0 10px 10px 0;margin:18px 0}
+    .footer{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+    a{color:var(--blue);font-weight:700}
+    @media(max-width:650px){main{padding:16px 13px 35px}.hero{padding:25px 21px}.flow,.checklist{grid-template-columns:1fr}.step{grid-template-columns:43px 1fr;padding:14px}.num{width:36px;height:36px}.tile{min-width:115px;flex:1}}
+    @media print{body{background:white}.hero{print-color-adjust:exact;-webkit-print-color-adjust:exact}.step,.account,.check{break-inside:avoid}}
+  </style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <p class="eyebrow">Visual walkthrough · Replit</p>
+    <h1>Move the Built Box site to another Replit account</h1>
+    <p>Use Replit’s share-and-fork process to make a copy. Then set up the copy’s private settings, test it, and move the domain only after everything works.</p>
+  </header>
+
+  <aside class="notice"><strong>Important:</strong> This copies the project; it does not move or cancel a Replit subscription. Keep the original project and live site until the new copy is tested.</aside>
+
+  <section class="flow" aria-label="Project transfer overview">
+    <article class="account">
+      <h2>Current account</h2>
+      <div class="account-row"><div class="avatar">A</div><p><strong>Built Box project</strong><br>Share access with the destination account.</p></div>
+    </article>
+    <article class="account">
+      <h2>Destination account</h2>
+      <div class="account-row"><div class="avatar">B</div><p><strong>New project copy</strong><br>Accept the invite, then fork it into this account.</p></div>
+    </article>
+  </section>
+
+  <section class="step-list" aria-label="Transfer steps">
+    <article class="step">
+      <div class="num">1</div>
+      <div><h2>Share the project</h2><p>In the current account, open the Built Box project and use its <strong>Share</strong> control to invite the other Replit account by its account email or username. Grant access to the project.</p>
+        <div class="diagram"><div class="tile">Current account<small>Open Built Box project</small></div><span class="chev">→</span><div class="tile">Share / invite<small>Destination account</small></div></div>
+      </div>
+    </article>
+    <article class="step">
+      <div class="num">2</div>
+      <div><h2>Accept the invitation</h2><p>Sign in to the destination account, accept the project invitation, and open the shared project.</p>
+        <div class="diagram"><div class="tile">Destination inbox<small>Accept project invite</small></div><span class="chev">→</span><div class="tile">Shared project<small>Open in Replit</small></div></div>
+      </div>
+    </article>
+    <article class="step">
+      <div class="num">3</div>
+      <div><h2>Fork it into the destination account</h2><p>From the shared project, choose <strong>Fork</strong> and create the copy in the destination account. Confirm the copied project opens there before changing anything on the original.</p>
+        <div class="diagram"><div class="tile">Shared project<small>Original stays intact</small></div><span class="chev">→</span><div class="tile">Fork<small>Create a separate copy</small></div></div>
+      </div>
+    </article>
+    <article class="step">
+      <div class="num">4</div>
+      <div><h2>Recreate the private settings</h2><p>In the destination project, open Replit’s <strong>Secrets</strong> tool and add the same secret names with their correct values. Secrets are not copied as ordinary project files.</p>
+        <div class="diagram"><div class="tile">Destination project<small>Secrets tool</small></div><span class="chev">→</span><div class="tile"><code>CONTACT_EMAIL</code><small><code>SMTP_USER</code> · <code>SMTP_PASS</code> · <code>SESSION_SECRET</code></small></div></div>
+      </div>
+    </article>
+    <article class="step">
+      <div class="num">5</div>
+      <div><h2>Start and test both services</h2><p>Start the copied website and API workflows. Check the main pages, quote calculator, Canadian pricing, contact form, and email delivery. Send a clearly labeled test quote to verify email.</p>
+        <div class="diagram"><div class="tile">Website<small>Catalog and quote flow</small></div><span class="chev">+</span><div class="tile">API server<small>Contact and quote email</small></div><span class="chev">→</span><div class="tile">Test before launch<small>Confirm both are healthy</small></div></div>
+      </div>
+    </article>
+    <article class="step">
+      <div class="num">6</div>
+      <div><h2>Publish the copy, then reconnect the domain</h2><p>Publish from the destination account and verify its temporary URL. Then configure <strong>builtboxcontainer.com</strong> for the new deployment and update DNS wherever the domain is managed. DNS and domain ownership are separate from the project copy.</p>
+        <div class="diagram"><div class="tile">New deployment<small>Verify temporary URL</small></div><span class="chev">→</span><div class="tile">Domain settings + DNS<small>Switch after verification</small></div><span class="chev">→</span><div class="tile">builtboxcontainer.com<small>Check live site and forms</small></div></div>
+      </div>
+    </article>
+  </section>
+
+  <h2>Before you call the move complete</h2>
+  <section class="checklist">
+    <article class="check"><b>☐ Website and API both run</b><p>The site needs its API for contact and formal quote emails.</p></article>
+    <article class="check"><b>☐ Private settings are re-added</b><p>Enter secret values only in Replit Secrets, never in source code or messages.</p></article>
+    <article class="check"><b>☐ Test quote email arrived</b><p>Use a clearly marked test request and confirm the destination inbox receives it.</p></article>
+    <article class="check"><b>☐ Domain points to the new deployment</b><p>Make the DNS change only after the copied site is ready. Keep the original until the switch is confirmed.</p></article>
+  </section>
+
+  <div class="warning"><strong>Do not delete the original yet.</strong> Forking creates a separate copy. Leave the original deployment available until the destination copy, email flow, and domain are all verified.</div>
+
+  <footer class="footer">
+    <strong>Official Replit instructions:</strong>
+    <a href="https://docs.replit.com/teams/identity-and-access-management/manually-copy-projects">Manually copy a project to another workspace</a>
+    · <a href="https://docs.replit.com/help/projects-and-files">Projects and files</a>
+    <br><br>Diagrams on this page illustrate the process; they are not screenshots of a specific Replit account interface.
+  </footer>
+</main>
+</body>
+</html>

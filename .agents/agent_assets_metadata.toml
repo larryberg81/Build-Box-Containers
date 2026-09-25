@@ -203,3 +203,17 @@ mtime_ms = 1789094791813
 storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:d4dbae2e-d432-4319-9d5e-9c13e137e68f/35b87a02-4653-4ae2-9833-e023bf0c5369/45040379-b4ea-4509-a2e2-43883ed5411f"
 storage_version_token = "1789094793837660"
 content_type = "image/svg+xml"
+
+[[outputs]]
+id = "GPYpW631wb2mO9h_2zO3D"
+uri = "file://guides/replit-account-transfer-visual-guide.html"
+type = "html"
+title = "Visual guide: transfer your Built Box site"
+description = "Illustrated step-by-step guide to sharing, forking, setting up secrets, testing, and reconnecting the domain in another Replit account."
+logical_id = "1fbb0eba-2896-4bab-9668-28a0fe9ba5bc"
+content_hash = "sha256:19da7a77c5076f49d6b0bbb0f7f087ff498ed93656d62ff8cdef8f9c40d59239"
+size = 9829
+mtime_ms = 1790335108315
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/repl:d4dbae2e-d432-4319-9d5e-9c13e137e68f/1fbb0eba-2896-4bab-9668-28a0fe9ba5bc/823c25a5-6fac-4e72-989a-0fb1ebfed946"
+storage_version_token = "1790335114351152"
+content_type = "text/html"
