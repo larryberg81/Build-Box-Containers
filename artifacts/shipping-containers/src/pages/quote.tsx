@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
-import { Link, useLocation, useSearch } from "wouter";
-import { ArrowRight, Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send, Zap } from "lucide-react";
+import { Link, useSearch } from "wouter";
+import { Check, ChevronDown, ChevronUp, Truck, MapPin, MessageCircle, X, Send, Zap } from "lucide-react";
 import { CONTAINERS as CATALOG_CONTAINERS } from "@/data/containers";
 import { calculateQuoteEstimate, toQuoteContainer } from "@/lib/quote-pricing";
 import { CANADIAN_LOCATIONS, CANADIAN_PROVINCES, useMarket } from "@/contexts/market";
@@ -124,7 +124,7 @@ function InquiryWidget({
   deliveryZip: string;
   mode: "purchase" | "rental";
 }) {
-  const { market, currency, cadRate, formatMoney } = useMarket();
+  const { market, currency, formatMoney } = useMarket();
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -268,8 +268,7 @@ function InquiryWidget({
 
 // ── Main page ────────────────────────────────────────────────────────────────
 export default function Quote() {
-  const { market, currency, cadRate, formatMoney } = useMarket();
-  const [, navigate]                              = useLocation();
+  const { market, currency, formatMoney } = useMarket();
   const search                                     = useSearch();
   const searchParams                               = new URLSearchParams(search);
   const requestedContainerId                       = searchParams.get("containerId");
@@ -298,42 +297,15 @@ export default function Quote() {
   const [selectedCity, setSelectedCity]           = useState<string>("");
   const [zipCode, setZipCode]                     = useState<string>("");
   const [sizeFilter, setSizeFilter]               = useState<string>("All");
+  const [quoteDetails, setQuoteDetails]           = useState({ name: "", email: "", phone: "", address: "", notes: "" });
+  const [quoteSubmitState, setQuoteSubmitState]   = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [quoteSubmitError, setQuoteSubmitError]   = useState("");
 
   useEffect(() => {
     setSelectedState("");
     setSelectedCity("");
     setZipCode("");
   }, [market]);
-
-  const goToFormalQuote = () => {
-    const gensetObj = GENSET_ADDONS.find(g => g.id === selectedGenset)!;
-    const modLabels = MODIFICATIONS.filter(m => selectedMods.has(m.id)).map(m => m.label);
-    const durationObj = RENTAL_DURATIONS.find(d => d.id === selectedDuration)!;
-    const selectedColorLabel = colorOptions.find(color => color.id === selectedColor)?.label ?? "";
-    const selectedConfigurationLabel = configurationOptions.find(configuration => configuration.id === selectedConfiguration)?.label ?? "";
-    const params = new URLSearchParams({
-      container: container.label,
-      containerId: container.id,
-      color: selectedColorLabel,
-      configuration: selectedConfigurationLabel,
-      mode,
-      total:    String(estimate.total),
-      base:     String(estimate.base),
-      delivery: String(estimate.delivery),
-      genset:   gensetObj.id !== "gs-none" ? gensetObj.label : "",
-      mods:     modLabels.join(" | "),
-      state:    selectedState,
-      city:     selectedCity,
-      zip:      zipCode,
-      country:  market === "CA" ? "Canada" : "United States",
-      currency,
-      rate:     String(cadRate),
-      ...(mode === "rental" && estimate.monthly !== null
-        ? { monthly: String(estimate.monthly), duration: durationObj.label }
-        : {}),
-    });
-    navigate(`/contact?${params.toString()}`);
-  };
 
   const SIZE_GROUPS = ["All", "10 ft", "20 ft", "30 ft", "40 ft"];
 
@@ -381,6 +353,58 @@ export default function Quote() {
       return { ...calculated, mods: calculated.modifications, gensetLabel: genset.label, label: "Estimated Rental Total" };
     }
   }, [selectedContainer, mode, selectedDuration, selectedMods, selectedGenset]);
+
+  const handleQuoteRequest = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setQuoteSubmitState("sending");
+    setQuoteSubmitError("");
+
+    const selectedGensetLabel = GENSET_ADDONS.find(g => g.id === selectedGenset)?.label ?? "No Genset";
+    const selectedModsLabels = MODIFICATIONS.filter(mod => selectedMods.has(mod.id)).map(mod => mod.label);
+    const durationLabel = RENTAL_DURATIONS.find(duration => duration.id === selectedDuration)?.label ?? "";
+    const deliveryStateLabel = (market === "CA" ? CANADIAN_PROVINCES : US_STATES)
+      .find(([code]) => code === selectedState)?.[1] ?? selectedState;
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: `Built Box Containers — Formal Quote Request: ${container.label}`,
+          name: quoteDetails.name,
+          email: quoteDetails.email,
+          phone: quoteDetails.phone,
+          address: quoteDetails.address,
+          container: container.label,
+          color: colorLabel || "Not specified",
+          configuration: configurationLabel || "Not specified",
+          mode: mode === "purchase" ? "Purchase" : "Rental",
+          mods: selectedModsLabels.length ? selectedModsLabels.join(", ") : "None",
+          genset: selectedGenset === "gs-none" ? "None" : selectedGensetLabel,
+          total: `${formatMoney(estimate.total)} ${currency}`,
+          base_price: `${formatMoney(estimate.base)} ${currency}`,
+          delivery_fee: `${formatMoney(estimate.delivery)} ${currency}`,
+          ...(estimate.monthly !== null
+            ? { monthly: `${formatMoney(estimate.monthly)} ${currency}/mo`, duration: durationLabel }
+            : {}),
+          delivery_state: deliveryStateLabel || "Not specified",
+          delivery_city: selectedCity || "Not specified",
+          delivery_zip: zipCode || "Not specified",
+          country: market === "CA" ? "Canada" : "United States",
+          currency,
+          notes: quoteDetails.notes || "None",
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "Please try again or email us directly.");
+      }
+      setQuoteSubmitState("sent");
+    } catch (error) {
+      setQuoteSubmitError(error instanceof Error ? error.message : "Please try again or email us directly.");
+      setQuoteSubmitState("error");
+    }
+  };
 
   return (
     <div className="bg-background min-h-screen pt-16">
@@ -615,88 +639,6 @@ export default function Quote() {
               </p>
             </div>
 
-            {/* Step 5: Delivery Location */}
-            <div>
-              <SectionHeader step={5} title="Delivery Location" subtitle="We'll estimate your delivery timeline from the nearest depot." />
-              <div className={`grid grid-cols-1 ${market === "CA" ? "sm:grid-cols-3" : "sm:grid-cols-2"} gap-4 mb-4`}>
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">{market === "CA" ? "Province / Territory" : "State"}</label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-                    <select
-                      data-testid="state-select"
-                      value={selectedState}
-                      onChange={e => { setSelectedState(e.target.value); setSelectedCity(""); }}
-                      className="w-full h-11 pl-9 pr-4 bg-card border border-border text-sm font-semibold appearance-none focus:outline-none focus:border-primary transition-colors text-foreground"
-                    >
-                      <option value="">Select {market === "CA" ? "province" : "state"}…</option>
-                      {(market === "CA" ? CANADIAN_PROVINCES : US_STATES).map(([code, name]) => (
-                        <option key={code} value={code}>{name}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                {market === "CA" && (
-                  <div>
-                    <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">City</label>
-                    <select
-                      data-testid="city-select"
-                      value={selectedCity}
-                      disabled={!selectedState}
-                      onChange={e => setSelectedCity(e.target.value)}
-                      className="w-full h-11 px-3 bg-card border border-border text-sm font-semibold focus:outline-none focus:border-primary disabled:opacity-50 text-foreground"
-                    >
-                      <option value="">Select city…</option>
-                      {(CANADIAN_LOCATIONS[selectedState] ?? []).map(city => <option key={city} value={city}>{city}</option>)}
-                    </select>
-                  </div>
-                )}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">{market === "CA" ? "Postal Code" : "ZIP Code"}</label>
-                  <input
-                    data-testid="zip-input"
-                    type="text"
-                    inputMode={market === "CA" ? "text" : "numeric"}
-                    maxLength={market === "CA" ? 7 : 5}
-                    placeholder={market === "CA" ? "e.g. M5V 2T6" : "e.g. 90210"}
-                    value={zipCode}
-                    onChange={e => setZipCode(market === "CA" ? e.target.value.toUpperCase().replace(/[^A-Z0-9 ]/g, "").slice(0, 7) : e.target.value.replace(/\D/g, "").slice(0, 5))}
-                    className="w-full h-11 px-4 bg-card border border-border text-sm font-semibold focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground text-foreground"
-                  />
-                </div>
-              </div>
-
-              {/* Delivery timeline card */}
-              <div className={`border-2 p-4 flex items-center gap-4 transition-all ${
-                selectedState ? "border-border bg-card" : "border-dashed border-border bg-transparent"
-              }`}>
-                <Truck className={`h-6 w-6 flex-shrink-0 ${selectedState ? delivery.color : "text-muted-foreground"}`} />
-                <div>
-                  <p className={`font-bold text-sm uppercase tracking-wide ${selectedState ? delivery.color : "text-muted-foreground"}`}>
-                    {selectedState ? delivery.days : market === "CA" ? "7 – 14 business days" : "3 – 5 business days"}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {selectedState ? delivery.label : `Select a ${market === "CA" ? "province" : "state"} to see your estimated delivery window`}
-                  </p>
-                </div>
-                {market === "US" && selectedState && DEPOT_STATES.has(selectedState) && (
-                  <span className="ml-auto text-[10px] font-bold uppercase tracking-wider bg-emerald-900/50 text-emerald-300 px-2 py-1 flex-shrink-0">
-                    Depot State
-                  </span>
-                )}
-              </div>
-
-              {/* Delivery fee callout */}
-              <div className="mt-3 flex items-center gap-3 px-4 py-3 bg-primary/5 border border-primary/20">
-                <Truck className="h-4 w-4 text-primary flex-shrink-0" />
-                <p className="text-sm">
-                  <span className="font-bold text-foreground">Delivery fee included: </span>
-                  <span className="text-primary font-bold">{formatMoney(deliveryFee)} {currency}</span>
-                  <span className="text-muted-foreground text-xs ml-2">(flat rate, one-time)</span>
-                </p>
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">Minimum lead time is 3 business days. Remote locations may require additional scheduling.</p>
-            </div>
           </div>
 
           {/* ── Right: Sticky Price Panel ─────────────────────────────────── */}
@@ -800,13 +742,201 @@ export default function Quote() {
                   Estimates are indicative. Final pricing depends on site-specific requirements.
                 </p>
 
-                <button
-                  data-testid="cta-get-formal-quote"
-                  onClick={goToFormalQuote}
-                  className="flex w-full h-12 items-center justify-center gap-2 bg-primary text-primary-foreground font-bold uppercase tracking-wider hover:bg-primary/90 transition-all text-sm"
-                >
-                  Get a Formal Quote <ArrowRight className="h-4 w-4" />
-                </button>
+                {quoteSubmitState === "sent" ? (
+                  <div className="border border-emerald-700/60 bg-emerald-950/30 p-5" role="status">
+                    <div className="flex items-center gap-2 text-emerald-300 mb-2">
+                      <Check className="h-5 w-5" />
+                      <h3 className="font-display font-bold uppercase">Quote request sent</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Thanks, {quoteDetails.name}. Our team will follow up at {quoteDetails.email} within 24 hours.
+                    </p>
+                  </div>
+                ) : (
+                  <form onSubmit={handleQuoteRequest} className="space-y-4">
+                    <div className="border-t border-border pt-5">
+                      <h3 className="text-xs font-bold tracking-widest uppercase text-muted-foreground">Your Details</h3>
+                      <p className="text-xs text-muted-foreground mt-1">Send your configuration to our team for a formal quote.</p>
+                    </div>
+
+                    <div>
+                      <label htmlFor="quote-name" className="block text-sm font-semibold mb-1.5">Full Name</label>
+                      <input
+                        id="quote-name"
+                        name="name"
+                        type="text"
+                        autoComplete="name"
+                        required
+                        value={quoteDetails.name}
+                        onChange={event => setQuoteDetails(details => ({ ...details, name: event.target.value }))}
+                        placeholder="Jane Smith"
+                        className="w-full h-11 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="quote-email" className="block text-sm font-semibold mb-1.5">Email Address</label>
+                      <input
+                        id="quote-email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required
+                        value={quoteDetails.email}
+                        onChange={event => setQuoteDetails(details => ({ ...details, email: event.target.value }))}
+                        placeholder="jane@company.com"
+                        className="w-full h-11 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="quote-phone" className="block text-sm font-semibold mb-1.5">Phone Number</label>
+                      <input
+                        id="quote-phone"
+                        name="phone"
+                        type="tel"
+                        autoComplete="tel"
+                        required
+                        value={quoteDetails.phone}
+                        onChange={event => setQuoteDetails(details => ({ ...details, phone: event.target.value }))}
+                        placeholder="+1 (555) 000-0000"
+                        className="w-full h-11 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="quote-address" className="block text-sm font-semibold mb-1.5">Delivery Address</label>
+                      <input
+                        id="quote-address"
+                        name="address"
+                        type="text"
+                        autoComplete="street-address"
+                        required
+                        value={quoteDetails.address}
+                        onChange={event => setQuoteDetails(details => ({ ...details, address: event.target.value }))}
+                        placeholder="123 Main St, City, State ZIP"
+                        className="w-full h-11 px-3 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground"
+                      />
+                      <p className="text-[11px] text-muted-foreground mt-1.5">Full address helps us give you the most accurate delivery quote.</p>
+                    </div>
+
+                    <div className="border-t border-border pt-5">
+                      <span className="inline-block bg-primary text-primary-foreground text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 mb-2">Step 5</span>
+                      <h3 className="font-display font-bold uppercase tracking-tight">Delivery Location</h3>
+                      <p className="text-xs text-muted-foreground mt-1">We'll estimate your delivery timeline from the nearest depot.</p>
+                    </div>
+
+                    <div>
+                      <label htmlFor="quote-state" className="block text-sm font-semibold mb-1.5">
+                        {market === "CA" ? "Province / Territory" : "State"}
+                      </label>
+                      <div className="relative">
+                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                        <select
+                          id="quote-state"
+                          data-testid="state-select"
+                          required
+                          value={selectedState}
+                          onChange={event => { setSelectedState(event.target.value); setSelectedCity(""); }}
+                          className="w-full h-11 pl-9 pr-4 bg-background border border-border text-sm font-semibold appearance-none focus:outline-none focus:border-primary transition-colors text-foreground"
+                        >
+                          <option value="">Select {market === "CA" ? "province" : "state"}…</option>
+                          {(market === "CA" ? CANADIAN_PROVINCES : US_STATES).map(([code, name]) => (
+                            <option key={code} value={code}>{name}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {market === "CA" && (
+                      <div>
+                        <label htmlFor="quote-city" className="block text-sm font-semibold mb-1.5">City</label>
+                        <select
+                          id="quote-city"
+                          data-testid="city-select"
+                          required
+                          value={selectedCity}
+                          disabled={!selectedState}
+                          onChange={event => setSelectedCity(event.target.value)}
+                          className="w-full h-11 px-3 bg-background border border-border text-sm font-semibold focus:outline-none focus:border-primary disabled:opacity-50 text-foreground"
+                        >
+                          <option value="">Select city…</option>
+                          {(CANADIAN_LOCATIONS[selectedState] ?? []).map(city => <option key={city} value={city}>{city}</option>)}
+                        </select>
+                      </div>
+                    )}
+
+                    <div>
+                      <label htmlFor="quote-zip" className="block text-sm font-semibold mb-1.5">
+                        {market === "CA" ? "Postal Code" : "ZIP Code"}
+                      </label>
+                      <input
+                        id="quote-zip"
+                        name="zip"
+                        data-testid="zip-input"
+                        type="text"
+                        inputMode={market === "CA" ? "text" : "numeric"}
+                        autoComplete="postal-code"
+                        maxLength={market === "CA" ? 7 : 5}
+                        minLength={market === "CA" ? 6 : 5}
+                        required
+                        placeholder={market === "CA" ? "e.g. M5V 2T6" : "e.g. 90210"}
+                        value={zipCode}
+                        onChange={event => setZipCode(
+                          market === "CA"
+                            ? event.target.value.toUpperCase().replace(/[^A-Z0-9 ]/g, "").slice(0, 7)
+                            : event.target.value.replace(/\D/g, "").slice(0, 5),
+                        )}
+                        className="w-full h-11 px-4 bg-background border border-border text-sm font-semibold focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground text-foreground"
+                      />
+                    </div>
+
+                    <div className="border border-primary/20 bg-primary/5 px-3 py-2.5">
+                      <div className="flex items-center gap-2">
+                        <Truck className={`h-4 w-4 flex-shrink-0 ${selectedState ? delivery.color : "text-muted-foreground"}`} />
+                        <p className={`text-xs font-bold uppercase tracking-wider ${selectedState ? delivery.color : "text-muted-foreground"}`}>
+                          {selectedState ? delivery.days : market === "CA" ? "7 – 14 business days" : "3 – 5 business days"}
+                        </p>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground mt-1">
+                        {selectedState ? delivery.label : `Choose a ${market === "CA" ? "province" : "state"} to see the estimated delivery window.`}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground mt-1.5">
+                        Delivery fee included: <span className="font-semibold text-primary">{formatMoney(deliveryFee)} {currency}</span>
+                      </p>
+                    </div>
+
+                    <div>
+                      <label htmlFor="quote-notes" className="block text-sm font-semibold mb-1.5">
+                        Additional Notes <span className="font-normal text-muted-foreground">(optional)</span>
+                      </label>
+                      <textarea
+                        id="quote-notes"
+                        name="notes"
+                        rows={3}
+                        value={quoteDetails.notes}
+                        onChange={event => setQuoteDetails(details => ({ ...details, notes: event.target.value }))}
+                        placeholder="Site access notes, preferred delivery window, questions..."
+                        className="w-full px-3 py-2.5 bg-background border border-border text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-muted-foreground resize-y"
+                      />
+                    </div>
+
+                    {quoteSubmitState === "error" && (
+                      <p className="text-sm text-destructive" role="alert">
+                        {quoteSubmitError || "We couldn't send your request. Please try again."}
+                      </p>
+                    )}
+
+                    <button
+                      type="submit"
+                      data-testid="cta-get-formal-quote"
+                      disabled={quoteSubmitState === "sending"}
+                      className="flex w-full min-h-12 items-center justify-center gap-2 bg-primary text-primary-foreground font-bold uppercase tracking-wider hover:bg-primary/90 transition-all text-sm disabled:opacity-60 disabled:cursor-not-allowed px-3 py-2"
+                    >
+                      {quoteSubmitState === "sending" ? "Sending..." : <>Send My Quote Request <Send className="h-4 w-4" /></>}
+                    </button>
+                  </form>
+                )}
 
                 <div className="mt-4 pt-4 border-t border-border space-y-1.5">
                   {[
